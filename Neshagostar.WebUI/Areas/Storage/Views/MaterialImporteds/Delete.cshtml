@@ -1,0 +1,104 @@
+﻿@model Neshagostar.DAL.DataModel.StorageRelated.MaterialRelated.MaterialImported
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>MaterialImported</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.MaterialPurchased.Code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MaterialPurchased.Code)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AmountImported)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AmountImported)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateOfImport)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateOfImport)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CarriageNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CarriageNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Location)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Location)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DriverName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DriverName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CarriagePrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CarriagePrice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OtherCost)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OtherCost)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Comments)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Comments)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LostAmount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LostAmount)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

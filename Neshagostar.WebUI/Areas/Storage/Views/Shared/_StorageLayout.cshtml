@@ -1,0 +1,77 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section menu_Items
+{
+    <nav id="menu" class="navbar">
+        <div class="navbar-header"> <span class="visible-xs visible-sm"> منو <b></b></span></div>
+        <div class="container">
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a class="home_link" title=" سفارشات ابلاغ شده" href="@Url.Action("Index", new { controller = "Orders", area = "Storage" })">سفارشات ابلاغ شده</a>
+                    </li>
+                    <li>
+                        <a class="home_link" title=" بارهای ارسالی" href="@Url.Action("Index", new { controller = "Sendings", area = "Storage" })">بارهای ارسالی</a>
+                    </li>
+                    @*<li>
+                        <a class="home_link" title=" کالاهای ورودی" href="@Url.Action("Index", new { controller = "Importedproducts", area = "Storage" })">کالاهای ورودی</a>
+                    </li>*@
+                    <li class="dropdown">
+                        <a class="home_link" title=" انبار" href="@Url.Action("Index", new { controller = "Importedproducts", area = "Storage" })">انبار</a>
+                        <div class="dropdown-menu">
+                            <ul>
+                                <li>
+                                    <a class="home_link" title=" کالا" href="@Url.Action("Index", new { controller = "Products", area = "Storage" })">کالا</a>
+                                    <div class="dropdown-menu">
+                                        <ul>
+                                            <li>
+                                                <a class="home_link" title=" کالاهای ورودی" href="@Url.Action("Index", new { controller = "Importedproducts", area = "Storage" })">کالاهای ورودی</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a class="home_link" title=" مواد" href="@Url.Action("Index", new { controller = "Materials", area = "Storage" })">مواد</a>
+                                    <div class="dropdown-menu">
+                                        <ul>
+                                            <li>
+                                                <a class="home_link" title=" تخصیص مواد" href="@Url.Action("Index", new { controller = "MaterialDedicateds", area = "Storage" })">تخصیص مواد</a>
+                                            </li>
+                                            <li>
+                                                <a class="home_link" title=" ورودی مواد" href="@Url.Action("Index", new { controller = "MaterialImporteds", area = "Storage" })">ورودی مواد</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a class="home_link" title=" ضایعات" href="@Url.Action("Index", new { controller = "Materials", area = "Storage" })">ضایعات</a>
+                                    <div class="dropdown-menu">
+                                        <ul>
+                                            <li>
+                                                <a class="home_link" title=" کالای نامنطبق" href="@Url.Action("Index", new { controller = "ImportedUnStandardProducts", area = "Storage" })">کالای نامنطبق</a>
+                                            </li>
+                                            <li>
+                                                <a class="home_link" title=" مواد" href="@Url.Action("Index", new { controller = "MaterialImporteds", area = "Storage" })"> مواد</a>
+                                            </li>
+                                            <li>
+                                                <a class="home_link" title=" آسیابی" href="@Url.Action("Index", new { controller = "MaterialImporteds", area = "Storage" })"> آسیابی</a>
+                                            </li>
+                                            <li>
+                                                <a class="home_link" title=" ایراد محصولات" href="@Url.Action("Index", new { controller = "ProductIssues", area = "Storage" })"> ایراد محصولات</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+}
+
+@RenderBody()

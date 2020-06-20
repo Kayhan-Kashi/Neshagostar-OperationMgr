@@ -1,0 +1,61 @@
+﻿@using Microsoft.AspNet.Identity
+@using Neshagostar.WebUI.App_Start
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section menu_Items
+{
+    @if (HttpContext.Current.User != null)
+    {
+            if (HttpContext.Current.User.Identity.IsAuthenticated)
+        {
+
+            var username = HttpContext.Current.GetOwinContext().Authentication.User.Identity.Name;
+            var roleId = HttpContext.Current.GetOwinContext().GetUserManager<PersonnelManager>().FindByName(username).Roles.FirstOrDefault().RoleId;
+            var RoleManager = HttpContext.Current.GetOwinContext().Get<PersonnelRoleManager>();
+            var role = RoleManager.FindByName("CEO");
+
+            if (role != null && roleId == role.Id)
+            {
+                <nav id="menu" class="navbar">
+                    <div class="navbar-header"> <span class="visible-xs visible-sm"> منو <b></b></span></div>
+                    <div class="container">
+                        <div class="collapse navbar-collapse navbar-ex1-collapse">
+                            <ul class="nav navbar-nav">
+                                <li>
+                                    <a class="home_link" title=" پرسنل" href="@Url.Action("Index", new { controller = "Account", area = "PersonnelManagement" })">پرسنل</a>
+                                </li>
+
+
+                                <li class="dropdown">
+                                    <a class="home_link" title=" نقش ها" href="@Url.Action("Index", new { controller = "Roles", area = "PersonnelManagement" })">نقش ها</a>
+                                    <div class="dropdown-menu">
+                                        <ul>
+                                            <li>
+                                                <a class="home_link" title=" تخصیص نقش ها" href="@Url.Action("DedicatedRoleList", new { controller = "Roles", area = "PersonnelManagement" })">تخصیص نقش ها</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <a class="home_link" title=" بخش ها" href="@Url.Action("Index", new { controller = "Departments", area = "PersonnelManagement" })">بخش ها</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            }
+
+
+        }
+    }
+
+
+}
+
+@RenderBody()

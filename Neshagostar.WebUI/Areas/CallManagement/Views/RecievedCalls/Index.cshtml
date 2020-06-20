@@ -1,0 +1,460 @@
+﻿@model List<Neshagostar.DAL.DataModel.CallManagement.RecievedCall>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<script src="~/Content/MarketShop/js/jquery-2.1.1.min.js" crossorigin="anonymous"></script>
+@*<script src="~/Scripts/jquery-3.0.0.js"></script>
+    <script src="~/Scripts/jquery-3.0.0.min.js"></script>*@
+<link href="~/Content/jquery-ui.css" rel="stylesheet">
+<script src="~/Scripts/jquery-ui.js"></script>
+
+
+
+
+<h2>لیست تماس‌ها</h2>
+<div class="col-md-5" style="float:left">
+
+    <input id="filter_name" type="text" name="term" value="" placeholder='جستجوی نام تماس گیرنده' class="form-control input-sm" style="width:40%" onchange="getTableValues();" onkeyup="getTableValues();">
+</div>
+
+@*<div class="col-md-3 " style="float:left;">
+        <select class="form-control input-sm" style="width:45%" id="SortPredicate" name="SortPredicate" onchange="sort(&quot;لباس&quot;,&quot;10&quot;)">
+            <option value="">مرتب سازی بر اساس</option>
+            <option value="mostDiscount">تاریخ</option>
+            <option value="mostExpensive">بخش مربوطه</option>
+        </select>
+    </div>*@
+<div>
+    <div class="col-md-2">
+        <p style="padding-right:15px;padding-top:10px;">
+            @Html.ActionLink("ثبت تماس", "Create", null, new { style = "font-size:20px;" })
+
+        </p>
+    </div>
+
+</div>
+
+
+<table class="table" id="recievedCalls_table">
+    <thead>
+        <tr>
+            <th style="padding-top:15px;">
+                @Html.DisplayName("نام طرف تماس")
+            </th>
+            <th>
+                @*@Html.DisplayName("بخش مربوطه")*@
+                @Html.DropDownList("DepartmentId", ViewBag.Departments as IEnumerable<SelectListItem>, "تمام بخش‌ها", new { @class = "form-control", style = "width:45%", onchange = "getTableValues()" })
+                @*<select class="form-control" style="width:45%">
+                        <option>بخش مربوطه</option>
+                        <option>بخش بازرگانی</option>
+                        <option>بخش مالی</option>
+                    </select>*@
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.Date)*@
+                @Html.DropDownList("Date", ViewBag.Dates as IEnumerable<SelectListItem>, "تمام تواریخ", new { @class = "form-control", style = "width:45%", id = "dates" })
+                @*<select class="form-control" style="width:45%">
+                        <option>تاریخ</option>
+                        <option>1398/06/22</option>
+                        <option>1398/06/21</option>
+                        <option>1398/06/20</option>
+                        <option>1398/06/19</option>
+                        <option>تاریخ عقب تر</option>
+                    </select>*@
+            </th>
+            <th style="padding-top:15px;">
+                @Html.DisplayName("زمان تماس ")
+            </th>
+
+            <th style="padding-right:50px;">عملیات</th>
+        </tr>
+    </thead>
+
+
+    <tbody id="recievedCalls_tbody">
+        @foreach (var item in Model)
+        {
+            if (item.Id != Guid.Empty)
+            {
+                //var date = item.DateTime.Substring(0, 10);
+                //var time = item.DateTime.Substring(11, 5);
+                var date = item.Date;
+                var time = item.Time;
+
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Caller.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Department.Name)
+                    </td>
+                    <td>
+                        @date
+                    </td>
+                    <td>
+                        @time
+                    </td>
+
+                    <td>
+                        @Html.ActionLink("ویرایش", "Edit", new { id = item.Id }) |
+                        @Html.ActionLink("جزئیات", "Details", new { id = item.Id }) |
+                        @Html.ActionLink("حذف", "Delete", new { id = item.Id })
+                    </td>
+                </tr>
+            }
+
+        }
+    </tbody>
+
+
+
+</table>
+
+
+
+<div class="row">
+    <div id="div_pagination" class="col-sm-12 text-center" style="margin-left:100px;">
+        <ul class="pagination" id="pagination_page">
+            <li id="previous_page">
+                <a role="button" onclick="getTableValues(1)"><<</a>
+                @*@Html.ActionLink(i.ToString(), "FilterRecievedCalls", new { controller = "RecievedCalls", area = "CallManagement", page = i, CategoryName = (string)ViewBag.Term, pageSize = (int)ViewBag.PageSize, role="button" })*@
+            </li>
+            <li id="first_page">
+                <a role="button" onclick="getTableValues(1)"><</a>
+                @*@Html.ActionLink(i.ToString(), "FilterRecievedCalls", new { controller = "RecievedCalls", area = "CallManagement", page = i, CategoryName = (string)ViewBag.Term, pageSize = (int)ViewBag.PageSize, role="button" })*@
+            </li>
+            @if (ViewBag.PageNumber > 1)
+            {
+                <li>
+                    <a role="button" onclick="getTableValues(@ViewBag.Page + 1)">></a>
+                    @*@Html.ActionLink(i.ToString(), "FilterRecievedCalls", new { controller = "RecievedCalls", area = "CallManagement", page = i, CategoryName = (string)ViewBag.Term, pageSize = (int)ViewBag.PageSize, role="button" })*@
+                </li>
+                <li>
+                    <a role="button" onclick="getTableValues(@ViewBag.PageNumbers)">>></a>
+                    @*@Html.ActionLink(i.ToString(), "FilterRecievedCalls", new { controller = "RecievedCalls", area = "CallManagement", page = i, CategoryName = (string)ViewBag.Term, pageSize = (int)ViewBag.PageSize, role="button" })*@
+                </li>
+            }
+            else
+            {
+                <li>
+                    <a role="button" onclick="getTableValues(1)">></a>
+                    @*@Html.ActionLink(i.ToString(), "FilterRecievedCalls", new { controller = "RecievedCalls", area = "CallManagement", page = i, CategoryName = (string)ViewBag.Term, pageSize = (int)ViewBag.PageSize, role="button" })*@
+                </li>
+                <li>
+                    <a role="button" onclick="getTableValues(1)">>></a>
+                    @*@Html.ActionLink(i.ToString(), "FilterRecievedCalls", new { controller = "RecievedCalls", area = "CallManagement", page = i, CategoryName = (string)ViewBag.Term, pageSize = (int)ViewBag.PageSize, role="button" })*@
+                </li>
+            }
+
+        </ul>
+    </div>
+
+</div>
+
+
+<script>
+
+
+    var option = $('<option id = "option_previousDates" value="previousDates" >تاریخ عقب تر</option>');
+    $("#dates").append(option);
+
+    $("#dates").change(function () {
+        var id = $(this).find("option:selected").attr("id");
+        //alert("dddd");
+
+        switch (id) {
+            case "option_previousDates":
+                // do something here
+                popUpDateSelection();
+                break;
+            default:
+                getTableValues();
+                break;
+        }
+    });
+
+    function removeTableContent() {
+        $("#recievedCalls_tbody").empty();
+    }
+
+    function getTableValues(page = 1, dateGiven = "") {
+        var searchTerm = $("#filter_name").val();
+        var departmentId = $("#DepartmentId").val();
+        var date;
+        if (dateGiven == "") {
+            date = $("#dates").val();
+        } else {
+            date = dateGiven;
+        }
+
+        $.ajax({
+            type: "GET",
+            url: "/CallManagement/RecievedCalls/FilterRecievedCalls",
+            async: false,
+            dataType: "json",
+            content: "application/json; charset=utf-8",
+            data: { callerName: searchTerm, departmentId: departmentId, date: date, page: page },
+            success: function (data) {
+                removeTableContent();
+                //alert("recieved");
+                if (data.length > 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        var callername = $("<td>" + data[i].callerName + "</td>");
+                        var departmentname = $("<td>" + data[i].departmentName + "</td>");
+                        var date = $("<td>" + data[i].date + "</td>");
+                        var time = $("<td>" + data[i].time + "</td>");
+                        var edit = $('<a href="' + '/callmanagement/recievedcalls/edit/' + data[i].id + '">ویرایش</a>');
+                        var details = $('<a href="' + '/callmanagement/recievedcalls/details/' + data[i].id + '">جزئیات</a>');
+                        var del = $('<a href="' + '/callmanagement/recievedcalls/delete/' + data[i].id + '">حذف</a>');
+                        var operationtd = $("<td></td>").append(edit).append("|").append(details).append("|").append(del);
+
+                        var row = $("<tr></tr>").append(callername).append(departmentname).append(date).append(time).append(operationtd);
+                        //$("#recievedcalls_tbody").append(row);
+                        $("#recievedCalls_tbody").append(row);
+                    }
+                }
+                else {
+                    var callername = $("<td></td>");
+                    var departmentname = $("<td> </td>");
+                    var date = $("<td>رکوردی یافت نشد</td>");
+                    var time = $("<td> </td>");
+                    var operationtd = $("<td> </td>");
+                    var row = $("<tr></tr>").append(callername).append(departmentname).append(date).append(time).append(operationtd);
+                    $("#recievedCalls_tbody").append(row);
+                }
+                insertPagination(data[0].pageNumbers, data[0].page);
+            }
+        });
+    }
+
+    function insertPagination(numberOfPages, currentPageNumber) {
+
+        var div_pagination = $("#div_pagination");
+        $("#pagination_page").remove();
+        var ul_pagination = $('<ul class="pagination" id="pagination_page"></ul>');
+
+        if (currentPageNumber > 1 && currentPageNumber < numberOfPages) {
+            //alert(numberOfPages + " ," + currentPageNumber + "if1");
+            var li1 = $("<li  id='previous_page'></li>");
+            var a1 = $('<a role="button" onclick="getTableValues(' + (currentPageNumber - 1) + ')">' + "<" + '</a>');
+            li1.append(a1);
+            //ul.append(li1);
+
+
+            var li2 = $("<li id='first_page'></li>");
+            var a2 = $('<a role="button" onclick="getTableValues(' + 1 + ')">' + "<<" + '</a>');
+            li2.append(a2);
+            //ul.append(li2);
+            //ul.append(li2);
+
+            var li3 = $("<li id='next_page'></li>");
+            var a3 = $('<a role="button" onclick="getTableValues(' + (currentPageNumber + 1) + ')">' + ">" + '</a>');
+            li3.append(a3);
+            //ul.append(li3);
+
+
+            var li4 = $("<li id='last_page'></li>");
+            var a4 = $('<a role="button" onclick="getTableValues(' + numberOfPages + ')">' + ">>" + '</a>');
+            li4.append(a4);
+            //ul.append(li4);
+            //ul.prepend(li4);
+            //alert("pagination is being inserted");
+            ul_pagination.append(li2);
+            ul_pagination.append(li1);
+            ul_pagination.append(li3);
+            ul_pagination.append(li4);
+            //alert("pagination is inserted");
+        }
+        else if (currentPageNumber == 1 && currentPageNumber < numberOfPages) {
+            //alert(numberOfPages + " ," + currentPageNumber + "if1");
+            var li1 = $("<li id='previous_page' ></li>");
+            var a1 = $('<a role="button" onclick="getTableValues(' + (currentPageNumber - 1) + ')">' + "<" + '</a>');
+            li1.append(a1);
+            //ul.append(li1);
+
+
+            var li2 = $("<li disabled='true'  id='first_page' ></li>");
+            var a2 = $('<a disabled="true" role="button" onclick="getTableValues(' + 1 + ')">' + "<<" + '</a>');
+            li2.append(a2);
+            //ul.append(li2);
+            //ul.append(li2);
+
+            var li3 = $("<li id='next_page'></li>");
+            var a3 = $('<a role="button" onclick="getTableValues(' + (currentPageNumber + 1) + ')">' + ">" + '</a>');
+            li3.append(a3);
+            //ul.append(li3);
+
+
+            var li4 = $("<li id='last_page'></li>");
+            var a4 = $('<a role="button" onclick="getTableValues(' + numberOfPages + ')">' + ">>" + '</a>');
+            li4.append(a4);
+            //ul.append(li4);
+            //ul.prepend(li4);
+            //alert("pagination is being inserted");
+            ul_pagination.append(li2);
+            ul_pagination.append(li1);
+            ul_pagination.append(li3);
+            ul_pagination.append(li4);
+        }
+        else {
+            //alert(numberOfPages + " ," + currentPageNumber + "if1");
+            var li1 = $("<li  id='previous_page'></li>");
+            var a1 = $('<a role="button" onclick="getTableValues(' + (currentPageNumber - 1) + ')">' + "<" + '</a>');
+            li1.append(a1);
+            //ul.append(li1);
+
+
+            var li2 = $("<li id='first_page'></li>");
+            var a2 = $('<a role="button" onclick="getTableValues(' + 1 + ')">' + "<<" + '</a>');
+            li2.append(a2);
+            //ul.append(li2);
+            //ul.append(li2);
+
+            var li3 = $("<li id='next_page'></li>");
+            var a3 = $('<a role="button" onclick="getTableValues(' + (numberOfPages) + ')">' + ">" + '</a>');
+            li3.append(a3);
+            //ul.append(li3);
+
+
+            var li4 = $("<li id='last_page'></li>");
+            var a4 = $('<a role="button" onclick="getTableValues(' + numberOfPages + ')">' + ">>" + '</a>');
+            li4.append(a4);
+            //ul.append(li4);
+            //ul.prepend(li4);
+            //alert("pagination is being inserted");
+            ul_pagination.append(li2);
+            ul_pagination.append(li1);
+            ul_pagination.append(li3);
+            ul_pagination.append(li4);
+            //ul.append(li2);
+            //ul.append(li2);
+            //ul.prepend(li2);
+
+            //div_pagination.append(pagination_ul);
+        }
+        //alert("appended");
+        div_pagination.append(ul_pagination);
+    }
+
+
+    var dayInput;
+    var monthInput;
+    var yearInput;
+
+
+
+    function popUpDateSelection() {
+        //alert(orderItemId);
+        //alert(amount);
+        var formGroup = $('<div style="margin-right:100px;" class="form-group"></div>');
+        var year = "@PersianDateTime.Now.Year";
+
+        //var label = $('<label style="margin-top:8px;margin-right:80px" for="' + orderItemId + "_" + amount + '">متراژ ابلاغی را وارد کنید</label>');
+        //var divInside = $('<div class="col-md-4"></div>');
+        var divInput = $(
+            `<div class="col-md-9" style="margin-top:30px;">
+            <span>
+            <input class="col-md-2 form-control" dir="rtl" id="day" name="Day" style="width:25%;text-align:center;float:center" type="text" onchange="setDay(this.value);" placeholder="روز">
+                </span>
+            <span>
+                <label for="" style="font-size:40px;padding-top:6px;float:right;">/</label>
+            </span>
+            <span>
+                <input class="col-md-2 form-control" dir="rtl" id="month" name="Month" style="width:25%;text-align:center" type="text" onchange="setMonth(this.value);" placeholder="ماه">
+                </span>
+                <span>
+                    <label  style="font-size:40px;padding-top:6px;float:right;">/</label>
+                </span>
+                <span>
+                    <input class="col-md-2 form-control" dir="rtl" id="year" name="Year" style="width:40%;text-align:center" onchange="setYear(this.value);" type="text" placeholder="سال">
+                </span>
+            </div>`
+        );
+
+        formGroup.append(divInput);
+
+
+        var parentDiv = $('<div id="divPopUpDateSelection" style="display:none"></div>');
+        parentDiv.append(formGroup);
+
+        var d = $(".ui-dialog-buttonset").remove();
+        //alert(d.children.name);
+        //alert(d);
+
+        parentDiv.dialog({
+            height: 250,
+            width: 500,
+            modal: true,
+            open: function () {
+                //$("#divPopUpDateSelection").remove();
+
+                $("#year").val(year).change();
+            },
+            buttons: {
+                "انتخاب": function () {
+                    //dispatchToProduction(orderItemId, amount);
+                    // alert("ok is chosen")
+                    var day = dayInput;
+                    var month = monthInput;
+                    var year = yearInput;
+
+                    date = year + "/" + month + "/" + day;
+
+
+                    var optionDate = $('<option style="color:orange" id = "option_' + date + '" value="' + date + '" >' + date + '</option>');
+
+
+                    var length = $('#dates > option').length;
+                    $('#dates > option').eq(length - 1).before(optionDate);
+
+
+                    //$("#dates").append(optionDate);
+                    //alert(optionDate);
+                    $(this).dialog("close");
+                    var newOption2 = $('select[name="Date"]').find('option[value="' + date + '"]').attr("selected", true);
+
+                    getTableValues(1, date);
+                    //var newOption = $('#option_' + date);
+
+
+                    //newOption2.attr('selected', 'selected');
+                    //alert(newOption);
+                    //alert(date);
+
+
+
+
+                    //alert("You selected OK!!")
+                },
+                "انصراف": function () {
+                    $('#dates option[value=""]').prop('selected', true);
+                    $('#dates option[value=""]').change();
+                    //var a = $('#dates > option').eq(0).attr("selected", true);
+                    //alert(a.text());
+                    $(this).dialog("close");
+                    //var a = $('select[name="Date"]').find('option[value=""]');
+                    //alert(a.val());
+
+                }
+
+            }
+        });
+    }
+
+    function setDay(input) {
+        dayInput = input;
+        // alert(dayInput);
+    }
+
+    function setMonth(input) {
+        monthInput = input;
+    }
+
+    function setYear(input) {
+        //alert(input);
+        yearInput = input;
+    }
+</script>
+

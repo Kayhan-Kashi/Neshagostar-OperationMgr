@@ -1,0 +1,39 @@
+﻿@model Neshagostar.WebUI.Areas.PersonnelManagement.Models.Roles.DedicatedRoleViewModel
+
+
+@{
+    /**/
+
+    ViewBag.Title = "تخصیص نقش";
+}
+
+
+@using (Html.BeginForm("Dedicate", "Roles", new { area = "PersonnelManagement" }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>تخصیص نقش</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+
+    <div class="form-group">
+        @Html.Label("نام پرسنل", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("PersonnelId", (IEnumerable<SelectListItem>)ViewBag.Personnels, new { @class = "form-control" })
+  
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label("نقش", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("RoleId", (IEnumerable<SelectListItem>)ViewBag.Roles, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Dedicate" />
+        </div>
+    </div>
+}
+
+

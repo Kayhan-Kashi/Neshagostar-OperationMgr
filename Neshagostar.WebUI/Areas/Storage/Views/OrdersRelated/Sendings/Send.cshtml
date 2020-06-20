@@ -1,0 +1,173 @@
+﻿@using Neshagostar.WebUI.Areas.Storage.Models
+@model OrderItemSendingDetailDTO
+
+@using (Html.BeginForm("Send", "Sendings", new { area = "storage" }, FormMethod.Post, null))
+{
+    @Html.HiddenFor(or => or.OrderItemId)
+    @Html.Hidden("sendings", ViewBag.sendings as string)
+    <div class="col-md-12 well" style="padding-left:30px;">
+        <div class="form-group">
+            <div class="col-md-4" style="padding:0px;margin:0px;">
+                @Html.Label("نام خریدار", htmlAttributes: new { @class = "control-label col-md-3", style = "text-align:center;padding-top:5px;margin-left:0px;margin-right:0px;" })
+                <div>
+                    @Html.TextBox("CustomerName", ViewBag.CustomerName as string, new { @class = "form-control col-md-3", dir = "rtl", id = "customer_name", style = "text-align:center;width:60%;margin-left:0px;margin-right:0px;", @readonly = "true" })
+                </div>
+
+            </div>
+            <div class="col-md-5">
+                @Html.Label("نوع محصول", htmlAttributes: new { @class = "control-label col-md-3", style = "text-align:center;;padding-top:5px" })
+                @Html.TextBox("ProductName", ViewBag.ProductName as string, new { @class = "form-control col-md-3", dir = "rtl", id = "customer_name", style = "text-align:center;width:60%;margin-left:0px;margin-right:0px;", @readonly = "true" })
+            </div>
+
+            <div class="col-md-3">
+
+                @Html.Label("تاریخ ابلاغ ", htmlAttributes: new { @class = "control-label col-md-4", style = "margin-top:5px;" })
+                @Html.TextBox("DispatchDate", ViewBag.DispatchDate as string, new { @class = "form-control col-md-3", dir = "rtl", id = "customer_name", style = "text-align:center;width:60%;margin-left:0px;margin-right:0px;", @readonly = "true" })
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-md-9 well" style="padding-left:30px;">
+        <div class="col-md-4">
+            @Html.Label("تاریخ ارسال بار", htmlAttributes: new { @class = "control-label col-md-6", style = "text-align:center;;padding-top:5px" })
+            @Html.TextBox("orderItemSendingDetail.DateSent", "", new { @class = "form-control", dir = "rtl", id = "DateSent", style = "text-align:center;width:40%;", placeholder = "13xx/xx/xx" })
+        </div>
+
+        <div class="col-md-4">
+            @Html.Label("تاریخ دریافت", htmlAttributes: new { @class = "control-label col-md-6", style = "text-align:center;;padding-top:5px" })
+            @Html.TextBox("orderItemSendingDetail.DateArrived", "", new { @class = "form-control", dir = "rtl", id = "DateArrived", style = "text-align:center;width:40%;", placeholder = "13xx/xx/xx" })
+        </div>
+
+        <div class="col-md-4">
+            @Html.Label("مقدار ارسالی", htmlAttributes: new { @class = "control-label col-md-6", style = "text-align:center;;padding-top:5px" })
+            @Html.TextBox("SendingAmount", ((double)ViewBag.SendingAmount).ToString(), new { @class = "form-control", dir = "rtl", id = "sendingAmount", style = "text-align:center;width:40%;", @readonly = "true" })
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="col-md-9" style="margin-bottom:30px;">
+            <div style="overflow-y:auto;" class="table-bordered">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center">
+                                تاریخ تولید
+                            </th>
+
+                            <th style="text-align:center">
+                                مقدار ارسالی
+                            </th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody id="tbody_allocated">
+
+                        @{
+                            double sum = 0;
+                            List<SendingDTO> sendingAllocateds = (List<SendingDTO>)ViewBag.SendingAllocateds;
+                        }
+                        @if (sendingAllocateds != null && sendingAllocateds.Count > 0)
+                        {
+                            for (int i = 0; i < (sendingAllocateds).Count; i++)
+                            {
+                                @Html.Hidden("sendings[" + i + "].AllocatedProductId", sendingAllocateds[i].AllocatedProductId, new { id = "sendingAllocateds[" + i + "].AllocatedProductId" })
+                                sum += sendingAllocateds[i].SendingAmount;
+                                <tr>
+                                    <td style="text-align:center">@sendingAllocateds[i].Date</td>
+
+                                    <td style="text-align:center;"> @sendingAllocateds[i].SendingAmount</td>
+                                </tr>
+
+                            }
+                            <tr>
+                                <th></th>
+                                <th style="text-align:center;">مجموع ارسالی</th>
+
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <td style="text-align:center;" id="sendingAmountAvailable"> @sum</td>
+                               
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+        @*<div class="col-md-3 well">
+            @Html.Label("مقدار فعلی آماده ارسال", htmlAttributes: new { @class = "control-label col-md-6", style = "text-align:center;;padding-top:5px;font-size:12px;" })
+            @Html.TextBox("AvailableAmountToSend", ((double)ViewBag.AvailableAmountToSend).ToString(), new { @class = "form-control", dir = "rtl", id = "amount_dispatched", style = "text-align:center;width:40%;", @readonly = "true" })
+        </div>*@
+
+        <div class="form-group">
+            <div>
+                <input id="btnSubmit" type="button" value="" class="btn btn-primary btn-block" style="background-color:white" />
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-md-12 well" style="padding-left:30px;">
+        <div class="col-md-12">
+            <div class="col-md-4">
+                @Html.Label("مقصد ارسال", htmlAttributes: new { @class = "control-label col-md-6", style = "text-align:center;;padding-top:5px" })
+                @Html.TextBox("orderItemSendingDetail.Destination", "", new { @class = "form-control", dir = "rtl", id = "AmountNotSent", style = "text-align:center;width:40%;" })
+            </div>
+            <div class="col-md-3">
+                @Html.Label("شماره بارنامه", htmlAttributes: new { @class = "control-label col-md-5", style = "text-align:center;;padding-top:5px" })
+                @Html.TextBox("orderItemSendingDetail.CarrierNumberCode", "", new { @class = "form-control", dir = "rtl", id = "amount_dispatched", style = "text-align:center;width:50%;" })
+            </div>
+
+            <div class="col-md-3">
+                @Html.Label("نام راننده", htmlAttributes: new { @class = "control-label col-md-4", style = "text-align:center;;padding-top:5px" })
+                @Html.TextBox("orderItemSendingDetail.DriverName", "", new { @class = "form-control", dir = "rtl", id = "amount_dispatched", style = "text-align:center;width:60%;" })
+            </div>
+        </div>
+
+
+        <div class="col-md-12" style="margin-top:2%;">
+            <div class="col-md-4">
+                @Html.Label("شماره راننده", htmlAttributes: new { @class = "control-label col-md-6", style = "text-align:center;;padding-top:5px" })
+                @Html.TextBox("orderItemSendingDetail.DriverTel", "", new { @class = "form-control", dir = "rtl", id = "amount_dispatched", style = "text-align:center;width:45%;" })
+            </div>
+            <div class="col-md-3">
+                @Html.Label("مقدار باسکول", htmlAttributes: new { @class = "control-label col-md-6", style = "text-align:center;;padding-top:5px" })
+                @Html.TextBox("orderItemSendingDetail.BasculeWeight", "", new { @class = "form-control", dir = "rtl", id = "amount_dispatched", style = "text-align:center;width:40%;" })
+            </div>
+            <div class="col-md-3">
+                @Html.Label("کرایه", htmlAttributes: new { @class = "control-label col-md-6", style = "text-align:center;;padding-top:5px" })
+                @Html.TextBox("orderItemSendingDetail.Price", "", new { @class = "form-control", dir = "rtl", id = "price", style = "text-align:center;width:40%;" })
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="col-md-8 form-group well">
+
+        @Html.Label("توضیحات ", htmlAttributes: new { @class = "control-label col-md-4", style = "margin-top:1%" })
+
+        @Html.TextArea("orderItemSendingDetail.Comments", null, new { @class = "form-control col-md-5", id = "orderItem_comments", style = "width:100%;" })
+
+    </div>
+
+
+
+
+
+    <div class="form-group">
+        <div>
+            <input id="btnSubmit" type="submit" value="ثبت" class="btn btn-primary btn-block" />
+        </div>
+    </div>
+
+}
+
+<div style="padding-right:20px;padding-top:30px;">
+    @Html.ActionLink("بازگشت به لیست ارسال", "Edit", new { area = "Storage", controller = "Orders", id = ViewBag.OrderItemId as string }, new { style = "font-size:18px;" })
+</div>

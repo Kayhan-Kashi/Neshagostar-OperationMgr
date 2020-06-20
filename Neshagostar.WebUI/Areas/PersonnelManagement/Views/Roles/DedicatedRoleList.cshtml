@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Neshagostar.WebUI.Areas.PersonnelManagement.Models.Roles.DedicatedRoleViewModel>
+
+
+@{
+    ViewBag.Title = "Dedicate Role";
+}
+
+
+
+<p style="font-size:medium;margin-top:20px;">
+    @Html.ActionLink("تخصیص", "Dedicate", new { area = "PersonnelManagement", controller = "Roles" }, new { style="padding-right:30px;font-size:20px;"})
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.Label("نام پرسنل")
+        </th>
+        <th>
+            @Html.Label("نقش")
+        </th>
+     
+    </tr>
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.PersonName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RoleName)
+        </td>
+   
+
+    </tr>
+    }
+</table>

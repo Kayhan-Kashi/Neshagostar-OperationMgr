@@ -1,0 +1,356 @@
+﻿@*<div id="divPopUpDateSelection" style="display:none">
+    <div id="div_form" style="margin-right:100px;" class="form-group">
+        <div id="div_input" class="col-md-9" style="margin-top:30px;">
+            <span>
+                <input class="col-md-2 form-control" dir="rtl" id="day" name="Day" style="width:25%;text-align:center;float:center" type="text" onchange="setDay(this.value);" placeholder="روز">
+            </span>
+            <span>
+                <label for="" style="font-size:40px;padding-top:6px;float:right;">/</label>
+            </span>
+            <span>
+                <input class="col-md-2 form-control" dir="rtl" id="month" name="Month" style="width:25%;text-align:center" type="text" onchange="setMonth(this.value);" placeholder="ماه">
+            </span>
+            <span>
+                <label style="font-size:40px;padding-top:6px;float:right;">/</label>
+            </span>
+            <span>
+                <input class="col-md-2 form-control" dir="rtl" id="year" name="Year" style="width:40%;text-align:center" onchange="setYear(this.value);" type="text" placeholder="سال">
+            </span>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    var option = $('<option id = "option_previousDates" value="" >تاریخ عقب تر</option>');
+    $("#dates").append(option);
+
+    //$("#dates").focus(function () {
+    //    var id = $(this).find("option:selected").attr("id");
+    //    //alert("dddd");
+
+    //    switch (id) {
+    //        case "option_previousDates":
+    //            // do something here
+    //            popUpDateSelection();
+    //            break;
+    //        default:
+    //            getTableValues();
+    //            break;
+
+    //    }
+    //});
+
+    $("#dates").change(function () {
+        var id = $(this).find("option:selected").attr("id");
+        //alert("dddd");
+
+        switch (id) {
+            case "option_previousDates":
+                // do something here
+                popUpDateSelection();
+                break;
+            default:
+                getTableValues();
+                break;
+
+        }
+    });
+
+    function removeTableContent() {
+
+        $("#recievedCalls_tbody").empty();
+        //alert("table rows removed");
+    }
+
+    function getTableValues(page = 1, dateGiven="") {
+        //alert();
+        var searchTerm = $("#filter_name").val();
+        var departmentId = $("#DepartmentId").val();
+        var date;
+        if (dateGiven == "") {
+            date = $("#dates").val();
+        } else {
+            date = dateGiven;
+        }
+
+        //alert(date);
+        $.ajax({
+            type: "GET",
+            url: "/CallManagement/RecievedCalls/FilterRecievedCalls",
+            async: false,
+            dataType: "json",
+            content: "application/json; charset=utf-8",
+            data: { callerName: searchTerm, departmentId: departmentId, date: date, page: page },
+            success: function (data) {
+                removeTableContent();
+                //alert("recieved");
+                if (data.length > 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        var callername = $("<td>" + data[i].callerName + "</td>");
+                        var departmentname = $("<td>" + data[i].departmentName + "</td>");
+                        var date = $("<td>" + data[i].date + "</td>");
+                        var time = $("<td>" + data[i].time + "</td>");
+                        var edit = $('<a href="' + '/callmanagement/recievedcalls/edit/' + data[i].id + '">ویرایش</a>');
+                        var details = $('<a href="' + '/callmanagement/recievedcalls/details/' + data[i].id + '">جزئیات</a>');
+                        var del = $('<a href="' + '/callmanagement/recievedcalls/delete/' + data[i].id + '">حذف</a>');
+                        var operationtd = $("<td></td>").append(edit).append("|").append(details).append("|").append(del);
+
+                        var row = $("<tr></tr>").append(callername).append(departmentname).append(date).append(time).append(operationtd);
+                        //$("#recievedcalls_tbody").append(row);
+                        $("#recievedCalls_tbody").append(row);
+                    }
+                }
+                else {
+                    var callername = $("<td></td>");
+                    var departmentname = $("<td> </td>");
+                    var date = $("<td>رکوردی یافت نشد</td>");
+                    var time = $("<td> </td>");
+                    var operationtd = $("<td> </td>");
+                    var row = $("<tr></tr>").append(callername).append(departmentname).append(date).append(time).append(operationtd);
+                    $("#recievedCalls_tbody").append(row);
+                }
+
+
+                //if (data.length < 20) {
+                //    for (var i = 0; i < 20 - data.length; i++) {
+                //        var callername = $("<td></td>");
+                //        var departmentname = $("<td></td>");
+                //        var date = $("<td></td>");
+                //        var time = $("<td></td>");
+
+                //        var operationtd = $("<td></td>");
+
+                //        var row = $("<tr></tr>").append(callername).append(departmentname).append(date).append(time).append(operationtd);
+                //        //$("#recievedcalls_tbody").append(row);
+                //        $("tbody").append(row);
+                //    }
+                //}
+                if (data.length != 0) {
+                    insertPagination(data[0].pageNumbers, data[0].page);
+                }
+
+            }
+        });
+
+        function insertPagination(numberOfPages, currentPageNumber) {
+
+            var div_pagination = $("#div_pagination");
+            $("#pagination_page").remove();
+            var ul_pagination = $('<ul class="pagination" id="pagination_page"></ul>');
+
+            if (currentPageNumber > 1 && currentPageNumber < numberOfPages) {
+                //alert(numberOfPages + " ," + currentPageNumber + "if1");
+                var li1 = $("<li  id='previous_page'></li>");
+                var a1 = $('<a role="button" onclick="getTableValues(' + (currentPageNumber - 1) + ')">' + "<" + '</a>');
+                li1.append(a1);
+                //ul.append(li1);
+
+
+                var li2 = $("<li id='first_page'></li>");
+                var a2 = $('<a role="button" onclick="getTableValues(' + 1 + ')">' + "<<" + '</a>');
+                li2.append(a2);
+                //ul.append(li2);
+                //ul.append(li2);
+
+                var li3 = $("<li id='next_page'></li>");
+                var a3 = $('<a role="button" onclick="getTableValues(' + (currentPageNumber + 1) + ')">' + ">" + '</a>');
+                li3.append(a3);
+                //ul.append(li3);
+
+
+                    var li4 = $("<li id='last_page'></li>");
+                    var a4 = $('<a role="button" onclick="getTableValues(' + numberOfPages + ')">' + ">>" + '</a>');
+                    li4.append(a4);
+                //ul.append(li4);
+                //ul.prepend(li4);
+                //alert("pagination is being inserted");
+                ul_pagination.append(li2);
+                ul_pagination.append(li1);
+                ul_pagination.append(li3);
+                ul_pagination.append(li4);
+                //alert("pagination is inserted");
+            }
+            else if (currentPageNumber == 1 && currentPageNumber < numberOfPages) {
+                //alert(numberOfPages + " ," + currentPageNumber + "if1");
+                var li1 = $("<li id='previous_page' ></li>");
+                var a1 = $('<a role="button" onclick="getTableValues(' + (currentPageNumber - 1) + ')">' + "<" + '</a>');
+                li1.append(a1);
+                //ul.append(li1);
+
+
+                var li2 = $("<li disabled='true'  id='first_page' ></li>");
+                var a2 = $('<a disabled="true" role="button" onclick="getTableValues(' + 1 + ')">' + "<<" + '</a>');
+                li2.append(a2);
+                //ul.append(li2);
+                //ul.append(li2);
+
+                var li3 = $("<li id='next_page'></li>");
+                var a3 = $('<a role="button" onclick="getTableValues(' + (currentPageNumber + 1) + ')">' + ">" + '</a>');
+                li3.append(a3);
+                //ul.append(li3);
+
+
+                var li4 = $("<li id='last_page'></li>");
+                var a4 = $('<a role="button" onclick="getTableValues(' + numberOfPages + ')">' + ">>" + '</a>');
+                li4.append(a4);
+                //ul.append(li4);
+                //ul.prepend(li4);
+                //alert("pagination is being inserted");
+                ul_pagination.append(li2);
+                ul_pagination.append(li1);
+                ul_pagination.append(li3);
+                ul_pagination.append(li4);
+            }
+            else {
+                //alert(numberOfPages + " ," + currentPageNumber + "if1");
+                var li1 = $("<li  id='previous_page'></li>");
+                var a1 = $('<a role="button" onclick="getTableValues(' + (currentPageNumber - 1) + ')">' + "<" + '</a>');
+                li1.append(a1);
+                //ul.append(li1);
+
+
+                var li2 = $("<li id='first_page'></li>");
+                var a2 = $('<a role="button" onclick="getTableValues(' + 1 + ')">' + "<<" + '</a>');
+                li2.append(a2);
+                //ul.append(li2);
+                //ul.append(li2);
+
+                var li3 = $("<li id='next_page'></li>");
+                var a3 = $('<a role="button" onclick="getTableValues(' + (numberOfPages) + ')">' + ">" + '</a>');
+                li3.append(a3);
+                //ul.append(li3);
+
+
+                var li4 = $("<li id='last_page'></li>");
+                var a4 = $('<a role="button" onclick="getTableValues(' + numberOfPages + ')">' + ">>" + '</a>');
+                li4.append(a4);
+                //ul.append(li4);
+                //ul.prepend(li4);
+                //alert("pagination is being inserted");
+                ul_pagination.append(li2);
+                ul_pagination.append(li1);
+                ul_pagination.append(li3);
+                ul_pagination.append(li4);
+                //ul.append(li2);
+                //ul.append(li2);
+                //ul.prepend(li2);
+
+                //div_pagination.append(pagination_ul);
+            }
+            //alert("appended");
+            div_pagination.append(ul_pagination);
+        }
+    }
+
+    var dayInput;
+    var monthInput;
+    var yearInput;
+
+    function popUpDateSelection() {
+        //alert(orderItemId);
+        //alert(amount);
+        //var formGroup = $("#div_form");
+        //$('<div style="margin-right:100px;" class="form-group"></div>');
+        var year = "@PersianDateTime.Now.Year";
+        //var label = $('<label style="margin-top:8px;margin-right:80px" for="' + orderItemId + "_" + amount + '">متراژ ابلاغی را وارد کنید</label>');
+        //var divInside = $('<div class="col-md-4"></div>');
+        //var divInput = $("#div_input");
+        //var divInput = $(
+        //    `<div class="col-md-9" style="margin-top:30px;">
+        //    <span>
+        //    <input class="col-md-2 form-control" dir="rtl" id="day" name="Day" style="width:25%;text-align:center;float:center" type="text" onchange="setDay(this.value);" placeholder="روز">
+        //        </span>
+        //    <span>
+        //        <label for="" style="font-size:40px;padding-top:6px;float:right;">/</label>
+        //    </span>
+        //    <span>
+        //        <input class="col-md-2 form-control" dir="rtl" id="month" name="Month" style="width:25%;text-align:center" type="text" onchange="setMonth(this.value);" placeholder="ماه">
+        //        </span>
+        //        <span>
+        //            <label  style="font-size:40px;padding-top:6px;float:right;">/</label>
+        //        </span>
+        //        <span>
+        //            <input class="col-md-2 form-control" dir="rtl" id="year" name="Year" style="width:40%;text-align:center" onchange="setYear(this.value);" type="text" placeholder="سال" value="` + year + `">
+        //        </span>
+
+        //    </div>`
+        //);
+
+        //formGroup.append(divInput);
+        $("#day").val("").change();
+        $("#month").val("").change();
+        $("#year").val(year).change();
+
+        var parentDiv = $('#divPopUpDateSelection');
+        //parentDiv.append(formGroup);
+
+        var d = $(".ui-dialog-buttonset").remove();
+        //alert(d.children.name);
+        //alert(d);
+
+        parentDiv.dialog({
+            height: 250,
+            width: 500,
+            modal: true,
+            buttons: {
+                "انتخاب": function () {
+                    //dispatchToProduction(orderItemId, amount);
+                    // alert("ok is chosen")
+                    var day = dayInput;
+                    var month = monthInput;
+                    var year = yearInput;
+
+
+                    date = year + "/" + month + "/" + day;
+
+
+                    var optionDate = $('<option id = "option_' + date + '" value="' + date + '" >' + date + '</option>');
+
+
+                    var length = $('#dates > option').length;
+                    $('#dates > option').eq(length - 1).before(optionDate);
+
+
+                    //$("#dates").append(optionDate);
+                    //alert(optionDate);
+                    $(this).dialog("close");
+                    var newOption2 = $('select[name="Date"]').find('option[value="' + date + '"]').attr("selected", true);
+
+                    getTableValues(1, date);
+                    //var newOption = $('#option_' + date);
+
+
+                    //newOption2.attr('selected', 'selected');
+                    //alert(newOption);
+                    //alert(date);
+
+
+
+
+                    //alert("You selected OK!!")
+                },
+                "انصراف": function () {
+                    $(this).dialog("close");
+                }
+
+            }
+        });
+    }
+
+    function setDay(input) {
+        dayInput = input;
+        alert(dayInput);
+    }
+
+    function setMonth(input) {
+        monthInput = input;
+    }
+
+    function setYear(input) {
+        //alert(input);
+        yearInput = input;
+    }
+</script>*@

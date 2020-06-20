@@ -1,0 +1,45 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section menu_Items
+{
+    <nav id="menu" class="navbar">
+        <div class="navbar-header"> <span class="visible-xs visible-sm"> منو <b></b></span></div>
+        <div class="container">
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a class="home_link" title=" سالن ها" href="@Url.Action("Index", new { controller = "Saloons", area = "Production" })">سالن ها </a>
+                    </li>
+                        <li>
+                            <a class="home_link" title=" دستگاه ها" href="@Url.Action("Index", new { controller = "Devices", area = "Production" })">دستگاه ها </a>
+                    </li>
+                    <li>
+                        <a class="home_link" title=" خطوط تولید" href="@Url.Action("Index", new { controller = "ProductionLines", area = "Production" })">خطوط تولید </a>
+                    </li>
+                    <li>
+                        <a class="home_link" title=" گزارشات" href="@Url.Action("Index", new { controller = "DailyProductionReports", area = "Production" })">گزارشات </a>
+                    </li>
+                    <li class="dropdown">
+                        <a class="home_link" title=" نمودارها" href="@Url.Action("Index", new { controller = "DailyProductionReports", area = "Production" })">نمودارها</a>
+                        <div class="dropdown-menu">
+                            <ul>
+                                <li>
+                                    <a class="home_link" title=" مواد مصرفی و ضایعات" href="@Url.Action("wastagechart", new { controller = "charts", area = "production" })"> مواد مصرفی و ضایعات</a>
+                                </li>
+                                @*<li>
+                        <a class="home_link" title="  مواد مصرفی" href="@Url.Action("IndexInquirier", new { controller = "Importedproducts", area = "Storage" })"> مواد مصرفی</a>
+                    </li>*@
+
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+}
+
+@RenderBody()

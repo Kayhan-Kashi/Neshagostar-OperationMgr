@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Neshagostar.DAL.DataModel.StorageRelated.ProductsRelated.ImportedProduct>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>لیست کالاهای ورودی</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th style="text-align:center">
+            @Html.DisplayNameFor(model => model.Product.Title)
+        </th>
+        <th style="text-align:center">
+            @Html.DisplayNameFor(model => model.AmountImported)
+        </th>
+
+        <th style="text-align:center">
+            @Html.DisplayNameFor(model => model.AmountAllocated)
+        </th>
+
+        <th style="text-align:center">
+            @Html.DisplayNameFor(model => model.AmountUnAllocated)
+        </th>
+
+        <th style="text-align:center">
+            @Html.DisplayNameFor(model => model.IsAllocatedCompletely)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td style="text-align:center">
+                @Html.DisplayFor(modelItem => item.Product.Title)
+            </td>
+
+            <td style="text-align:center">
+                @Html.DisplayFor(modelItem => item.AmountImported)
+            </td>
+            <td style="text-align:center">
+                @Html.DisplayFor(modelItem => item.AmountAllocated)
+            </td>
+
+            <td style="text-align:center">
+                @Html.DisplayFor(modelItem => item.AmountUnAllocated)
+            </td>
+
+            @{
+                if (item.IsAllocatedCompletely)
+                {
+                    <td style="color:green;text-align:center;">
+                        بله
+                    </td>
+                }
+                else
+                {
+                    <td style="color:red;text-align:center;">
+                        خیر
+                    </td>
+                }
+            }
+
+            <td>
+                @Html.ActionLink("تخصیص", "Allocate", new { area = "Storage", controller = "AllocatedProducts", importedProductId = item.Id })
+
+            </td>
+        </tr>
+    }
+
+</table>

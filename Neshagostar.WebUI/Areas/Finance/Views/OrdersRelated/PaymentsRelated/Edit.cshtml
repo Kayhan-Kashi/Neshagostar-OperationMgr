@@ -1,0 +1,85 @@
+﻿@model Neshagostar.WebUI.Areas.Finance.Models.OrdersRelated.PaymentDTO
+
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>ویرایش</h2>
+@using (Html.BeginForm("Edit", "Payments", new { area = "finance" }, FormMethod.Post, null))
+{
+    <div class="col-md-12 well" style="padding-left:30px;">
+        <div class="form-group">
+            <div class="col-md-3">
+                @Html.Label("نام خریدار", htmlAttributes: new { @class = "control-label col-md-4", style = "text-align:center;padding-top:5px" })
+                <div>
+                    @Html.EditorFor(model => Model.CustomerName, new { htmlAttributes = new { @class = "form-control", dir = "rtl", id = "customer_name", style = "text-align:center;width:60%", @readonly = "true" } })
+                </div>
+
+            </div>
+            <div class="col-md-3">
+                @Html.Label("مبلغ پرداختی", htmlAttributes: new { @class = "control-label col-md-5", style = "text-align:center;;padding-top:5px" })
+                @Html.EditorFor(model => Model.Amount, new { htmlAttributes = new { @class = "form-control", dir = "rtl", id = "customer_tel", style = "text-align:center;width:50%;" } })
+            </div>
+            <div class="col-md-3">
+                @Html.Label("روش پرداخت", htmlAttributes: new { @class = "control-label col-md-4", style = "text-align:center;;padding-top:5px" })
+                @Html.DropDownList("PaymentMethodId", ViewBag.PaymentMethods as IEnumerable<SelectListItem>, new { @class = "form-control col-md-3", dir = "rtl", id = "paymentMethod_select", style = "text-align:center;width:40%;" })
+            </div>
+            <div class="col-md-3">
+                @Html.Label("تاریخ پرداخت ", new { @class = "control-label col-md-5", style = "margin-top:5px;" })
+                @Html.TextBox("Date", Model.Date, new { @class = "form-control col-md-5", placeholder = "13xx/xx/xx ", style = "text-align:center;width:40%;", id = "date" })
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-md-4" id="check_div">
+        @if (Model.PaymentMethodTitle == "چک")
+        {
+            <div>
+                <div class="col-md-12 well">
+                    @Html.Label("تاریخ وصول چک", htmlAttributes: new { @class = "control-label col-md-4", style = "text-align:center;;padding-top:5px" })
+                    @Html.EditorFor(model => Model.CheckDateToCash, new { htmlAttributes = new { @class = "form-control", dir = "rtl", id = "customer_tel", style = "text-align:center;width:30%;" } })
+                </div>
+            </div>
+        }
+    </div>
+
+
+
+    <div class="form-group">
+        <div>
+            <input id="btnSubmit" type="submit" value="ویرایش" class="btn btn-primary btn-block" />
+        </div>
+    </div>
+}
+
+
+
+<script>
+    $("#paymentMethod_select").change(function () {
+        var value = $(this).find("option:selected").text();
+
+
+        switch (value) {
+            case "چک":
+
+                // do something here
+                var div = $(`
+ <div>
+            <div class="col-md-12 well">
+                <label class="control-label col-md-4" for="" style="text-align:center;;padding-top:5px">تاریخ وصول چک</label>
+                <input class="form-control text-box single-line" dir="rtl" id="customer_tel" name="CheckDateToCash" style="text-align:center;width:30%;" type="text" value="1398/09/29">
+            </div>
+        </div>
+`);
+                $("#check_div").append(div);
+
+                break;
+            default:
+                $("#check_div").empty();
+                break;
+        }
+    });
+</script>
+

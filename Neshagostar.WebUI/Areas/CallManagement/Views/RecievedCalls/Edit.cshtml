@@ -1,0 +1,229 @@
+﻿@model Neshagostar.DAL.DataModel.CallManagement.RecievedCall
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2 style="padding-right:0px;">ویرایش تماس</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.CallerId)
+<div class="form-horizontal">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="col-md-5" style="margin-top:6px;">
+        <div>
+            <div class="form-group">
+                @Html.Label("نام طرف تماس", htmlAttributes: new { @class = "control-label col-md-3", style = "text-align:center;" })
+                <div class="col-md-9">
+                    @Html.EditorFor(model => model.Caller.Name, new { htmlAttributes = new { @class = "form-control", dir = "rtl", id = "callerName", style = "width:70%;margin-right:-20px;" } })
+
+                </div>
+            </div>
+            <div class="form-group" style="margin-top:40px;">
+                @Html.Label("شماره تماس", htmlAttributes: new { @class = "control-label col-md-3", style = "text-align:center" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.Caller.Tel, new { htmlAttributes = new { @class = "form-control", dir = "rtl", id = "callerTel", style = "width:50%;margin-right:-20px;" } })
+
+                </div>
+            </div>
+            <div class="form-group" style="margin-top:38px;">
+                @Html.Label("توضیح در مورد طرف تماس", htmlAttributes: new { @class = "control-label col-md-3", style = "text-align:center" })
+                <div class="col-md-8">
+                    @Html.TextAreaFor(model => model.Caller.Comments, new { @class = "form-control", row = "15", style = "height:100px;width:70%;margin-right:-20px;", dir = "rtl", id = "callercomments" })
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-7" style="padding-bottom:5px;">
+
+        <div class="form-group" style="margin-top:2px;">
+            @Html.Label("بخش مربوطه", new { @class = "control-label col-md-2" })
+            <div class="col-md-9">
+                @Html.DropDownList("DepartmentId", (IEnumerable<SelectListItem>)ViewBag.Departments, new { @class = "form-control", style = "width:50%" })
+            </div>
+        </div>
+        <div class="form-group" style="margin-top:10px;">
+            @Html.Label("تاریخ تماس", new { @class = "control-label col-md-2" })
+            <div class="col-md-9">
+                @Html.TextBoxFor(model => model.Date, new { @class = "col-md-2 form-control", dir = "rtl", style = "width:40%;text-align:center;float:center" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("زمان تماس", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-9">
+                @Html.TextBoxFor(model => model.Time, new { @class = "col-md-2 form-control", dir = "rtl", style = "width:40%;text-align:center;float:center" })
+            </div>
+        </div>
+
+        <div class="form-group">
+
+            <div class="col-md-7" style="margin-right:5%;margin-top:1%;margin-bottom:1%">
+                @if (Model.IsCallingFromOutside)
+                {
+                    <span>تماس ورودی</span>
+                    @Html.RadioButtonFor(model => model.IsCallingFromOutside, true, new { @checked = true, style = "margin-left:3%;" })
+                    <span >تماس خروجی</span>
+                    @Html.RadioButtonFor(model => model.IsCallingFromOutside, false)
+                }
+                else
+                {
+                    <span>تماس ورودی</span>
+                    @Html.RadioButtonFor(model => model.IsCallingFromOutside, true)
+                    <span>تماس خروجی</span>
+                    @Html.RadioButtonFor(model => model.IsCallingFromOutside, false, new { @checked = true, style = "margin-left:1%;" })
+                }
+
+
+
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Comments, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-9">
+                @Html.TextAreaFor(model => model.Comments, new { @class = "form-control", row = "15", style = "height:100px;width:50%;", dir = "rtl" })
+                @Html.ValidationMessageFor(model => model.Comments, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="ویرایش" class="btn btn-default" />
+        </div>
+    </div>
+
+</div>
+}
+
+<div style="padding-right:20px;padding-top:15px;">
+    @Html.ActionLink("بازگشت به لیست تماس‌ها", "Index", null, new { style = "font-size:18px;" })
+</div>
+
+
+
+
+@*@model Neshagostar.DAL.DataModel.CallManagement.RecievedCall
+
+    @{
+        ViewBag.Title = "Edit";
+    }
+
+    <h2>ویرایش</h2>
+
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>تماس دریافتی</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.CallerId)
+        @Html.HiddenFor(model => model.Caller.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Caller.Name, "نام تماس گیرنده", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Caller.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Caller.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Caller.Tel, "شماره تماس", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Caller.Tel, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Caller.Tel, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Time, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Time, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Time, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group" style="margin-top:2px;">
+            @Html.Label("بخش مربوطه", new { @class = "control-label col-md-2" })
+            <div class="col-md-9">
+                @Html.DropDownList("DepartmentId", (IEnumerable<SelectListItem>)ViewBag.Departments, new { @class = "form-control", style = "width:25%" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Comments, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Comments, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Comments, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Caller.Comments, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Caller.Comments, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Caller.Comments, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="ویرایش" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+    }
+
+    <div>
+        @Html.ActionLink("بازگشت به لیست", "Index")
+    </div>
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>*@
+
+<script type="text/javascript">
+    $(function () {
+        $("#callerName").autocomplete({
+            source: '@Url.Action("Search", new { area="CallManagement", controller="Callers" })',
+            minLength: 2,
+            select: function (event, ui) {
+                showTel_CallerComments(ui.item.value);
+            }
+
+        });
+    });
+
+    function showTel_CallerComments(name) {
+       // alert("ajax started");
+        $.ajax({
+            type: "GET",
+            url: "/CallManagement/Callers/GetTel/?name=" + name,
+            async: false,
+            dataType: "json",
+            content: "application/json; charset=utf-8",
+            success: function (data) {
+                //alert("recieved");
+                $("#callerTel").val(data.tel);
+                $("#callercomments").val(data.comments);
+            }
+        })
+    }
+</script>

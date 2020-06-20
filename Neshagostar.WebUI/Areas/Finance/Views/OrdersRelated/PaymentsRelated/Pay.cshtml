@@ -1,0 +1,296 @@
+﻿@model List<Neshagostar.WebUI.Areas.Finance.Models.OrdersRelated.OrderItemFinanceDTO>
+@{
+    ViewBag.Title = "Pay";
+}
+
+
+
+
+<h2 style="margin-right:3%;">پرداخت</h2>
+
+<div class="col-md-12 well" style="padding-left:30px;">
+    <div class="form-group">
+        <div class="col-md-4">
+            @Html.Label("نام خریدار", htmlAttributes: new { @class = "control-label col-md-4", style = "text-align:center;padding-top:5px" })
+            <div>
+                @Html.EditorFor(model => model[0].CustomerName, new { htmlAttributes = new { @class = "form-control", dir = "rtl", id = "customer_name", style = "text-align:center;width:60%", @readonly = "true" } })
+            </div>
+
+        </div>
+        <div class="col-md-3">
+            @Html.Label("شماره تماس", htmlAttributes: new { @class = "control-label col-md-4", style = "text-align:center;;padding-top:5px" })
+            @Html.EditorFor(model => model[0].CustomerTel, new { htmlAttributes = new { @class = "form-control", dir = "rtl", id = "customer_tel", style = "text-align:center;width:50%;", @readonly = "true" } })
+        </div>
+        <div class="col-md-2">
+            @Html.Label("محل", htmlAttributes: new { @class = "control-label col-md-3", style = "text-align:center;;padding-top:5px" })
+            @Html.EditorFor(model => model[0].CustomerCity, new { htmlAttributes = new { @class = "form-control", dir = "rtl", id = "customer_address", style = "text-align:center;width:60%;", @readonly = "true" } })
+        </div>
+        <div class="col-md-3">
+            @Html.Label("تاریخ دریافت سفارش ", htmlAttributes: new { @class = "control-label col-md-6", style = "margin-top:5px;" })
+            @Html.TextBox("Datetime", Model[0].OrderDate, htmlAttributes: new { @class = "form-control col-md-4", placeholder = "13xx/xx/xx ", style = "text-align:center;width:40%;", id = "date", @readonly = "true" })
+        </div>
+
+    </div>
+</div>
+
+<div style="overflow-y:auto;" class="table-bordered">
+    <table class="table">
+        <tr>
+            <th style="text-align:center;font-size:12px;">
+                نام محصول
+            </th>
+            <th style="text-align:center;font-size:12px;width:100px;">
+                مقدار آیتم
+            </th>
+            <th style="text-align:center;font-size:12px;">
+                قیمت واحد
+            </th>
+            <th style="text-align:center;font-size:12px;">
+                کل مبلغ آیتم
+            </th>
+            <th style="text-align:center;font-size:12px;">
+                کل مبلغ مقادیر ارسالی
+            </th>
+            <th style="text-align:center;font-size:12px;">
+                کل مبلغ مقادیر ارسال نشده
+            </th>
+
+        </tr>
+        <tbody id="inquiries_tbody">
+
+
+            @foreach (var orderItem in Model)
+            {
+                <tr>
+                    <td style="text-align:center;width:300px;font-size:12px;">
+                        @Html.DisplayFor(modelItem => orderItem.ProductName, new { style = "text-align:right;font-size:12px;" })
+                    </td>
+                    <td style="text-align:center;font-size:12px;">
+                        @Html.DisplayFor(modelItem => orderItem.OrderItemAmount)
+                        @Html.DisplayFor(modelItem => orderItem.Unit)
+                    </td>
+                    <td style="text-align:center;font-size:12px;">
+                        @Html.DisplayFor(modelItem => orderItem.PricePerUnit)
+                    </td>
+                    <td style="text-align:center;font-size:12px;">
+                        @Html.DisplayFor(modelItem => orderItem.OrderItemTotalPrice)
+                    </td>
+                    <td style="text-align:center;font-size:12px;">
+                        @Html.DisplayFor(modelItem => orderItem.SentAmountTotalPrice)
+                    </td>
+                    <td style="text-align:center;font-size:12px;">
+                        @Html.DisplayFor(modelItem => orderItem.UnsentAmountTotalPrice)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<hr />
+
+<div style="overflow-y:auto;" class="table-bordered">
+    <table class="table">
+        <tr>
+            <th style="text-align:center;font-size:12px;">
+                کل مبلغ مقادیر ارسالی
+            </th>
+            <th style="text-align:center;font-size:12px;">
+                کل مبلغ مقادیر ارسال نشده
+            </th>
+            <th style="text-align:center;font-size:12px;">
+                تسویه شده
+            </th>
+            <th style="text-align:center;font-size:12px;">
+                ارزش افزوده دارد
+            </th>
+            <th style="text-align:center;font-size:12px;">
+                کل مبلغ پرداختی
+            </th>
+            <th style="text-align:center;font-size:12px;">
+                مانده پرداختی از کل سفارش
+            </th>
+            <th style="text-align:center;font-size:12px;">
+                مانده پرداختی از کل ارسالی
+            </th>
+        </tr>
+        <tbody id="order_tbody">
+            <tr>
+
+                <td style="text-align:center;font-size:12px;">
+                @{ 
+                    double TotalSentItemsValues = ViewBag.TotalSentItemsValues;
+                    double TotalUnSentItemsValues = ViewBag.TotalUnsentItemsValues;
+                }
+                    @TotalSentItemsValues.ToString("N0")
+                </td>
+                <td style="text-align:center;font-size:12px;">
+                    @TotalUnSentItemsValues.ToString("N0")
+                </td>
+                @{
+                    if (Model[0].IsPayingCompleted)
+                    {
+                        <td style="text-align:center;color:green">
+                            بله
+                        </td>
+                    }
+                    else
+                    {
+                        <td style="text-align:center;color:red">
+                            خیر
+                        </td>
+                    }
+                }
+
+                @{
+                    if (Model[0].HasAddedCost)
+                    {
+                        <td style="text-align:center;color:green">
+                            بله
+                        </td>
+                    }
+                    else
+                    {
+                        <td style="text-align:center;color:red">
+                            خیر
+                        </td>
+                    }
+                }
+
+                <td style="vertical-align:middle;text-align:center;">
+                    @Html.DisplayFor(modelItem => modelItem[0].OrderPayedAmount)
+                </td>
+                <td style="vertical-align:middle;text-align:center;">
+                    @Html.DisplayFor(modelItem => modelItem[0].OrderRemainingToPayAmount)
+                </td>
+                <td style="vertical-align:middle;text-align:center;">
+                    @Html.DisplayFor(modelItem => modelItem[0].OrderRemainingAmountToPayFromSentItems)
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<hr />
+
+<div style="overflow-y:auto;" class="table-bordered">
+    <table class="table">
+        <tr>
+            <th style="text-align:center;font-size:12px;">
+                تاریخ پرداخت
+            </th>
+            <th style="text-align:center;font-size:12px;">
+                مبلغ پرداختی
+            </th>
+            <th style="text-align:center;font-size:12px;">
+                روش پرداخت
+            </th>
+            <th style="text-align:center;font-size:12px;">
+            
+            </th>
+        </tr>
+        <tbody id="order_tbody">
+            @if (Model[0].Payments != null && Model[0].Payments.Count > 0)
+            {
+                
+
+                foreach (var peyment in Model[0].Payments)
+                {
+            <tr>
+                <td style="text-align:center;font-size:12px;">
+                    @Html.DisplayFor(modelItem => peyment.Date)
+                </td>
+                <td style="text-align:center;font-size:12px;">
+                    @Html.DisplayFor(modelItem => peyment.Amount)
+                </td>
+                <td style="text-align:center;font-size:12px;">
+                    @Html.DisplayFor(modelItem => peyment.PaymentMethodTitle)
+                </td>
+                <td style="text-align:center;font-size:12px;">
+                    @Html.ActionLink("ویرایش", "Edit", new { controller="Payments", area="Finance", id=peyment.Id})
+                </td>
+            </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>
+
+<hr />
+@using (Html.BeginForm("Pay", "Orders", new { area = "finance" }, FormMethod.Post, null))
+{
+    @Html.Hidden("OrderId", Model[0].OrderId)
+<div class="col-md-12 well" style="padding-left:30px;">
+    <div class="form-group">
+        <div class="col-md-3">
+            @Html.Label("تاریخ پرداخت ", htmlAttributes: new { @class = "control-label col-md-6", style = "text-align:center;padding-top:5px" })
+            <div>
+                @Html.Editor("Date", new { htmlAttributes = new { @class = "form-control", dir = "rtl", id = "customer_name", placeholder = "13xx/xx/xx ", style = "text-align:center;width:50%" } })
+            </div>
+        </div>
+        <div class="col-md-3">
+            @Html.Label("مبلغ پرداختی", htmlAttributes: new { @class = "control-label col-md-5", style = "text-align:center;;padding-top:5px" })
+            @Html.Editor("Amount", new { htmlAttributes = new { @class = "form-control", dir = "rtl", id = "customer_tel", style = "text-align:center;width:50%;" } })
+        </div>
+        <div class="col-md-4">
+            @Html.Label("روش پرداخت", htmlAttributes: new { @class = "control-label col-md-5", style = "text-align:center;;padding-top:5px" })
+            @Html.DropDownList("PaymentMethodId", ViewBag.PaymentMethods as IEnumerable<SelectListItem>, "روش پرداخت", new { @class = "form-control", dir = "rtl", id = "paymentmethod_select", style = "text-align:center;width:40%;" })
+        </div>
+    </div>
+</div>
+
+<div class="col-md-10 well" style="padding-left:30px;" id="check_div">
+  
+</div>
+
+<div class="form-group">
+    <div>
+        <input id="btnSubmit" type="submit" value="ثبت پرداخت" class="btn btn-primary btn-block" />
+    </div>
+</div>
+
+}
+
+<div style="padding-right:20px;padding-top:30px;">
+    @Html.ActionLink("بازگشت به لیست سفارش‌ها", "Index", new { area="Finance" }, new { style = "font-size:18px;" })
+</div>
+
+
+
+<script>
+    $("#paymentmethod_select").change(function () {
+        var value = $(this).find("option:selected").text();
+
+
+        switch (value) {
+            case "چک":
+
+                // do something here
+                var div = $(`
+    <div class="form-group">
+        <div class="col-md-6">
+            <label class="control-label col-md-6" for="" style="text-align:center;padding-top:5px">تاریخ وصول چک </label>
+            <div>
+                <input class="form-control text-box single-line" dir="rtl" id="customer_name" name="CheckDateToCash" placeholder="13xx/xx/xx " style="text-align:center;width:50%" type="text" value="">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label class="control-label col-md-6" for="" style="text-align:center;padding-top:5px">تاریخ دریافت چک </label>
+            <div>
+                <input class="form-control text-box single-line" dir="rtl" id="customer_name" name="Date" placeholder="13xx/xx/xx " style="text-align:center;width:50%" type="text" value="">
+            </div>
+        </div>
+    </div>
+`);
+                $("#check_div").append(div);
+
+                break;
+            default:
+                $("#check_div").empty();
+                break;
+        }
+    });
+</script>
+

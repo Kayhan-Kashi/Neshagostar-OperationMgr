@@ -1,0 +1,103 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section menu_Items 
+{
+    <nav id="menu" class="navbar">
+        <div class="navbar-header"> <span class="visible-xs visible-sm"> منو <b></b></span></div>
+        <div class="container">
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a class="home_link" title=" مشتریان" href="@Url.Action("Index", new { controller = "Customers", area = "Commerce" })">مشتریان</a>
+                    </li>
+                    <li>
+                        <a class="home_link" title=" فروش" href="@Url.Action("Index", new { controller = "Orders", area = "Commerce" })">فروش</a>
+                    </li>
+
+                    <li class="dropdown">
+                        <a class="home_link" title=" استعلامات" href="@Url.Action("Index", new { controller = "Inquiries", area = "Commerce" })">استعلامات</a>
+                        <div class="dropdown-menu">
+                            <ul>
+                                <li>
+                                    <a class="home_link" title=" ثبت استعلام" href="@Url.Action("Create", new { controller = "Inquiries", area = "Commerce" })">ثبت استعلام</a>
+                                </li>
+                                <li>
+                                    <a class="home_link" title=" استعلام گران" href="@Url.Action("IndexInquirier", new { controller = "Customers", area = "Commerce" })">استعلام گران</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="dropdown">
+                        <a class="home_link" title=" مناقصات" href="@Url.Action("Index", new { controller = "Tenders", area = "Commerce" })">مناقصات</a>
+                        <div class="dropdown-menu">
+                            <ul>
+                                <li>
+                                    <a class="home_link" title=" رقبا" href="@Url.Action("Index", new { controller = "Rivals", area = "Commerce" })">رقبا</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+
+                    @*<li class="dropdown">
+            <a class="home_link" title=" سفارش ها" href="@Url.Action("Index", new { controller = "Orders", area = "Commerce" })">سفارش ها</a>
+        </li>*@
+                    <li class="dropdown">
+                        <a class="home_link" title=" مشخصات محصول" href="">مشخصات کالا</a>
+                        <div class="dropdown-menu">
+                            <ul>
+                                <li>
+                                    <a class="home_link" title=" کوپلر" href="@Url.Action("Index", new { controller = "Couplings", area = "Commerce" })">کوپلر</a>
+                                </li>
+                                <li>
+                                    <a class="home_link" title=" دسته محصول" href="@Url.Action("Index", new { controller = "ProductCategories", area = "Commerce" })">دسته محصول</a>
+                                </li>
+                                <li>
+                                    <a class="home_link" title=" نوع پروفیل" href="@Url.Action("Index", new { controller = "PipeProfiles", area = "Commerce" })">نوع پروفیل</a>
+                                </li>
+                                <li>
+                                    <a class="home_link" title=" قطر لوله" href="@Url.Action("Index", new { controller = "PipeDiameters", area = "Commerce" })">قطر لوله</a>
+                                </li>
+                                <li>
+                                    <a class="home_link" title=" مقاومت مکانیکی" href="@Url.Action("Index", new { controller = "RingStiffnesses", area = "Commerce" })">مقاومت مکانیکی</a>
+                                </li>
+                                <li>
+                                    <a class="home_link" title=" ژانر محصولات" href="@Url.Action("Index", new { controller = "ProductGenres", area = "Commerce" })">ژانر محصولات</a>
+                                </li>
+                                <li>
+                                    <a class="home_link" title="  محصولات تولیدی" href="@Url.Action("Index", new { controller = "Products", area = "Commerce" })">محصولات تولیدی</a>
+                                </li>
+                            </ul>
+
+                        </div>
+                    </li>
+
+                    <li class="dropdown">
+                        <a class="home_link" title=" مواد اولیه" href="@Url.Action("Index", new { controller = "Inquiries", area = "Commerce" })">مواد اولیه</a>
+                        <div class="dropdown-menu">
+                            <ul>
+                                <li>
+                                    <a class="home_link" title=" خریداری" href="@Url.Action("Index", new { controller = "MaterialPurchaseds", area = "Commerce" })">خریداری</a>
+                                </li>
+                                <li>
+                                    <a class="home_link" title=" فروشنده ها" href="@Url.Action("Index", new { controller = "MaterialSellers", area = "Commerce" })">فروشنده ها</a>
+                                </li>
+                                <li>
+                                    <a class="home_link" title=" نوع مواد" href="@Url.Action("Index", new { controller = "MaterialSpecifications", area = "Commerce" })">نوع مواد</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+}
+
+@RenderBody()

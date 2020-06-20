@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Neshagostar.WebUI.Areas.Storage.Models.ProductStorageDTO>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>لیست کالاهای موجود</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductName)
+        </th>
+        <th style="text-align:center">
+            @Html.DisplayName("مقدار موجود")
+        </th>
+        <th style="text-align:center">
+            @Html.DisplayNameFor(model => model.UnAllocatedAmount)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(model => item.ProductName)
+            </td>
+            <td style="text-align:center">
+                @Html.DisplayFor(model => item.ExistingAmount)
+            </td>
+
+            <td style="text-align:center">
+                @Html.DisplayFor(model => item.UnAllocatedAmount)
+            </td>
+
+        </tr>
+    }
+
+</table>

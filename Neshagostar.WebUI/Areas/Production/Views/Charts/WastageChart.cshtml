@@ -1,0 +1,222 @@
+﻿
+@{
+    ViewBag.Title = "Wastage";
+}
+
+<style>
+    #columnchart_div {
+        direction: ltr !important;
+    }
+
+    div {
+        direction: ltr;
+    }
+
+        div.div_form {
+            direction: rtl;
+        }
+
+            div.div_form div {
+                direction: rtl;
+            }
+</style>
+
+
+
+<title>نمودار ضایعات</title>
+
+<div class="col-md-12 well div_form">
+    <div class="col-md-10">
+        <div class="col-md-12 well">
+            <div class="form-group">
+                <div class="col-md-4">
+                    @Html.Label("سال :", htmlAttributes: new { @class = "control-label col-md-4", style = "text-align:center;padding-top:5px" })
+                    @Html.DropDownList("Year", ViewBag.Years as IEnumerable<SelectListItem>, null, new { @class = "form-control col-md-9", style = "width:60%;text-align:center", id = "filter_year" })
+                </div>
+                <div class="col-md-4">
+                    @Html.Label("ماه :", htmlAttributes: new { @class = "control-label col-md-4", style = "text-align:center;padding-top:5px" })
+                    @Html.DropDownList("Month", ViewBag.Months as IEnumerable<SelectListItem>, null, new { @class = "form-control", style = "width:60%;text-align:center", id = "filter_month" })
+                </div>
+
+                <div class="col-md-4">
+                    @Html.Label("نوع نمودار :", htmlAttributes: new { @class = "control-label col-md-5", style = "text-align:center;padding-top:5px" })
+                    @Html.DropDownList("Month", ViewBag.ChartTypes as IEnumerable<SelectListItem>, null, new { @class = "form-control", style = "width:50%;text-align:center", id = "filter_chartType" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 well">
+            <div class="form-group">
+                <div class="col-md-4">
+                    @Html.Label("سالن :", htmlAttributes: new { @class = "control-label col-md-3", style = "text-align:center;padding-top:5px" })
+                    <select class = "form-control col-md-9"  style = "width:60%;text-align:center" id = "filter_saloon" >
+                        <option onclick="showDevices('')" value="">همه سالن ها</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    @Html.Label("دستگاه :", htmlAttributes: new { @class = "control-label col-md-4", style = "text-align:center;padding-top:5px" })
+                    <select class="form-control col-md-9" style="width:60%;text-align:center"  id="filter_device">
+                        <option value="">همه دستگاه ها</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    @Html.Label("خط تولید", htmlAttributes: new { @class = "control-label col-md-3", style = "text-align:center;padding-top:5px;" })
+                    <select class="form-control col-md-9" style="width:75%;text-align:center"  id="filter_productionLine">
+                        <option value="">همه خطوط</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    <div class="col-md-2 well" style="margin-top:5%;">
+        <button id="btn_drawChart" class="btn btn-primary btn-block" style="width:90%;height:80%!important;margin-top:1px;">نمایش</button>
+    </div>
+</div>
+
+
+
+<div class="col-md-12">
+
+
+
+    <div class="divchart" id="columnchart_div" style="margin-left:8%;">
+
+    </div>
+
+
+    <div class="col-md-12 well div_form">
+        <div class="form-group">
+            <div class="col-md-3">
+                @Html.Label("مقدار کل مواد مصرفی :", htmlAttributes: new { @class = "control-label col-md-7", style = "text-align:center;padding-top:5px" })
+                @Html.TextBox("TotalConsumed", "", new { @class = "form-control col-md-5", dir = "rtl", id = "total_consumed", style = "width:40%;", @readonly = "true" })
+            </div>
+            <div class="col-md-3">
+                @Html.Label("بیشینه مواد مصرفی :", htmlAttributes: new { @class = "control-label col-md-7", style = "text-align:center;padding-top:5px" })
+                @Html.TextBox("MaxConsumed", "", new { @class = "form-control col-md-5", dir = "rtl", id = "max_consumed", style = "width:40%;", @readonly = "true" })
+            </div>
+            <div class="col-md-3">
+                @Html.Label("کمینه مواد مصرفی :", htmlAttributes: new { @class = "control-label col-md-7", style = "text-align:center;padding-top:5px" })
+                @Html.TextBox("MinConsumed", "", new { @class = "form-control col-md-5", dir = "rtl", id = "min_consumed", style = "width:40%;", @readonly = "true" })
+            </div>
+            <div class="col-md-3">
+                @Html.Label("متوسط مواد مصرفی :", htmlAttributes: new { @class = "control-label col-md-7", style = "text-align:center;padding-top:5px" })
+                @Html.TextBox("AverageConsumed", "", new { @class = "form-control col-md-5", dir = "rtl", id = "average_consumed", style = "width:40%;", @readonly = "true" })
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="col-md-12 well div_form">
+        <div class="form-group">
+            <div class="col-md-3">
+                @Html.Label("مقدار کل ضایعات تولیدی :", htmlAttributes: new { @class = "control-label col-md-7", style = "text-align:center;padding-top:5px" })
+                @Html.TextBox("TotalWastage", "", new { @class = "form-control col-md-5", dir = "rtl", id = "total_wastage", style = "width:40%;", @readonly = "true" })
+            </div>
+            <div class="col-md-3">
+                @Html.Label("بیشینه ضایعات تولیدی :", htmlAttributes: new { @class = "control-label col-md-7", style = "text-align:center;padding-top:5px" })
+                @Html.TextBox("MaxWastage", "", new { @class = "form-control col-md-5", dir = "rtl", id = "max_wastage", style = "width:40%;", @readonly = "true" })
+            </div>
+            <div class="col-md-3">
+                @Html.Label("کمینه ضایعات تولیدی :", htmlAttributes: new { @class = "control-label col-md-7", style = "text-align:center;padding-top:5px" })
+                @Html.TextBox("MinWastage", "", new { @class = "form-control col-md-5", dir = "rtl", id = "min_wastage", style = "width:40%;", @readonly = "true" })
+            </div>
+            <div class="col-md-3">
+                @Html.Label("متوسط ضایعات تولیدی :", htmlAttributes: new { @class = "control-label col-md-7", style = "text-align:center;padding-top:5px" })
+                @Html.TextBox("AverageWastage", "", new { @class = "form-control col-md-5", dir = "rtl", id = "average_wastage", style = "width:40%;", @readonly = "true" })
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    getSaloonsName();
+    //$(document).ready(getDevicesName());
+    //$(document).ready(getProductionLines());
+
+    function getSaloonsName() {
+        var saloon_select = $("#filter_saloon");
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json",
+            url: '/production/Saloons/GetSaloons',
+            success: function (result) {
+                if (result.length > 0) {
+                    $.each(result, function (i, obj) {
+                        //alert(obj);
+                        saloon_select.append($("<option onclick=showDevices('" + obj.Id + "') value=" + obj.Id + ">" + obj.Name + "</option>"));
+                    });
+                }
+            }
+        });
+    }
+
+    function showDevices(saloonId) {
+        var device_select = $("#filter_device").empty();
+
+        if ($("#filter_saloon").find("option:selected").attr("value") == "") {
+            var productionLine_select = $("#filter_productionLine").empty();
+            device_select.append($("<option  onclick=showProductionLines('')  value=''>همه دستگاهها</option>"));
+            productionLine_select.append($("<option  onclick=showProductionLines('')  value=''>همه خطوط</option>"));
+            return;
+        }
+        //alert("showdevices called")
+        //var device_select = $("#filter_device").empty();
+        device_select.append($("<option  onclick=showProductionLines('')  value=''>همه دستگاهها</option>"));
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json",
+            url: '/production/devices/GetDevices?saloonId=' + saloonId,
+            success: function (result) {
+                if (result.length > 0) {
+                    $.each(result, function (i, obj) {
+                        //alert(obj);
+                        device_select.append($("<option  onclick=showProductionLines('" + obj.Id + "')  value=" + obj.Id + ">" + obj.Name + "</option>"));
+                    });
+                }
+            }
+        });
+    }
+
+    function showProductionLines(deviceId) {
+        var productionLine_select = $("#filter_productionLine").empty();
+
+        if ($("#filter_device").find("option:selected").attr("value") == "") {
+            productionLine_select.append($("<option  onclick=showProductionLines('')  value=''>همه خطوط</option>"));
+            return;
+        }
+      
+        productionLine_select.append($("<option value=''>همه خطوط</option>"));
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json",
+            url: '/production/productionLines/GetProductionLines?deviceId=' + deviceId,
+            success: function (result) {
+                if (result.length > 0) {
+                    $.each(result, function (i, obj) {
+                        //alert(obj.Name);
+                        productionLine_select.append($("<option  value=" + obj.Id + ">" + obj.Description + "</option>"));
+                    });
+                }
+            }
+        });
+    }
+
+
+    
+</script>
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="~/Scripts/NeshagostarScripts/Production/Charts/ProductionCharts.js"></script>
+<script src="~/Content/MarketShop/js/owl.carousel.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $(".custom-footer").addClass("col-md-12");
+    });
+</script>

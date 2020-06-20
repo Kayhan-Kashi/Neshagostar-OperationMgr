@@ -1,0 +1,362 @@
+﻿@using Neshagostar.WebUI.Areas.Storage.Models
+@model OrderItemSendingDetailDTO
+
+
+<link href="~/Content/jquery-ui.css" rel="stylesheet">
+<script src="~/Scripts/jquery-ui.js"></script>
+
+
+
+@using (Html.BeginForm("Edit", "Sendings", new { area = "storage", id = Model.Id }, FormMethod.Post, null))
+{
+    @Html.HiddenFor(or => or.OrderItemId)
+    @Html.Hidden("sendings", ViewBag.sendings as string)
+    <div class="col-md-12 well" style="padding-left:30px;">
+        <div class="form-group">
+            <div class="col-md-4" style="padding:0px;margin:0px;">
+                @Html.Label("نام خریدار", htmlAttributes: new { @class = "control-label col-md-3", style = "text-align:center;padding-top:5px;margin-left:0px;margin-right:0px;" })
+                <div>
+                    @Html.TextBox("CustomerName", ViewBag.CustomerName as string, new { @class = "form-control col-md-3", dir = "rtl", id = "customer_name", style = "text-align:center;width:60%;margin-left:0px;margin-right:0px;", @readonly = "true" })
+                </div>
+
+            </div>
+            <div class="col-md-5">
+                @Html.Label("نوع محصول", htmlAttributes: new { @class = "control-label col-md-3", style = "text-align:center;;padding-top:5px" })
+                @Html.TextBox("ProductName", ViewBag.ProductName as string, new { @class = "form-control col-md-3", dir = "rtl", id = "customer_name", style = "text-align:center;width:60%;margin-left:0px;margin-right:0px;", @readonly = "true" })
+            </div>
+
+            <div class="col-md-3">
+
+                @Html.Label("تاریخ ابلاغ ", htmlAttributes: new { @class = "control-label col-md-4", style = "margin-top:5px;" })
+                @Html.TextBox("DispatchDate", ViewBag.DispatchDate as string, new { @class = "form-control col-md-3", dir = "rtl", id = "customer_name", style = "text-align:center;width:60%;margin-left:0px;margin-right:0px;", @readonly = "true" })
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-md-9 well" style="padding-left:30px;">
+        <div class="col-md-4">
+            @Html.Label("تاریخ ارسال بار", htmlAttributes: new { @class = "control-label col-md-6", style = "text-align:center;;padding-top:5px" })
+            @Html.TextBox("DateSent", Model.DateSent, new { @class = "form-control", dir = "rtl", id = "DateSent", style = "text-align:center;width:40%;", placeholder = "13xx/xx/xx" })
+        </div>
+
+        <div class="col-md-4">
+            @Html.Label("تاریخ دریافت", htmlAttributes: new { @class = "control-label col-md-6", style = "text-align:center;;padding-top:5px" })
+            @Html.TextBox("DateArrived", Model.DateArrived, new { @class = "form-control", dir = "rtl", id = "DateArrived", style = "text-align:center;width:40%;", placeholder = "13xx/xx/xx" })
+        </div>
+
+        <div class="col-md-4">
+            @Html.Label("مقدار ارسالی", htmlAttributes: new { @class = "control-label col-md-6", style = "text-align:center;;padding-top:5px" })
+            @Html.TextBox("SendingAmount", (Model.SendingAmount).ToString(), new { @class = "form-control", dir = "rtl", id = "sendingAmount", style = "text-align:center;width:40%;", @readonly = "true" })
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="col-md-9" style="margin-bottom:30px;">
+            <div style="overflow-y:auto;" class="table-bordered">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center">
+                                تاریخ تولید
+                            </th>
+                            <th style="text-align:center">
+                                مقدار موجود
+                            </th>
+                            <th style="text-align:center">
+                                مقدار ارسالی
+                            </th>
+                            <th style="text-align:center">
+                                عملیات
+                            </th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody id="tbody_allocated">
+
+                        @{
+                            double sum = 0;
+                            var sendingAllocateds = Model.SendingAllocateds;
+                        }
+                        @if (sendingAllocateds != null && sendingAllocateds.Count > 0)
+                        {
+                            for (int i = 0; i < (sendingAllocateds).Count; i++)
+                            {
+                                @Html.Hidden("SendingAllocateds[" + i + "].Id", sendingAllocateds[i].Id, new { id = "SendingAllocateds[" + i + "].AllocatedProductId" })
+                                @Html.Hidden("SendingAllocateds[" + i + "].DateProducted", sendingAllocateds[i].DateProducted, new { id = "SendingAllocateds[" + i + "].Date" })
+                                sum += sendingAllocateds[i].AvailableAmountToSend;
+                                <tr>
+                                    <td style="text-align:center">@sendingAllocateds[i].DateProducted</td>
+                                    <td style="text-align:center" id="td_availToSend_@i">@(sendingAllocateds[i].AvailableAmountToSend )</td>
+                                    <td style="text-align:center;"> @Html.TextBox("SendingAllocateds[" + i + "].SendingAmount", @sendingAllocateds[i].SendingAmount, new { @class = "form-control", style = "text-align:center;margin-right:35%", id = "td_amountToSend_" + @i, onchange = "checkInput(" + i + ", this.value)", onkeyup = "checkInput(" + i + ", this.value)" })</td>
+                                    @*<td style="text-align:center">@Html.ActionLink("حذف", "Delete", new { area = "storage", controller = "SendingAllocateds", id = sendingAllocateds[i].Id })</td>*@
+                                </tr>
+
+                            }
+                            <tr>
+                                <th></th>
+                                <th style="text-align:center;">مجموع قابل ارسال</th>
+                                <th style="text-align:center;">مجموع ارسالی</th>
+
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <td style="text-align:center;" id="sendingAmountAvailable"> @sum</td>
+                                <td> @Html.TextBox("SumOfSending", Model.SendingAmount, new { @class = "form-control", style = "text-align:center;margin-right:27%;width:40%", id = "SumOfSending", @readonly = "true" })</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+        @*<div class="col-md-3 well">
+                @Html.Label("مقدار فعلی آماده ارسال", htmlAttributes: new { @class = "control-label col-md-6", style = "text-align:center;;padding-top:5px;font-size:12px;" })
+                @Html.TextBox("AvailableAmountToSend", ((double)ViewBag.AvailableAmountToSend).ToString(), new { @class = "form-control", dir = "rtl", id = "amount_dispatched", style = "text-align:center;width:40%;", @readonly = "true" })
+            </div>*@
+
+        <div class="form-group">
+            <div>
+                <input id="btnSubmit" type="button" value="" class="btn btn-primary btn-block" style="background-color:white" />
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-md-12 well" style="padding-left:30px;">
+        <div class="col-md-12">
+            <div class="col-md-4">
+                @Html.Label("مقصد ارسال", htmlAttributes: new { @class = "control-label col-md-6", style = "text-align:center;;padding-top:5px" })
+                @Html.TextBox("Destination", Model.Destination, new { @class = "form-control", dir = "rtl", id = "AmountNotSent", style = "text-align:center;width:40%;" })
+            </div>
+            <div class="col-md-3">
+                @Html.Label("شماره بارنامه", htmlAttributes: new { @class = "control-label col-md-5", style = "text-align:center;;padding-top:5px" })
+                @Html.TextBox("CarrierNumberCode", Model.CarrierNumberCode, new { @class = "form-control", dir = "rtl", id = "amount_dispatched", style = "text-align:center;width:50%;" })
+            </div>
+
+            <div class="col-md-3">
+                @Html.Label("نام راننده", htmlAttributes: new { @class = "control-label col-md-4", style = "text-align:center;;padding-top:5px" })
+                @Html.TextBox("DriverName", Model.DriverName, new { @class = "form-control", dir = "rtl", id = "amount_dispatched", style = "text-align:center;width:60%;" })
+            </div>
+        </div>
+
+
+        <div class="col-md-12" style="margin-top:2%;">
+            <div class="col-md-4">
+                @Html.Label("شماره راننده", htmlAttributes: new { @class = "control-label col-md-6", style = "text-align:center;;padding-top:5px" })
+                @Html.TextBox("DriverTel", Model.DriverTel, new { @class = "form-control", dir = "rtl", id = "amount_dispatched", style = "text-align:center;width:45%;" })
+            </div>
+            <div class="col-md-3">
+                @Html.Label("مقدار باسکول", htmlAttributes: new { @class = "control-label col-md-6", style = "text-align:center;;padding-top:5px" })
+                @Html.TextBox("BasculeWeight", Model.BasculeWeight, new { @class = "form-control", dir = "rtl", id = "amount_dispatched", style = "text-align:center;width:40%;" })
+            </div>
+            <div class="col-md-3">
+                @Html.Label("کرایه", htmlAttributes: new { @class = "control-label col-md-6", style = "text-align:center;;padding-top:5px" })
+                @Html.TextBox("Price", Model.Price, new { @class = "form-control", dir = "rtl", id = "price", style = "text-align:center;width:40%;" })
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="col-md-8 form-group well">
+
+        @Html.Label("توضیحات ", htmlAttributes: new { @class = "control-label col-md-4", style = "margin-top:1%" })
+
+        @Html.TextArea("Comments", null, new { @class = "form-control col-md-5", id = "orderItem_comments", style = "width:100%;" })
+
+    </div>
+    <div class="col-md-4 form-group ">
+
+
+
+    </div>
+
+
+
+
+
+    <div class="form-group">
+        <div>
+            <input id="btn_edit" type="button" value="ویرایش" class="btn btn-primary btn-block" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div>
+            <button id="hide_btn" class="btn btn-primary btn-block" style="display:none" onclick="return;" disabled>ثبت</button>
+        </div>
+    </div>
+
+
+
+}
+
+<div style="padding-right:20px;padding-top:30px;">
+    @Html.ActionLink("بازگشت به لیست ارسال", "Edit", new { area = "Storage", controller = "Orders", id = ViewBag.OrderItemId as string }, new { style = "font-size:18px;" })
+</div>
+
+
+
+<script>
+
+
+    $("#btn_error").click(function () {
+        alert("کالای تولیدی برای ارسال تخصیص داده نشده است");
+    });
+    var rowCount = $('#tbody_allocated tr').length - 2;
+
+    var initValues = [];
+    for (var i = 0; i < rowCount; i++) {
+        initValues.push(parseFloat($("#td_amountToSend_" + i).val()));
+    }
+
+
+    var sendingAmountAvailable;
+
+
+
+    function checkInput(index, value) {
+
+        //alert(index);
+        if (value == "" || value == "0") {
+            $("#td_amountToSend_" + index).val(initValues[index]);
+
+
+        }
+        else {
+            $("#hide_btn").attr("style", "display:none");
+            $("#btn_edit").attr("style", "display:block");
+        }
+
+        var sum = 0;
+        for (var i = 0; i < rowCount; i++) {
+            var currentValue = parseFloat($("#td_amountToSend_" + i).val());
+            sum += currentValue;
+            sendingAmountAvailable = parseFloat($("#td_availToSend_" + i).html());
+
+            if (currentValue > sendingAmountAvailable) {
+                alert("موجودی کافی نیست ");
+                $("#btn_edit").attr("style", "display:none");
+
+                $("#hide_btn").attr("style", "display:block");
+                return;
+
+            }
+        }
+        var availToSend = parseFloat($("#sendingAmountAvailable").html());
+        if (availToSend >= sum) {
+            $("#SumOfSending").val(sum);
+            $("#btn_edit").attr("style", "display:block");
+        } else {
+            alert("موجودی کافی نیست ");
+            $("#btn_edit").attr("style", "display:none");
+            return;
+
+        }
+    }
+
+
+    //$("#sendBtn").click(function () {
+    //    $.ajax(
+    //        {
+    //            url: "/Storage/Sendings/Create/",
+    //            async: false,
+    //            data: { sendings: getInputValues(), orderItemId = $("#orderItemId").val() },
+    //            dataType: "json",
+    //            method:"POST",
+    //            content: "application/json; charset=utf-8",
+    //            success: function (data) {
+
+    //            }
+    //        });
+    //});
+
+
+    function getRowValue(i) {
+        var currentValue = parseFloat($("#td_amountToSend_" + i).val());
+        var currentId = $("#sendingAllocateds[" + i + "].AllocatedProductId").val();
+        return new { SendingValue: currentValue, ProductAllocatedId: currentId };
+    }
+
+    function getInputValues() {
+        var inputValues = [];
+        var rowCount = $('#tbody_allocated tr').length - 2;
+        for (var i = 0; i < rowCount; i++) {
+            inputValues.push(getRowValue(i));
+        }
+        return inputValues;
+    }
+
+</script>
+
+<script>
+    $("#btn_edit").click(popUpJustify);
+
+
+    function popUpJustify() {
+        var parentDiv = $('<div id="divPopupProducts" style="display:none;margin-top:5%;background:white;"></div>');
+
+        var formGroupReason = $('<div class="col-sm-12 form-group"></div>');
+        var labelReason = $('<label class="control-label col-md-3" for="Reason">دلیل عملیات</label>');
+        formGroupReason.append(labelReason);
+
+        var divReason = $('<div class="col-md-12"></div>');
+        var inputReason = $('<textarea  style="width:80%"  class="form-control" data-val="true" data-val-required="لطفا دلیل را وارد فرمائید" id="reason" name="Reason" type="text" value=""></textarea>');
+        var validationReason = $('<span class="field-validation-valid text-danger" data-valmsg-for="Reason" data-valmsg-replace="true"></span>');
+        divReason.append(inputReason);
+        divReason.append(validationReason);
+        formGroupReason.append(divReason);
+
+        var formGroupComments = $('<div class="col-sm-12 form-group"></div>');
+        var labelComments = $('<label class="control-label col-md-3" for="Comments">توضیحات</label>');
+        formGroupComments.append(labelComments);
+
+        var divComments = $('<div class="col-md-12"></div>');
+        var inputComments = $('<textarea style="width:80%" class="form-control" cols="30"  rows="2  data-val="true" data-val-required="لطفا دلیل را وارد فرمائید" id="comments" name="Comments" type="text" value=""></textarea>');
+        var validationComments = $('<span class="field-validation-valid text-danger" data-valmsg-for="Comments" data-valmsg-replace="true"></span>');
+        divComments.append(inputComments);
+        divComments.append(validationComments);
+        formGroupComments.append(divComments);
+
+
+
+        parentDiv.append(formGroupReason);
+        parentDiv.append(formGroupComments);
+
+        parentDiv.dialog({
+            height: 430,
+            width: 800,
+            modal: true,
+            buttons: {
+                "OK": function () {
+                    $.ajax({
+                        url: "/personnelmanagement/justifies/create",
+                        data: { reason: $("#reason").val(), comments: $("#comments").val(), action: "Edit", Entity: "Sending" },
+                        type: "POST",
+                        async: false,
+                        dataType: "json",
+                        content: "application/json; charset=utf-8",
+                        success: function (data) {
+                            if (data.value) {
+                                //alert(data.value);
+                                $("form").submit();
+                            }
+                        }
+
+                    })
+                    $(this).dialog("close");
+                    //alert("You selected OK!!")
+                },
+                "Cancel": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+
+    }
+</script>

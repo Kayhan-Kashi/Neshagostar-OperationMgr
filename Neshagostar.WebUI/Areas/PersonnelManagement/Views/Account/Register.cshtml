@@ -1,0 +1,59 @@
+﻿@model Neshagostar.WebUI.Areas.PersonnelManagement.Models.RegisterViewModel
+
+
+@{
+    /**/
+
+    ViewBag.Title = "Register";
+}
+
+<h2 style="padding-right:20px;">ثبت نام</h2>
+
+@using (Html.BeginForm("Register", "Account", new { area = "PersonnelManagement" }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Name, new { @class = "form-control", dir = "rtl" })
+            @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", dir = "rtl" })
+            @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.DepartmentName, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("DepartmentId", (IEnumerable<SelectListItem>)ViewBag.Departments, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.DepartmentName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ConfirmPass, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.PasswordFor(m => m.ConfirmPass, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.ConfirmPass, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group" style="padding-right:15px;">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="ثبت نام" style="width:10%" />
+        </div>
+    </div>
+}
+

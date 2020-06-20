@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Neshagostar.WebUI.Areas.PersonnelManagement.Models.Personnel.PersonnelViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>لیست حساب های کاربری</h2>
+
+
+<table class="table">
+    <tr>
+
+        <th>
+            @Html.DisplayName("نام")
+        </th>
+        <th>
+            @Html.DisplayName("نام کاربری")
+        </th>
+        <th></th>
+    </tr>
+    @if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+            <tr>
+
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+ 
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+    }
+
+
+</table>

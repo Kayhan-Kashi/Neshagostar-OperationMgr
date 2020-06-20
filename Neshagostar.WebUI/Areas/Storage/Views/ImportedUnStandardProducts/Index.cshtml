@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Neshagostar.DAL.DataModel.StorageRelated.WastageRelated.ImportedUnStandardProduct>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayName("محصول نامنطبق")
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AmountImportedInMeter)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AmountImportedInKilo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductIssue.Title)
+        </th>
+
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date)
+        </td>
+        <td>
+            @Html.DisplayFor(model => item.Product.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AmountImportedInMeter)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AmountImportedInKilo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProductIssue.Title)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+        </td>
+    </tr>
+}
+
+</table>

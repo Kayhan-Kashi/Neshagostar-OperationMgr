@@ -1,0 +1,164 @@
+﻿@model Neshagostar.DAL.DataModel.StorageRelated.WastageRelated.ImportedUnStandardProduct
+
+@{
+    ViewBag.Title = "Create";
+}
+
+
+<link href="~/Content/jquery-ui.css" rel="stylesheet">
+<script src="~/Scripts/jquery-ui.js"></script>
+
+
+<h2>Create</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>ImportedUnStandardProduct</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.Label("نوع محصول نامنطبق", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.Hidden("ProductId", null, new { id = "productInputHidden" })
+                @Html.TextBox("ProductInput", null, htmlAttributes: new { @class = "form-control col-md-7", onclick = "popUpProducts()", id = "productInput", placeholder = "نوع محصول", style = "width:70%;text-align:center;margin:0%;" })
+                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("ProductIssueId", "ایراد", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.DropDownListFor(d => d.ProductIssueId, (IEnumerable<SelectListItem>)ViewBag.ProductIssues, "ایراد محصول کدام است", new { @class = "form-control text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AmountImportedInMeter, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.AmountImportedInMeter, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.AmountImportedInMeter, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AmountImportedInKilo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.AmountImportedInKilo, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.AmountImportedInKilo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Issue, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Issue, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Issue, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Comments, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Comments, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Comments, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="ثبت" class="btn btn-default" style="width:20%" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+
+<script>
+
+    var products = "";
+
+    function getProductsJson() {
+        return $.ajax({
+            type: "GET",
+            url: "/commerce/products/getProducts"
+        });
+    };
+
+    var productsPromise = getProductsJson();
+
+    productsPromise.success(function (data) {
+        products = data;
+        //alert(data[0].id)
+    });
+
+    var parentProductsDialog;
+
+    function popUpProducts() {
+        //alert("popup ");
+
+        var parentDiv = $('<div id="divPopupProducts" style="display:none"></div>').addClass("table-responsive");
+        //alert();
+        var table = $("<table></table>").addClass("table table-hover");
+        var headers = $("<tr></tr>");
+        headers.append(
+            `<th>نام محصول</th>
+         <th>نوع</th>
+        `);
+
+        headers.appendTo(table);
+        var tableDatas = $("<tr></tr>");
+        for (var productNum = 0; productNum < products.length; productNum++) {
+            $(`<td style="font-family:B Nazanin" onclick="showProduct('${products[productNum].id}','${products[productNum].name}')">${products[productNum].name}</td>`).appendTo(tableDatas);
+            $(`<td style="font-family:B Nazanin" onclick="showProduct('${products[productNum].id}','${products[productNum].name}')">${products[productNum].category}</td>`).appendTo(tableDatas);
+            tableDatas.appendTo(table);
+            tableDatas = $("<tr></tr>");
+        }
+        tableDatas.appendTo(table);
+        table.appendTo(parentDiv);
+        parentProductsDialog = true;
+
+
+        parentDiv.dialog({
+            height: 400,
+            width: 500,
+            modal: true,
+            buttons: {
+                "OK": function () {
+                    $(this).dialog("close");
+                    //alert("You selected OK!!")
+                },
+                "Cancel": function () {
+                    $(this).dialog("close");
+                }
+            }
+        })
+        parentProductsDialog = parentDiv;
+    }
+
+    function showProduct(id, name) {
+
+        //alert(id + "   "  +  name);
+        $("#productInputHidden").val(id);
+        $("#productInput").val(name);
+        parentProductsDialog.dialog("close");
+
+    }
+
+</script>

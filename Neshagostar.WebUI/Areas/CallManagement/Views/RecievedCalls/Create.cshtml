@@ -1,0 +1,175 @@
+﻿@model Neshagostar.WebUI.Areas.CallManagement.Models.RecievedCallViewModel
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2 style="padding-right:0px;">ثبت تماس</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.CallerId)
+<div class="form-horizontal">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="col-md-5" style="margin-top:6px;">
+        <div >
+            <div class="form-group">
+                @Html.Label("نام طرف تماس", htmlAttributes: new { @class = "control-label col-md-3", style = "text-align:center;" })
+                <div class="col-md-9">
+                    @Html.EditorFor(model => model.CallerName, new { htmlAttributes = new { @class = "form-control", dir = "rtl", id = "callerName", style = "width:70%;margin-right:-20px;" } })
+                    @Html.ValidationMessageFor(model => model.CallerName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group" style="margin-top:40px;">
+                @Html.Label("شماره تماس", htmlAttributes: new { @class = "control-label col-md-3", style = "text-align:center" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.CallerTel, new { htmlAttributes = new { @class = "form-control", dir = "rtl", id = "callerTel", style = "width:50%;margin-right:-20px;" } })
+                    @Html.ValidationMessageFor(model => model.CallerTel, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group" style="margin-top:38px;">
+                @Html.Label("توضیح در مورد طرف تماس", htmlAttributes: new { @class = "control-label col-md-3", style = "text-align:center" })
+                <div class="col-md-8">
+                    @Html.TextAreaFor(model => model.CallerComments, new { @class = "form-control", row = "15", style = "height:100px;width:70%;margin-right:-20px;", dir = "rtl", id="callercomments" })
+                    @Html.ValidationMessageFor(model => model.CallerComments, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+     
+    <div class="col-md-7" style="padding-bottom:5px;">
+        <div class="form-group" style="margin-top:2px;">
+            @Html.Label("بخش مربوطه", new { @class = "control-label col-md-2" })
+            <div class="col-md-9">
+                @Html.DropDownList("DepartmentId", (IEnumerable<SelectListItem>)ViewBag.Departments, new { @class = "form-control", style = "width:50%" })
+            </div>
+        </div>
+        <div class="form-group" style="margin-top:10px;">
+            @Html.Label("تاریخ تماس", new { @class = "control-label col-md-2" })
+            <div class="col-md-9">
+                @{
+                    var datetime = PersianDateTime.Now.ToString();
+                    var datetime2 = PersianDateTime.Now;
+                    string realDate = datetime.Substring(0, 10);
+                    var hour = datetime2.Hour;
+                    var minute = datetime2.Minute;
+                    var date = realDate;
+                    var year = datetime2.Year;
+                    var month = datetime2.Month;
+                    var day = datetime2.Day;
+
+                }
+
+                <span>
+                    @Html.TextBox("Day", day, new { @class = "col-md-2 form-control", dir = "rtl", style = "width:10%;text-align:center;float:center" })
+                </span>
+                <span>
+                    @Html.Label("/", new { style = "font-size:40px;padding-top:6px;float:right;" })
+                </span>
+
+                <span>
+                    @Html.TextBox("Month", month, new { @class = "col-md-2 form-control", dir = "rtl", style = "width:10%;text-align:center" })
+                </span>
+                <span>
+                    @Html.Label("/", new { style = "font-size:40px;padding-top:6px;float:right;" })
+                </span>
+                <span>
+                    @Html.TextBox("Year", year, new { @class = "col-md-2 form-control", dir = "rtl", style = "width:20%;text-align:center" })
+                </span>
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("زمان تماس", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-9">
+
+
+                <span>
+                    @Html.TextBox("Minute", minute, new { @class = "col-md-2 form-control", dir = "rtl", style = "width:10%;text-align:center;float:center" })
+                </span>
+                <span>
+                    @Html.Label(":", new { style = "font-size:40px;padding-top:6px;float:right;" })
+                </span>
+
+                <span>
+                    @Html.TextBox("Hour", hour, new { @class = "col-md-2 form-control", dir = "rtl", style = "width:10%;text-align:center" })
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group">
+
+            <div class="col-md-7" style="margin-right:5%;margin-top:1%;margin-bottom:1%">
+    
+                <span>تماس ورودی</span>
+                @Html.RadioButtonFor(model => model.IsCallingFromOutside, true, new { @checked = true, style = "margin-left:1%;" })
+                <span>تماس خروجی</span>
+                @Html.RadioButtonFor(model => model.IsCallingFromOutside, false)
+        
+
+
+            </div>
+        </div>
+
+
+
+        <div class="form-group"  style="margin-right:1%">
+            @Html.LabelFor(model => model.Comments, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-9">
+                @Html.TextAreaFor(model => model.Comments, new { @class = "form-control", row = "15", style = "height:100px;width:50%;", dir = "rtl" })
+                @Html.ValidationMessageFor(model => model.Comments, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <hr />
+
+
+
+  
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-9">
+            <input type="submit" value="ثبت" class="btn btn-default" style="width:15%;margin-top:15px;margin-right:250px;" />
+        </div>
+    </div>
+</div>
+}
+
+<div style="padding-right:20px;padding-top:15px;">
+    @Html.ActionLink("بازگشت به لیست تماس‌ها", "Index", null, new { style="font-size:18px;" })
+</div>
+
+
+
+<script type="text/javascript">
+    $(function () {
+        $("#callerName").autocomplete({
+            source: '@Url.Action("Search", new { area="CallManagement", controller="Callers" })',
+            minLength: 2,
+            select: function (event, ui) {
+                showTel_CallerComments(ui.item.value);
+            }
+
+        });
+    });
+
+    function showTel_CallerComments(name) {
+       // alert("ajax started");
+        $.ajax({
+            type: "GET",
+            url: "/CallManagement/Callers/GetTel/?name=" + name,
+            async: false,
+            dataType: "json",
+            content: "application/json; charset=utf-8",
+            success: function (data) {
+                //alert("recieved");
+                $("#callerTel").val(data.tel);
+                $("#callercomments").val(data.comments);
+            }
+        })
+    }
+</script>

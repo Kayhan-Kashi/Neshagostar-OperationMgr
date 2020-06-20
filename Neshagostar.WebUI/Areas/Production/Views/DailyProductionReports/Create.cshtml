@@ -1,0 +1,229 @@
+﻿@model Neshagostar.DAL.DataModel.ProductionRelated.DailyProductionReport
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>ثبت</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>گزارش تولید</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="col-md-12 well" style="padding-left:0px;text-align:center;">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(model => model.ProductionLineId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("ProductionLineId", null, "خط تولید را انتخاب کنید",htmlAttributes: new { @class = "form-control", style = "width:70%", id = "productionLine_select" })
+                @Html.ValidationMessageFor(model => model.ProductionLineId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(model => model.ProductId, htmlAttributes: new { @class = "control-label col-md-3" })
+            <div class="col-md-9">
+                @Html.DropDownList("ProductId", null, htmlAttributes: new { @class = "form-control", style = "width:80%", id = "product_select" })
+                @Html.ValidationMessageFor(model => model.ProductId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+    </div>
+
+    @{ 
+        var date = PersianDateTime.Now.ToString().Substring(0, 10);
+    }
+
+    <div class="col-md-12 well" style="padding-left:0px;margin-left:0px;text-align:center;">
+        <div class="col-md-5 well" style="padding-left:0px;">
+            <div class="form-group">
+                @Html.LabelFor(model => model.DateOfProduction, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-9">
+                    @Html.TextBox("DateOfProduction", @date, new { @class = "form-control", style = "width:50%;text-align:center", value=@date} )
+                    @Html.ValidationMessageFor(model => model.DateOfProduction, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.DateOfReport, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-9">
+                    @Html.TextBox("DateOfReport", @date, new { @class = "form-control", style = "width:50%;text-align:center", value = @date })
+                    @Html.ValidationMessageFor(model => model.DateOfReport, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1">
+
+        </div>
+        <div class="col-md-5 well" style="padding-left:0px  ;margin-left:0px;">
+            <div class="form-group">
+                @Html.LabelFor(model => model.AmountOfAcceptedProduct, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-9">
+                    @Html.EditorFor(model => model.AmountOfAcceptedProduct, new { htmlAttributes = new { @class = "form-control", style = "width:50%;text-align:center" } })
+                    @Html.ValidationMessageFor(model => model.AmountOfAcceptedProduct, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.AmountOfUnacceptedProduct, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-9">
+                    @Html.EditorFor(model => model.AmountOfUnacceptedProduct, new { htmlAttributes = new { @class = "form-control", style = "width:50%;text-align:center" } })
+                    @Html.ValidationMessageFor(model => model.AmountOfUnacceptedProduct, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 well" style="padding-left:0px;margin-left:0px;text-align:center;">
+        <div class="col-md-5 well" style="margin-left:0px;">
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.OrdinaryMaterialConsumedAmount, htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.OrdinaryMaterialConsumedAmount, new { htmlAttributes = new { @class = "form-control", style = "width:50%;text-align:center" } })
+                    @Html.ValidationMessageFor(model => model.OrdinaryMaterialConsumedAmount, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.GranuleMaterialConsumedAmount, htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.GranuleMaterialConsumedAmount, new { htmlAttributes = new { @class = "form-control", style = "width:50%;text-align:center" } })
+                    @Html.ValidationMessageFor(model => model.GranuleMaterialConsumedAmount, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.RecycledConsumedAmount, htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.RecycledConsumedAmount, new { htmlAttributes = new { @class = "form-control", style = "width:50%;text-align:center" } })
+                    @Html.ValidationMessageFor(model => model.RecycledConsumedAmount, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1">
+
+        </div>
+        <div class="col-md-6 well" style="padding-left:10px;margin-top:2%;">
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.BlackMasterbatchConsumedAmount, htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.BlackMasterbatchConsumedAmount, new { htmlAttributes = new { @class = "form-control", style = "width:40%;text-align:center" } })
+                    @Html.ValidationMessageFor(model => model.BlackMasterbatchConsumedAmount, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.YellowMasterbatchConsumedAmount, htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.YellowMasterbatchConsumedAmount, new { htmlAttributes = new { @class = "form-control", style = "width:40%;text-align:center" } })
+                    @Html.ValidationMessageFor(model => model.YellowMasterbatchConsumedAmount, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="col-md-12 well" style="padding-left:0px;margin-left:0px;text-align:center;">
+        <div class="col-md-4">
+            <div class="form-group">
+                @Html.LabelFor(model => model.AllMaterialsConsumedAmountInKilo, htmlAttributes: new { @class = "control-label col-md-5" })
+                <div class="col-md-7">
+                    @Html.EditorFor(model => model.AllMaterialsConsumedAmountInKilo, new { htmlAttributes = new { @class = "form-control", style = "width:60%;text-align:center" } })
+                    @Html.ValidationMessageFor(model => model.AllMaterialsConsumedAmountInKilo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                @Html.LabelFor(model => model.WastageProducedInKilo, htmlAttributes: new { @class = "control-label col-md-5" })
+                <div class="col-md-7">
+                    @Html.EditorFor(model => model.WastageProducedInKilo, new { htmlAttributes = new { @class = "form-control", style = "width:60%;text-align:center" } })
+                    @Html.ValidationMessageFor(model => model.WastageProducedInKilo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                @Html.LabelFor(model => model.WeightInUnit, htmlAttributes: new { @class = "control-label col-md-5" })
+                <div class="col-md-7">
+                    @Html.EditorFor(model => model.WeightInUnit, new { htmlAttributes = new { @class = "form-control", style = "width:60%;text-align:center" } })
+                    @Html.ValidationMessageFor(model => model.WeightInUnit, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+
+        <div class="form-group">
+            <div class="col-md-12">
+                <input type="submit" value="ثبت" class="btn btn-primary btn-block" />
+            </div>
+        </div>
+    </div>
+    }
+
+    <div>
+        @Html.ActionLink("بازگشت به لیست", "Index")
+    </div>
+
+
+<script>
+    alert();
+    $("#productionLine_select").change(function () {
+        var id = $(this).find("option:selected").attr("value");
+        alert(id);
+        getRelatedProducts(id);
+    });
+
+    function getRelatedProducts(productionLineId) {
+               $.ajax({
+                type: "GET",
+                url: "/Production/ProductionLines/GetRelatedProducts/?productionlineId=" + productionLineId,
+                async: false,
+                dataType: "json",
+                content: "application/json; charset=utf-8",
+                   success: function (data) {
+                       alert("inside ajax");
+                    if (data.length > 0) {
+                        var select = $("#product_select");
+                        select.empty();
+                        for (var i = 0; i < data.length; i++) {
+                            $("<option value='" + data[i].Id + "' text='" + data[i].Title + "' >" + data[i].Title + "</option>").appendTo(select);
+                        }
+                    }
+                }
+            });
+    }
+
+
+
+
+        //function getRelatedProducts(productionLineId) {
+        //    $.ajax({
+        //        type: "GET",
+        //        url: "/Production/ProductionLines/GetRelatedProducts/?productlineId=" + productionLineId,
+        //        async: false,
+        //        dataType: "json",
+        //        content: "application/json; charset=utf-8",
+        //        success: function (data) {
+        //            if (data.length > 0) {
+        //                var select = $("#product_select");
+        //                select.empty();
+        //                for (var i = 0; i < data.length; i++) {
+        //                    $("<option value='" + data[i].Id + "' text='" + data[i].Title + "' >" + data[i].Title + "</option>").appendTo(select);
+        //                }
+        //            }
+        //        }
+        //    });
+        //}
+    
+</script>

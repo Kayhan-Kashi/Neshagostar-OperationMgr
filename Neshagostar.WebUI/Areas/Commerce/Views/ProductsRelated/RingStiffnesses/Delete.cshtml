@@ -1,0 +1,32 @@
+﻿@model Neshagostar.DAL.DataModel.CommerceRelated.ProductsRelated.RingStiffness
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+
+
+<h3>آیا می خواهید حذف شود؟</h3>
+<div>
+    <h4>مقاومت مکانیکی</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="حذف" class="btn btn-default" /> |
+            @Html.ActionLink("بازگشت به لیست", "Index")
+        </div>
+    }
+</div>

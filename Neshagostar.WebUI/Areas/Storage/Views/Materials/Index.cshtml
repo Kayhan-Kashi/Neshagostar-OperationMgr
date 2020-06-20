@@ -1,0 +1,70 @@
+﻿@model IEnumerable<Neshagostar.DAL.DataModel.StorageRelated.MaterialRelated.MaterialPurchased>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th style="text-align:center">
+            @Html.DisplayName("تاریخ خرید")
+        </th>
+        <th style="text-align:center">
+            @Html.DisplayNameFor(model => model.MaterialSeller.Name)
+        </th>   
+        <th style="text-align:center">
+            @Html.DisplayNameFor(model => model.MaterialSpecification.Specification)
+        </th>
+        <th style="text-align:center">
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th style="text-align:center">
+            @Html.DisplayNameFor(model => model.AmountPurchased)
+        </th>
+        <th style="text-align:center">
+            @Html.DisplayNameFor(model => model.AmountImported)
+        </th>
+        <th style="text-align:center">
+            @Html.DisplayNameFor(model => model.AmountReady)
+        </th>
+
+        <th style="text-align:center"></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td style="text-align:center;">
+            @Html.DisplayFor(model => item.DateOfPurchase)
+        </td>
+        <td style="text-align:center;">
+            @Html.DisplayFor(model => item.MaterialSeller.Name)
+        </td>
+        <td style="text-align:center;">
+            @Html.DisplayFor(modelItem => item.MaterialSpecification.Specification)
+        </td>
+        <td style="text-align:center;">
+            @Html.DisplayFor(modelItem => item.Price)
+        </td>
+        <td style="text-align:center;">
+            @Html.DisplayFor(modelItem => item.AmountPurchased)
+        </td>
+        <td style="text-align:center;">
+            @Html.DisplayFor(modelItem => item.AmountImported)
+        </td>
+        <td style="text-align:center;">
+            @Html.DisplayFor(modelItem => item.AmountReady)
+        </td>
+
+        <td style="text-align:center;font-size:14px;">
+            @Html.ActionLink("تخصیص", "Create", new { id = item.Id })
+        </td>
+    </tr>
+    }
+
+</table>

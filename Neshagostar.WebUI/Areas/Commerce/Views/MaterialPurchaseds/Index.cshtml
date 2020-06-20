@@ -1,0 +1,87 @@
+﻿@model IEnumerable<Neshagostar.DAL.DataModel.StorageRelated.MaterialRelated.MaterialPurchased>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.MaterialSeller.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MaterialSpecification.Specification)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Code)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateOfPurchase)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AddedCostPrice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PurchaseMethod)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Escont)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OtherCosts)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AmountPurchased)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.MaterialSeller.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MaterialSpecification.Specification)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Code)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateOfPurchase)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Price)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AddedCostPrice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PurchaseMethod)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Escont)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OtherCosts)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AmountPurchased)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

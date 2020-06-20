@@ -1,0 +1,78 @@
+﻿@model IEnumerable<Neshagostar.DAL.DataModel.ProductionRelated.DailyProductionReport>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>لیست گزارشات</h2>
+
+<p style="font-size:20px;">
+    @Html.ActionLink("ثبت", "Create")
+</p>
+<table class="table">
+    <tr>
+
+        <th style="text-align:center;">
+            @Html.DisplayNameFor(model => model.ProductionLine.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateOfProduction)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateOfReport)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AmountOfAcceptedProduct)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AmountOfUnacceptedProduct)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.WeightInUnit)
+        </th>
+        <th>
+            @Html.DisplayName("کل مواد مصرفی")
+        </th>
+        <th>
+            @Html.DisplayName("ضایعات تولیدی به کیلو")
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+
+        <td style="text-align:center;font-size:13px;">
+            @Html.DisplayFor(modelItem => item.ProductionLine.Description)
+        </td>
+        <td style="text-align:center;font-size:13px;">
+            @Html.DisplayFor(modelItem => item.DateOfProduction)
+        </td>
+        <td style="text-align:center;font-size:13px;">
+            @Html.DisplayFor(modelItem => item.DateOfReport)
+        </td>
+        <td style="text-align:center;font-size:13px;">
+            @Html.DisplayFor(modelItem => item.AmountOfAcceptedProduct)
+        </td>
+        <td style="text-align:center;font-size:13px;">
+            @Html.DisplayFor(modelItem => item.AmountOfUnacceptedProduct)
+        </td>
+        <td style="text-align:center;font-size:13px;">
+            @Html.DisplayFor(modelItem => item.WeightInUnit)
+        </td>
+
+        <td style="text-align:center;font-size:13px;">
+            @Html.DisplayFor(modelItem => item.AllMaterialsConsumedAmountInKilo)
+        </td>
+        <td style="text-align:center;font-size:13px;">
+            @Html.DisplayFor(modelItem => item.WastageProducedInKilo)
+        </td>
+        <td style="font-size:12px;">
+            @Html.ActionLink("ویرایش", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("جزئیات", "Details", new { id=item.Id }) |
+            @Html.ActionLink("حذف", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,25 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section menu_Items
+{
+    <nav id="menu" class="navbar">
+        <div class="navbar-header"> <span class="visible-xs visible-sm"> منو <b></b></span></div>
+        <div class="container">
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a class="home_link" title=" سفارشات" href="@Url.Action("Index", new { controller = "Orders", area = "Finance" })">سفارشات </a>
+                    </li>
+                    <li>
+                        <a class="home_link" title=" پرداختها" href="@Url.Action("Index", new { controller = "Payments", area = "Finance" })">پرداختها </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+}
+
+@RenderBody()

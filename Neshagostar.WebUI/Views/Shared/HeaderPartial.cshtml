@@ -1,0 +1,146 @@
+﻿@using Microsoft.AspNet.Identity
+@using Neshagostar.WebUI.App_Start
+
+<div id="header">
+    <!-- Top Bar Start-->
+    <nav id="top" class="htop">
+        <div class="container">
+            <div class="row">
+                <span class="drop-icon visible-sm visible-xs"><i class="fa fa-align-justify"></i></span>
+                <div class="pull-left flip left-top">
+                    <div class="links">
+                        <ul>
+                            <li class="wrap_custom_block hidden-sm hidden-xs">
+                                <div class="dropdown-menu custom_block">
+                                    <ul>
+                                        <li>
+                                            <table>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><img alt="" src="~/Content/MarketShop/image/banner/cms-block.jpg"></td>
+                                                        <td><img alt="" src="~/Content/MarketShop/image/banner/responsive.jpg"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><h4>بلاک های محتوا</h4></td>
+                                                        <td><h4>قالب واکنش گرا</h4></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>این یک بلاک مدیریت محتواست. شما میتوانید هر نوع محتوای html نوشتاری یا تصویری را در آن قرار دهید.</td>
+                                                        <td>این یک بلاک مدیریت محتواست. شما میتوانید هر نوع محتوای html نوشتاری یا تصویری را در آن قرار دهید.</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong><a class="btn btn-default btn-sm" href="#">ادامه مطلب</a></strong></td>
+                                                        <td><strong><a class="btn btn-default btn-sm" href="#">ادامه مطلب</a></strong></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="top-links" class="nav pull-right flip">
+                    <ul>
+                        @{
+                            if (HttpContext.Current.User.Identity.IsAuthenticated)
+                            {
+                                var username = HttpContext.Current.GetOwinContext().Authentication.User.Identity.Name;
+                                var name = HttpContext.Current.GetOwinContext().GetUserManager<PersonnelManager>().FindByName(username).Name;
+
+                                <li>@Html.ActionLink("خروج", "logOut", new { area = "personnelmanagement", controller = "account" }, new { style = "color:red" })</li>
+
+                                <li style="padding-left:20px;padding-right:20px;"><span style="color:white">   @(name) </span></li>
+                            }
+                            else
+                            {
+                                <li>@Html.ActionLink("ورود", "login", new { controller = "account", area = "personnelmanagement" }, new {style="color:white" })</li>
+                                <li>@Html.ActionLink("ثبت نام", "register", new { controller = "account", area = "personnelmanagement" }, new { style = "color:white" })</li>
+                            }
+                        }
+                    </ul>
+                </div>
+                @{ 
+                                if (HttpContext.Current.User.Identity.IsAuthenticated)
+                                {
+                                    var username = HttpContext.Current.GetOwinContext().Authentication.User.Identity.Name;
+                                    var name = HttpContext.Current.GetOwinContext().GetUserManager<PersonnelManager>().FindByName(username).Name;
+
+                                    var u = HttpContext.Current.GetOwinContext().GetUserManager<PersonnelManager>().FindByName(username);
+                                    var role = u.Roles.FirstOrDefault();
+                                    if(role != null && role.RoleId == "6597d8c0-f0c7-4529-918c-4b5ef38c7dc0")
+                                    {
+                            <div id="top-links" class="nav pull-right flip" style="margin-left:20%">
+                                <ul>
+                                    <li>@Html.ActionLink("بازرگانی", "index", new { area = "commerce", controller = "orders" }, new { style = "color:red" })</li>
+                                    <li>@Html.ActionLink("انبار", "index", new { area = "storage", controller = "orders" }, new { style = "color:red" })</li>
+                                    <li>@Html.ActionLink("تولید", "index", new { area = "Production", controller = "DailyProductionReports" }, new { style = "color:red" })</li>
+                                    <li>@Html.ActionLink("مالی", "index", new { area = "finance", controller = "orders" }, new { style = "color:red" })</li>
+                                    <li>@Html.ActionLink("تماسها", "index", new { area = "callmanagement", controller = "recievedcalls" }, new { style = "color:red" })</li>
+                                </ul>
+                            </div> 
+                                     
+                            
+                        }
+                    }
+                }
+            </div>
+        </div>
+    </nav>
+    <!-- Top Bar End-->
+    <!-- Header Start-->
+    <header class="header-row">
+        <div class="container">
+            <div class="table-container">
+                <!-- Logo Start -->
+                <div class="col-table-cell col-lg-6 col-md-6 col-sm-12 col-xs-12 inner">
+                    <div id="logo"><a href="index.html"><img class="img-responsive" src="~/Content/MarketShop/image/logo.png" title="MarketShop" alt="MarketShop" /></a></div>
+                </div>
+                <!-- Logo End -->
+                <!-- Mini Cart Start-->
+                <div class="col-table-cell col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div id="cart">
+                        <button id="btn-paymentsummary" type="button" data-toggle="dropdown" data-loading-text="بارگذاری ..." class="heading dropdown-toggle" style="visibility:hidden">
+                            <span class="cart-icon pull-left flip"></span>
+                            <span id="cart-total">@*2 آیتم - 132000 تومان*@</span>
+                        </button>
+
+                        <ul class="dropdown-menu">
+                            <li>
+                                <table class="table">
+                                    <tbody id="tbody-cart"></tbody>
+                                </table>
+                            </li>
+                            <li>
+                                <div>
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <td class="text-right"><strong>جمع کل</strong></td>
+                                                <td class="text-right" id="total-pay">@*132000 تومان*@</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right"><strong>قابل پرداخت</strong></td>
+                                                <td class="text-right" id="payable">@*139880 تومان*@</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <p class="checkout"><a href="@Url.Action("ShowCart","Orders", new { area = "Store" })" class="btn btn-primary"><i class="fa fa-shopping-cart"></i> مشاهده سبد</a>&nbsp;&nbsp;&nbsp;<a href="@Url.Action("CheckOutFromCartSummary","Orders", new { area = "Store" })" class="btn btn-primary"><i class="fa fa-share"></i> تسویه حساب</a></p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Mini Cart End-->
+
+            </div>
+        </div>
+    </header>
+    <!-- Header End-->
+    <!-- Main آقایانu Start-->
+    
+
+    <!-- Main آقایانu End-->
+</div>

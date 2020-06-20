@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Neshagostar.DAL.DataModel.CommerceRelated.ProductsRelated.RingStiffness>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>لیست انواع مقاوت مکانیکی</h2>
+
+<p>
+    @Html.ActionLink("ثبت", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Code)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Code)
+        </td>
+        <td>
+            @Html.ActionLink("ویرایش", "Edit", new { id = item.Id }) |
+            @Html.ActionLink("جزئیات", "Details", new { id = item.Id }) |
+            @Html.ActionLink("حذف   ", "Delete", new { id = item.Id })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,700 @@
+﻿@model List<List<Neshagostar.WebUI.Areas.Commerce.Models.InquiriesRelated.InquiryBag>>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<link href="~/Content/jquery-ui.css" rel="stylesheet">
+<script src="~/Scripts/jquery-ui.js"></script>
+
+
+<style type="text/css">
+    th, td {
+        text-align: center;
+        font-size: 13px;
+    }
+</style>
+
+<script src="~/Scripts/NeshagostarScripts/Commerce/IndexInquiry.js">
+   
+</script>
+
+<h1>لیست استعلامات</h1>
+<p style="font-size:20px;padding-top:10px;">
+    @Html.ActionLink("ثبت استعلام", "Create", new { area = "Commerce", controller = "Inquiries" })
+</p>
+<div style="overflow-y:auto;" class="table-bordered">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DropDownList("Date", ViewBag.Dates as IEnumerable<SelectListItem>, "تمام تواریخ", new { @class = "form-control", style = "width:100%", id = "filter_date" })
+                    @*@Html.TextBox("a", null, new { @class = "form-control", style = "width:70%", placeholder = "جستجوی نام", id = "filter_name", onchange = "getTableValues();", onkeyup = "getTableValues();" })*@
+                </th>
+                <th style="text-align:center">
+                    @Html.TextBox("a", null, new { @class = "form-control", style = "width:80%;text-align:center;margin-right:30px;font-size:14px;", placeholder = "جستجوی نام", id = "filter_customer", onchange = "getTableValues();", onkeyup = "getTableValues();" })
+                </th>
+                <th style="text-align:center">
+                    @Html.Hidden("productId", null, new { id = "productId" })
+                    @Html.TextBox("a", null, new { @class = "form-control", style = "width:100%;text-align:center;margin-right:10px;font-size:11px;", placeholder = "جستجوی محصول", id = "filter_product", onclick = "popUpProducts();" })
+                    @*@Html.DropDownList("Date", new List<SelectListItem>(), "تمام محصولات", new { @class = "form-control", style = "width:90%;text-align:center;margin-right:30px;font-size:14px;", id = "filter_product" })*@
+                    @* @Html.TextBox("a", null, new { @class = "form-control", style = "width:80%;text-align:center;margin-right:30px;font-size:14px;", placeholder = "جستجوی محصول", id = "filter_product", onchange = "getTableValues();", onkeyup = "getTableValues();" })*@
+                </th>
+                <th></th>
+            </tr>
+
+        </thead>
+        <tr>
+            <th style="text-align:center;font-size:15px;">
+                تاریخ
+            </th>
+            <th style="text-align:center;font-size:15px;">
+                نام مشتری
+            </th>
+            <th style="text-align:center;font-size:15px;">
+                نام محصول
+
+            </th>
+            <th>
+                <label>متراژ</label>
+
+            </th>
+            <th>
+                <label>قیمت هر متر</label>
+                @*@Html.DisplayName("قیمت هر متر")*@
+            </th>
+            <th>
+                <label>قیمت هر کیلو</label>
+                @*@Html.DisplayName("قیمت هر کیلو")*@
+            </th>
+            <th>
+                <label>مبلغ کل آیتم</label>
+
+            </th>
+            <th>
+                <label>به خرید منجر شده</label>
+            </th>
+            <th>
+                <label>مبلغ کل استعلام</label>
+            </th>
+
+            <th></th>
+        </tr>
+        @{
+            Random random = new Random();
+            int x = random.Next(0, 255);
+            int y = random.Next(0, 255);
+            int z = random.Next(0, 255);
+        }
+        <tbody id="inquiries_tbody">
+            @foreach (var list in Model)
+            {
+
+                foreach (var inquiryItem in list)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => inquiryItem.DateTime, new { id = "date" })
+                        </td>
+                        <td style="text-align:center;width:230px;font-size:14px;">
+                            @Html.DisplayFor(modelItem => inquiryItem.CustomerName, new { style = "text-align:right;font-size:19px;" })
+                        </td>
+                        <td style="text-align:center;width:280px;font-size:14px;">
+                            @Html.DisplayFor(modelItem => inquiryItem.ProductName, new { style = "text-align:right;font-size:12px;" })
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => inquiryItem.Amount)
+                        </td>
+                        <td style="text-align:center">
+                            @Html.DisplayFor(modelItem => inquiryItem.PricePerUnit)
+                        </td>
+                        <td style="text-align:center">
+                            @Html.DisplayFor(modelItem => inquiryItem.PricePerKilo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => inquiryItem.TotalPrice)
+                        </td>
+                        @{
+                            if (inquiryItem.IsSuccessful)
+                            {
+                                <td style="color:green">
+                                    بله
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="color:red">
+                                    خیر
+                                </td>
+                            }
+                        }
+
+
+                        @{
+                            if (list.IndexOf(inquiryItem) == 0)
+                            {
+                                <td rowspan="@(list.Count)" style="vertical-align:middle;text-align:right;">
+                                    @Html.DisplayFor(modelItem => inquiryItem.InquiryTotalPrice)
+                                </td>
+                            }
+                        }
+
+                        <td>
+                            @Html.ActionLink("ویرایش", "Edit", new { area = "Commerce", controller = "Inquiries", id = inquiryItem.Id }, new { style = "font-size:12px;" }) |
+                            @Html.ActionLink("جزئیات", "Details", new { area = "Commerce", controller = "Inquiries", id = inquiryItem.Id }, new { style = "font-size:12px;" })
+                        </td>
+                        @{
+                            if (list.IndexOf(inquiryItem) == 0)
+                            {
+                                <td rowspan="@(list.Count)" style="vertical-align:middle;text-align:center;">
+                                    @Html.ActionLink("اضافه", "Add", new { inquiryId = inquiryItem.InquiryId }, new { style = "font-size:14px;" })
+                                </td>
+                            }
+                        }
+                    </tr>
+
+                }
+
+                <tr>
+                    <td style=@("background-color:rgb(" + x + "," + y + "," + z + ");")></td>
+                    <td style=@("background-color:rgb(" + x + "," + y + "," + z + ")")></td>
+                    <td style=@("background-color:rgb(" + x + "," + y + "," + z + ")")></td>
+                    <td style=@("background-color:rgb(" + x + "," + y + "," + z + ")")></td>
+                    <td style=@("background-color:rgb(" + x + "," + y + "," + z + ")")></td>
+                    <td style=@("background-color:rgb(" + x + "," + y + "," + z + ")")></td>
+                    <td style=@("background-color:rgb(" + x + "," + y + "," + z + ")")></td>
+                    <td style=@("background-color:rgb(" + x + "," + y + "," + z + ")")></td>
+                    <td style=@("background-color:rgb(" + x + "," + y + "," + z + ")")></td>
+                    <td style=@("background-color:rgb(" + x + "," + y + "," + z + ")")></td>
+                    <td style=@("background-color:rgb(" + x + "," + y + "," + z + ")")></td>
+                </tr>
+
+            }
+        </tbody>
+
+
+
+
+    </table>
+</div>
+<div class="row" style="margin-top:10px;margin-right:110px;">
+    <div id="div_pagination" class="col-sm-11 text-center">
+        <ul class="pagination" id="pagination_page">
+            <li id="previous_page">
+                <a role="button" onclick="getTableValues(1)"><<</a>
+                @*@Html.ActionLink(i.ToString(), "FilterRecievedCalls", new { controller = "RecievedCalls", area = "CallManagement", page = i, CategoryName = (string)ViewBag.Term, pageSize = (int)ViewBag.PageSize, role="button" })*@
+            </li>
+            <li id="first_page">
+                <a role="button" onclick="getTableValues(1)"><</a>
+                @*@Html.ActionLink(i.ToString(), "FilterRecievedCalls", new { controller = "RecievedCalls", area = "CallManagement", page = i, CategoryName = (string)ViewBag.Term, pageSize = (int)ViewBag.PageSize, role="button" })*@
+            </li>
+            @if (ViewBag.PageNumber > 1)
+            {
+                <li>
+                    <a role="button" onclick="getTableValues(@(ViewBag.Page + 1))">></a>
+                    @*@Html.ActionLink(i.ToString(), "FilterRecievedCalls", new { controller = "RecievedCalls", area = "CallManagement", page = i, CategoryName = (string)ViewBag.Term, pageSize = (int)ViewBag.PageSize, role="button" })*@
+                </li>
+                <li>
+                    <a role="button" onclick="getTableValues(@ViewBag.PageNumber)">>></a>
+                    @*@Html.ActionLink(i.ToString(), "FilterRecievedCalls", new { controller = "RecievedCalls", area = "CallManagement", page = i, CategoryName = (string)ViewBag.Term, pageSize = (int)ViewBag.PageSize, role="button" })*@
+                </li>
+            }
+            else
+            {
+                <li>
+                    <a role="button" onclick="getTableValues(1)">></a>
+                    @*@Html.ActionLink(i.ToString(), "FilterRecievedCalls", new { controller = "RecievedCalls", area = "CallManagement", page = i, CategoryName = (string)ViewBag.Term, pageSize = (int)ViewBag.PageSize, role="button" })*@
+                </li>
+                <li>
+                    <a role="button" onclick="getTableValues(1)">>></a>
+                    @*@Html.ActionLink(i.ToString(), "FilterRecievedCalls", new { controller = "RecievedCalls", area = "CallManagement", page = i, CategoryName = (string)ViewBag.Term, pageSize = (int)ViewBag.PageSize, role="button" })*@
+                </li>
+            }
+
+        </ul>
+    </div>
+
+</div>
+
+
+
+<script>
+
+    var products = "";
+
+    function getProductsJson() {
+        return $.ajax({
+            type: "GET",
+            url: "/commerce/products/getProducts"
+        });
+    };
+
+    var productsPromise = getProductsJson();
+
+    productsPromise.success(function (data) {
+        products = data;
+        //alert(data[0].id)
+    });
+
+    var parentProductsDialog;
+
+    function popUpProducts() {
+        //alert("popup ");
+
+        var parentDiv = $('<div id="divPopupProducts" style="display:none"></div>').addClass("table-responsive");
+        //alert();
+        var table = $("<table></table>").addClass("table table-hover");
+        var headers = $("<tr></tr>");
+        headers.append(
+            `<th>نام محصول</th>
+         <th>نوع</th>
+        `);
+
+        headers.appendTo(table);
+        var tableDatas = $("<tr></tr>");
+        var allProductsRow = $("<tr></tr>");
+        $(`<td style="font-family:B Nazanin" onclick="showProduct('${""}','${""}')">${'همه محصولات'}</td>`).appendTo(allProductsRow); 
+        $(`<td style="font-family:B Nazanin" onclick="showProduct('${""}','${""}')">${'همه محصولات'}</td>`).appendTo(allProductsRow);
+        table.append(allProductsRow)
+
+        for (var productNum = 0; productNum < products.length; productNum++) {
+            $(`<td style="font-family:B Nazanin" onclick="showProduct('${products[productNum].id}','${products[productNum].name}')">${products[productNum].name}</td>`).appendTo(tableDatas);
+            $(`<td style="font-family:B Nazanin" onclick="showProduct('${products[productNum].id}','${products[productNum].name}')">${products[productNum].category}</td>`).appendTo(tableDatas);
+            tableDatas.appendTo(table);
+            tableDatas = $("<tr></tr>");
+        }
+        tableDatas.appendTo(table);
+        table.appendTo(parentDiv);
+        parentProductsDialog = true;
+
+
+        parentDiv.dialog({
+            height: 400,
+            width: 500,
+            modal: true,
+            buttons: {
+                "OK": function () {
+                    $(this).dialog("close");
+                    //alert("You selected OK!!")
+                },
+                "Cancel": function () {
+                    $(this).dialog("close");
+                }
+            }
+        })
+        parentProductsDialog = parentDiv;
+    }
+
+    function showProduct(id, name) {
+
+        //alert(id + "   "  +  name);
+        $("#productId").val(id);
+        $("#filter_product").val(name);
+
+        parentProductsDialog.dialog("close");
+        getTableValues();
+    }
+
+
+
+    var option = $('<option id = "option_previousDates" value="previousDates" >تاریخ عقب تر</option>');
+    $("#filter_date").append(option);
+
+    $("#filter_date").change(function () {
+        var id = $(this).find("option:selected").attr("id");
+        //alert("dddd");
+
+        switch (id) {
+            case "option_previousDates":
+                // do something here
+                popUpDateSelection();
+                break;
+            default:
+                getTableValues();
+                break;
+        }
+    });
+
+    function removeTableContent() {
+
+        $("#inquiries_tbody").empty();
+        //alert("table rows removed");
+    }
+
+    function getTableValues(page = 1, dateGiven = "") {
+        //alert();
+        var searchTerm_date = $("#filter_date").val();
+        var searchTerm_customer = $("#filter_customer").val();
+        var searchTerm_product = $("#productId").val();
+
+        if (dateGiven != "") {
+            searchTerm_date = dateGiven;
+        } 
+
+
+        $.ajax({
+            type: "POST",
+            url: "/Commerce/Inquiries/Filter",
+            async: false,
+            dataType: "json",
+            content: "application/json; charset=utf-8",
+            data: { date: searchTerm_date, customerName: searchTerm_customer, productId: searchTerm_product, page: page },
+            success: function (data) {
+                //alert("call back");
+                removeTableContent();
+
+                //alert("recieved");
+                if (data.length > 0) {
+
+                    for (var i = 0; i < data.length; i++) {
+                        for (var j = 0; j < data[i].length; j++) {
+                            //alert(data[i][j].CustomerName);
+                            var date = $("<td>" + data[i][j].DateTime + "</td>");
+                            var customer_name = $("<td>" + data[i][j].CustomerName + "</td>");
+                            var product_name = $("<td>" + data[i][j].ProductName + "</td>");
+                            var amount = $("<td>" + (Math.trunc(data[i][j].Amount).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + "</td>"));
+                            var pricePerUnit = $("<td>" + (Math.trunc(data[i][j].PricePerUnit).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + "</td>"));
+                            var pricePerKilo = $("<td>" + (Math.trunc(data[i][j].PricePerKilo).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + "</td>"));
+                            var totalPrice = $("<td>" + (Math.trunc(data[i][j].TotalPrice).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + "</td>"));
+                            var isSuccessful = false;
+
+                            if (data[i][j].IsSuccessful) {
+                                //alert(data[i][j].IsSuccessful);
+                                isSuccessful = $("<td style='color: green'>بله</td>");
+                            } else {
+                                isSuccessful = $("<td style='color: red'>خیر</td>");
+                            }
+
+                            var row = $("<tr></tr>").append(date).append(customer_name).append(product_name).append(amount).append(pricePerUnit).append(pricePerKilo).append(totalPrice).append(isSuccessful);
+
+                            if (j == 0) {
+                                var inquiryTotalPrice = $("<td rowspan='" + data[i].length + "' style='vertical-align:middle;text-align:center;'>" + (Math.trunc(data[i][j].InquiryTotalPrice).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + "</td>"));
+                                row.append(inquiryTotalPrice);
+                            }
+
+                            var edit = $('<a href="' + '/commerce/Inquiries/edit/' + data[i][j].Id + '">ویرایش</a>');
+                            var details = $('<a href="' + '/commerce/Inquiries/details/' + data[i][j].Id + '">جزئیات</a>');
+                            var operationtd = $("<td></td>").append(edit).append("|").append(details).append("|");
+                            row.append(operationtd);
+
+
+                            if (j == 0) {
+                                var add = $('<a href="' + '/commerce/Inquiries/add/?inquiryId=' + data[i][j].InquiryId + '">اضافه</a>');
+                                var addTd = $("<td rowspan='" + data[i].length + "' style='vertical-align:middle;text-align:center;'></td>");
+                                addTd.append(add);
+                                row.append(addTd);
+                            }
+
+                            $("#inquiries_tbody").append(row);
+                        }
+
+                        var detachRow = $("<tr></tr>");
+                        var str = "<td style='background-color:rgb(110,67,82)'></td>";
+                        var td1 = $(str);
+                        var td2 = $(str);
+                        var td3 = $(str);
+                        var td4 = $(str);
+                        var td5 = $(str);
+                        var td6 = $(str);
+                        var td7 = $(str);
+                        var td8 = $(str);
+                        var td9 = $(str);
+                        var td10 = $(str);
+                        var td11 = $(str);
+
+                        detachRow.append(td1);
+                        detachRow.append(td2);
+                        detachRow.append(td3);
+                        detachRow.append(td4);
+                        detachRow.append(td5);
+                        detachRow.append(td6);
+                        detachRow.append(td7);
+                        detachRow.append(td8);
+                        detachRow.append(td9);
+                        detachRow.append(td10);
+                        detachRow.append(td11);
+
+                        //$(`<td>${(Math.trunc(orderItem.pricePerKilo)).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}</td>`).appendTo(row);
+
+                        $("#inquiries_tbody").append(detachRow);
+
+                        //$("#recievedcalls_tbody").append(row);
+
+                        insertPagination(data[0][0].PageNumbers, data[0][0].Page);
+                    }
+                }
+                else {
+                    var date = $("<td></td>");
+                    var customer_name = $("<td> </td>");
+                    var product_name = $("<td></td>");
+                    var amount = $("<td>رکوردی یافت نشد</td>");
+                    var pricePerUnit = $("<td> </td>");
+                    var pricePerKilo = $("<td> </td>");
+                    var totalPrice = $("<td> </td>");
+                    var isSuccessfull = $("<td> </td>");
+                    var row = $("<tr></tr>").append(customer_name).append(product_name).append(amount).append(pricePerUnit).append(pricePerKilo).append(totalPrice);
+                    $("#inquiries_tbody").append(row);
+                }
+
+
+
+            }
+        });
+    }
+
+    function insertPagination(numberOfPages, currentPageNumber) {
+        // alert("number of page:" + numberOfPages);
+        //alert("current page number:" + currentPageNumber);
+        var div_pagination = $("#div_pagination");
+        $("#pagination_page").remove();
+        var ul_pagination = $('<ul class="pagination" id="pagination_page"></ul>');
+
+        if (currentPageNumber > 1 && currentPageNumber < numberOfPages) {
+            //alert(numberOfPages + " ," + currentPageNumber + "if1");
+            var li1 = $("<li  id='previous_page'></li>");
+            var a1 = $('<a role="button" onclick="getTableValues(' + (currentPageNumber - 1) + ')">' + "<" + '</a>');
+            li1.append(a1);
+            //ul.append(li1);
+
+
+            var li2 = $("<li id='first_page'></li>");
+            var a2 = $('<a role="button" onclick="getTableValues(' + 1 + ')">' + "<<" + '</a>');
+            li2.append(a2);
+            //ul.append(li2);
+            //ul.append(li2);
+
+            var li3 = $("<li id='next_page'></li>");
+            var a3 = $('<a role="button" onclick="getTableValues(' + (currentPageNumber + 1) + ')">' + ">" + '</a>');
+            li3.append(a3);
+            //ul.append(li3);
+
+
+            var li4 = $("<li id='last_page'></li>");
+            var a4 = $('<a role="button" onclick="getTableValues(' + numberOfPages + ')">' + ">>" + '</a>');
+            li4.append(a4);
+            //ul.append(li4);
+            //ul.prepend(li4);
+            //alert("pagination is being inserted");
+            ul_pagination.append(li2);
+            ul_pagination.append(li1);
+            ul_pagination.append(li3);
+            ul_pagination.append(li4);
+            //alert("pagination is inserted");
+        }
+        else if (currentPageNumber == 1 && currentPageNumber < numberOfPages) {
+            //alert(numberOfPages + " ," + currentPageNumber + "if1");
+            var li1 = $("<li id='previous_page' ></li>");
+            var a1 = $('<a role="button" onclick="getTableValues(' + (currentPageNumber - 1) + ')">' + "<" + '</a>');
+            li1.append(a1);
+            //ul.append(li1);
+
+
+            var li2 = $("<li disabled='true'  id='first_page' ></li>");
+            var a2 = $('<a disabled="true" role="button" onclick="getTableValues(' + 1 + ')">' + "<<" + '</a>');
+            li2.append(a2);
+            //ul.append(li2);
+            //ul.append(li2);
+
+            var li3 = $("<li id='next_page'></li>");
+            var a3 = $('<a role="button" onclick="getTableValues(' + (currentPageNumber + 1) + ')">' + ">" + '</a>');
+            li3.append(a3);
+            //ul.append(li3);
+
+
+            var li4 = $("<li id='last_page'></li>");
+            var a4 = $('<a role="button" onclick="getTableValues(' + numberOfPages + ')">' + ">>" + '</a>');
+            li4.append(a4);
+            //ul.append(li4);
+            //ul.prepend(li4);
+            //alert("pagination is being inserted");
+            ul_pagination.append(li2);
+            ul_pagination.append(li1);
+            ul_pagination.append(li3);
+            ul_pagination.append(li4);
+        }
+        else {
+            //alert(numberOfPages + " ," + currentPageNumber + "if1");
+            var li1 = $("<li  id='previous_page'></li>");
+            var a1 = $('<a role="button" onclick="getTableValues(' + (currentPageNumber - 1) + ')">' + "<" + '</a>');
+            li1.append(a1);
+            //ul.append(li1);
+
+
+            var li2 = $("<li id='first_page'></li>");
+            var a2 = $('<a role="button" onclick="getTableValues(' + 1 + ')">' + "<<" + '</a>');
+            li2.append(a2);
+            //ul.append(li2);
+            //ul.append(li2);
+
+            var li3 = $("<li id='next_page'></li>");
+            var a3 = $('<a role="button" onclick="getTableValues(' + (numberOfPages) + ')">' + ">" + '</a>');
+            li3.append(a3);
+            //ul.append(li3);
+
+
+            var li4 = $("<li id='last_page'></li>");
+            var a4 = $('<a role="button" onclick="getTableValues(' + numberOfPages + ')">' + ">>" + '</a>');
+            li4.append(a4);
+            //ul.append(li4);
+            //ul.prepend(li4);
+            //alert("pagination is being inserted");
+            ul_pagination.append(li2);
+            ul_pagination.append(li1);
+            ul_pagination.append(li3);
+            ul_pagination.append(li4);
+            //ul.append(li2);
+            //ul.append(li2);
+            //ul.prepend(li2);
+
+            //div_pagination.append(pagination_ul);
+        }
+        //alert("appended");
+        div_pagination.append(ul_pagination);
+    }
+
+    function popUpDateSelection() {
+        //alert(orderItemId);
+        //alert(amount);
+        var formGroup = $('<div style="margin-right:100px;" class="form-group"></div>');
+        var year = ""
+        year = "@PersianDateTime.Now.Year";
+
+        //var label = $('<label style="margin-top:8px;margin-right:80px" for="' + orderItemId + "_" + amount + '">متراژ ابلاغی را وارد کنید</label>');
+        //var divInside = $('<div class="col-md-4"></div>');
+
+        var span1 = $(`<span>
+            <label for="" style="font-size:40px;padding-top:6px;float:right;">/</label>
+        </span>`);
+
+        var span2 = $(`<span>
+            <label for="" style="font-size:40px;padding-top:6px;float:right;">/</label>
+        </span>`);
+
+        var selectDay = $("<select id='selectDay'  class='col-md-2 form-control' id='day' name='Day' style='width: 25 %; text - align: center; float: center'  onchange='setDay(this.value);' placeholder='روز'  ></select>");
+        $(`<option style="font-size:10px;" value='${""}'>${"روز"}</option>`).appendTo(selectDay);
+        for (var i = 1; i < 32; i++) {
+            $(`<option class='col-md-2' style="width:25%;text-align:center;float:center;font-size:10px;"  onchange="setDay(this.value);" placeholder="روز" value='${i}'>${i}</option>`).appendTo(selectDay);
+        }
+
+        var selectMonth = $("<select  class='col-md-2 form-control' dir='rtl' id='month' name='Month' id='selectMonth' style='width:25%;text-align:center;'  onchange='setMonth(this.value);' placeholder='ماه'></select>");
+        $(`<option style="font-size:10px;" value='${""}'>${"ماه"}</option>`).appendTo(selectMonth);
+        for (var i = 1; i < 13; i++) {
+            $(`<option class='col-md-2' style='font-size:10px;' value='${i}'>${i}</option>`).appendTo(selectMonth);
+        }
+
+        selectYear = $(`<input class="col-md-2 form-control" dir="rtl" id="year" name="Year" style="width:40%;text-align:center" onchange="setYear(this.value);" type="text" placeholder="سال">`);
+
+        var divInput = $('<div class="col-md-9" style="margin-top:30px;"></div>');
+        divInput.append(selectDay);
+        divInput.append(span1);
+        divInput.append(selectMonth);
+        divInput.append(span2);
+        divInput.append(selectYear);
+
+
+        //var divInput = $(
+        //    `<div class="col-md-9" style="margin-top:30px;">
+        //    <span>
+        //    <input class="col-md-2 form-control" dir="rtl" id="day" name="Day" style="width:25%;text-align:center;float:center" type="text" onchange="setDay(this.value);" placeholder="روز">
+        //        </span>
+        //    <span>
+        //        <label for="" style="font-size:40px;padding-top:6px;float:right;">/</label>
+        //    </span>
+        //    <span>
+        //        <input class="col-md-2 form-control" dir="rtl" id="month" name="Month" style="width:25%;text-align:center" type="text" onchange="setMonth(this.value);" placeholder="ماه">
+        //        </span>
+        //        <span>
+        //            <label  style="font-size:40px;padding-top:6px;float:right;">/</label>
+        //        </span>
+        //        <span>
+        //            <input class="col-md-2 form-control" dir="rtl" id="year" name="Year" style="width:40%;text-align:center" onchange="setYear(this.value);" type="text" placeholder="سال">
+        //        </span>
+        //    </div>`
+        //);
+
+        formGroup.append(divInput);
+
+
+        var parentDiv = $('<div id="divPopUpDateSelection" style="display:none"></div>');
+        parentDiv.append(formGroup);
+
+        var d = $(".ui-dialog-buttonset").remove();
+        //alert(d.children.name);
+        //alert(d);
+
+        parentDiv.dialog({
+            height: 250,
+            width: 550,
+            modal: true,
+            open: function () {
+                //$("#divPopUpDateSelection").remove();
+
+                $("#year").val(year).change();
+            },
+            buttons: {
+                "انتخاب": function () {
+                    //dispatchToProduction(orderItemId, amount);
+                    // alert("ok is chosen")
+                    var day = dayInput;
+                    var month = monthInput;
+                    var year = yearInput;
+
+                    date = year + "/" + month + "/" + day;
+
+
+                    var optionDate = $('<option style="color:orange" id = "option_' + date + '" value="' + date + '" >' + date + '</option>');
+
+
+                    var length = $('#filter_date > option').length;
+                    $('#filter_date > option').eq(length - 1).before(optionDate);
+
+
+                    //$("#dates").append(optionDate);
+                    //alert(optionDate);
+                    $(this).dialog("close");
+                    var newOption2 = $('select[name="Date"]').find('option[value="' + date + '"]').attr("selected", true);
+
+                    getTableValues(1, date);
+                    //var newOption = $('#option_' + date);
+
+
+                    //newOption2.attr('selected', 'selected');
+                    //alert(newOption);
+                    //alert(date);
+
+
+
+
+                    //alert("You selected OK!!")
+                },
+                "انصراف": function () {
+                    $('#filter_date option[value=""]').prop('selected', true);
+                    $('#filter_date option[value=""]').change();
+                    //var a = $('#dates > option').eq(0).attr("selected", true);
+                    //alert(a.text());
+                    $(this).dialog("close");
+                    //var a = $('select[name="Date"]').find('option[value=""]');
+                    //alert(a.val());
+
+                }
+
+            }
+        });
+    }
+
+    function setDay(input) {
+        dayInput = input;
+        // alert(dayInput);
+    }
+
+    function setMonth(input) {
+        monthInput = input;
+    }
+
+    function setYear(input) {
+        //alert(input);
+        yearInput = input;
+    }
+
+</script>

@@ -1,0 +1,192 @@
+﻿@model IEnumerable<Neshagostar.DAL.DataModel.StorageRelated.MaterialRelated.MaterialDedicated>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<link href="~/Content/jquery-ui.css" rel="stylesheet">
+<script src="~/Scripts/jquery-ui.js"></script>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th style="text-align:center;">
+            @Html.DisplayNameFor(model => model.DateOfDedication)
+        </th>
+        <th style="text-align:center;">
+            @Html.DisplayNameFor(model => model.Device.Name)
+        </th>
+        <th style="text-align:center;">
+            @Html.DisplayNameFor(model => model.AmountDedicated)
+        </th>
+
+        <th style="text-align:center;">
+            @Html.DisplayName("نوع مواد دریافتی")
+        </th>
+        <th style="text-align:center;">
+            @Html.DisplayNameFor(model => model.MaterialPurchased.Price)
+        </th>
+        <th style="text-align:center;">
+            @Html.DisplayNameFor(model => model.AmountWithdrawed)
+        </th>
+        <th style="text-align:center;">
+            @Html.DisplayNameFor(model => model.RealConsumedAmount)
+        </th>
+
+        <th></th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td style="text-align:center">
+            @Html.DisplayFor(modelItem => item.DateOfDedication)
+        </td>
+        <td style="text-align:center">
+            @Html.DisplayFor(modelItem => item.Device.Name)
+        </td>
+        <td style="text-align:center">
+            @Html.DisplayFor(modelItem => item.AmountDedicated)
+        </td>
+
+        <td style="text-align:center">
+            @Html.DisplayFor(model => item.MaterialPurchased.MaterialSeller.Name)
+            @Html.DisplayFor(model => item.MaterialPurchased.DateOfPurchase)
+        </td>
+        <td style="text-align:center">
+            @Html.DisplayFor(model => item.MaterialPurchased.Price)
+        </td>
+        <td style="text-align:center">
+            @Html.DisplayFor(model => item.AmountWithdrawed)
+        </td>
+        <td style="text-align:center">
+            @Html.DisplayFor(model => item.RealConsumedAmount)
+        </td>
+        <td style="text-align:center">
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+        </td>
+        <td style="text-align:center">
+            <button id="btn_withdrawal" class="btn btn-danger" onclick="popUpWithdrawal('@item.Id', '@item.AmountWithdrawed', '@item.DateOfWithdrawal')">برگشت مواد</button>
+        </td>
+    </tr>
+    }
+
+</table>
+
+
+<script>
+ 
+
+
+    function popUpWithdrawal(id, amount_withdrawed_before, withdrawed_date_before) {
+        var parentDiv = $('<div id="divpopUpWithdrawal" style="display:none;margin-top:5%;background:white;"></div>');
+        //alert(withdrawed_date_before);
+        //alert();
+        if (amount_withdrawed_before > 0) {
+            alert("قبلا مواد برگشتی ذخیره شده است در صورت اعمال مقدار جدید دلیل ذخیره مجدد را مشخص کنید.")
+
+            var formGroupPreviousWithdrawal = $('<div class="col-sm-12 form-group"></div>');
+            var labelPreviousWithdrawal = $('<label class="control-label col-md-12" for="withdrawal_amount">مقدار برگشتی قبلی :</label>');
+            var divPreviousWithdrawal = $('<div class="col-md-12"></div>');          
+
+            var inputPreviousWithdrawal = $('<input type="text" style="width:80%" readonly="true" class="form-control" id="withdrawal_previousAmount" name="withdrawal_previousAmount"  value="' + amount_withdrawed_before + '" />');
+            formGroupPreviousWithdrawal.append(labelPreviousWithdrawal);
+            divPreviousWithdrawal.append(inputPreviousWithdrawal);
+
+            formGroupPreviousWithdrawal.append(divPreviousWithdrawal);
+            parentDiv.append(formGroupPreviousWithdrawal);
+
+
+
+            var formGroupPreviousWithdrawalDate = $('<div class="col-sm-12 form-group"></div>');
+            var labelPreviousWithdrawalDate = $('<label class="control-label col-md-12" for="withdrawal_amount">تاریخ برگشتی قبلی :</label>');
+            var divPreviousWithdrawalDate = $('<div class="col-md-12"></div>');
+
+            var inputPreviousWithdrawalDate = $('<input type="text" style="width:80%" readonly="true" class="form-control" id="withdrawal_previousAmount" name="withdrawal_previousAmount"  value="' + withdrawed_date_before + '" />');
+            formGroupPreviousWithdrawalDate.append(labelPreviousWithdrawalDate);
+            divPreviousWithdrawalDate.append(inputPreviousWithdrawalDate);
+
+            formGroupPreviousWithdrawalDate.append(divPreviousWithdrawalDate);
+            parentDiv.append(formGroupPreviousWithdrawalDate);
+        }
+
+
+       
+
+        var formGroupWithdrawal = $('<div class="col-sm-12 form-group"></div>');
+        var labelWithdrawal = $('<label class="control-label col-md-12" for="withdrawal_amount">لطفا مقدار برگشتی را وارد فرمائید</label>');
+        formGroupWithdrawal.append(labelWithdrawal);
+
+        var divWithdrawal = $('<div class="col-md-12"></div>');
+        var inputWithdrawal = $('<input type="text" style="width:80%"  class="form-control" data-val="true" data-val-required="لطفا دلیل را وارد فرمائید" id="withdrawal_amount" name="withdrawal_amount"  value="" />');
+        var validationWithdrawal = $('<span class="field-validation-valid text-danger" data-valmsg-for="withdrawal_amount" data-valmsg-replace="true"></span>');
+        divWithdrawal.append(inputWithdrawal);
+        divWithdrawal.append(validationWithdrawal);
+        formGroupWithdrawal.append(divWithdrawal);
+
+
+        var formGroupWithdrawalDate = $('<div class="col-sm-12 form-group"></div>');
+        var labelWithdrawalDate = $('<label class="control-label col-md-12" for="withdrawal_date">لطفا تاریخ برگشت را وارد فرمائید</label>');
+        formGroupWithdrawalDate.append(labelWithdrawalDate);
+
+        var divWithdrawalDate = $('<div class="col-md-12"></div>');
+        var inputWithdrawalDate = $('<input type="text" style="width:80%"  class="form-control" data-val="true" data-val-required="لطفا تاریخ را وارد فرمائید" id="withdrawal_date" name="withdrawal_date"  value="@PersianDateTime.Now.ToString().Substring(0,10)" />');
+        var validationWithdrawalDate = $('<span class="field-validation-valid text-danger" data-valmsg-for="withdrawal_amount" data-valmsg-replace="true"></span>');
+        divWithdrawalDate.append(inputWithdrawalDate);
+        divWithdrawalDate.append(validationWithdrawal);
+        formGroupWithdrawalDate.append(divWithdrawalDate);
+
+        var formGroupComments = $('<div class="col-sm-12 form-group"></div>');
+        var labelComments = $('<label class="control-label col-md-3" for="Comments">توضیحات</label>');
+        formGroupComments.append(labelComments);
+
+        var divComments = $('<div class="col-md-12"></div>');
+        var inputComments = $('<textarea style="width:80%" class="form-control" cols="30"  rows="2  data-val="true" data-val-required="لطفا دلیل را وارد فرمائید" id="withdrawal_comments" name="Comments" type="text" value=""></textarea>');
+        var validationComments = $('<span class="field-validation-valid text-danger" data-valmsg-for="Comments" data-valmsg-replace="true"></span>');
+        divComments.append(inputComments);
+        divComments.append(validationComments);
+        formGroupComments.append(divComments);
+
+        parentDiv.append(formGroupWithdrawal);
+        parentDiv.append(formGroupWithdrawalDate);
+        parentDiv.append(formGroupComments);
+
+        parentDiv.dialog({
+            height: amount_withdrawed_before > 0 ? 500 : 360,
+            width: 500,
+            modal: true,
+            buttons: {
+                "OK": function () {
+                    $.ajax({
+                        url: "/Storage/MaterialDedicateds/SetWithdrawedAmount",
+                        data: { materialDedicatedId: id, amountToSet: $("#withdrawal_amount").val(), dateToset : $("#withdrawal_date").val(), withdrawalComments: $("#withdrawal_comments").val() },
+                        type: "POST",
+                        async: false,
+                        dataType: "json",
+                        content: "application/json; charset=utf-8",
+                        success: function (data) {
+                            //alert(data);
+                            alert("مقدار برگشتی ثبت شد");
+                            window.location.reload();
+                        }
+
+                    })
+                    $(this).dialog("close");
+                    //alert("You selected OK!!")
+                },
+                "Cancel": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+
+    }
+</script>

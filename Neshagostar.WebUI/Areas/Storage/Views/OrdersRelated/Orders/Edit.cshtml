@@ -1,0 +1,262 @@
+﻿@using Neshagostar.WebUI.Areas.Storage.Models
+@model OrderItemStorageInfo
+
+@using (Html.BeginForm("Create", "Sendings", new { area = "storage", OrderItemId = Model.OrderItemId }, FormMethod.Post, null))
+{
+    @Html.Hidden("OrderItemId", Model.OrderItemId, new { id="orderItemId" })
+    <div class="col-md-12 well" style="padding-left:30px;">
+        <div class="form-group">
+            <div class="col-md-4" style="padding:0px;margin:0px;">
+                @Html.Label("نام خریدار", htmlAttributes: new { @class = "control-label col-md-3", style = "text-align:center;padding-top:5px;margin-left:0px;margin-right:0px;" })
+                <div>
+                    @Html.EditorFor(model => model.CustomerName, new { htmlAttributes = new { @class = "form-control col-md-3", dir = "rtl", id = "customer_name", style = "text-align:center;width:60%;margin-left:0px;margin-right:0px;", @readonly = "true" } })
+                </div>
+
+            </div>
+            <div class="col-md-5">
+                @Html.Label("نوع محصول", htmlAttributes: new { @class = "control-label col-md-3", style = "text-align:center;;padding-top:5px" })
+                @Html.EditorFor(model => model.ProductName, new { htmlAttributes = new { @class = "form-control", dir = "rtl", id = "product_name", style = "text-align:center;width:70%;", @readonly = "true" } })
+            </div>
+
+            <div class="col-md-3">
+
+                @Html.Label("تاریخ ابلاغ ", htmlAttributes: new { @class = "control-label col-md-4", style = "margin-top:5px;" })
+                @Html.EditorFor(model => model.DispatchDate, new { htmlAttributes = new { @class = "form-control", dir = "rtl", id = "date_dispatch", style = "text-align:center;width:40%;", @readonly = "true" } })
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-12 well" style="padding-left:30px;">
+        <div class="col-md-3">
+            @Html.Label("مقدار ابلاغ شده", htmlAttributes: new { @class = "control-label col-md-6", style = "text-align:center;;padding-top:5px" })
+            @Html.EditorFor(model => model.AmountDispatched, new { htmlAttributes = new { @class = "form-control", dir = "rtl", id = "amount_dispatched", style = "text-align:center;width:40%;", @readonly = "true" } })
+        </div>
+
+
+        <div class="col-md-3">
+            @Html.Label("مقدار تولید شده", htmlAttributes: new { @class = "control-label col-md-6", style = "text-align:center;;padding-top:5px" })
+            @Html.EditorFor(model => model.AmountAllocated, new { htmlAttributes = new { @class = "form-control", dir = "rtl", id = "amount_dispatched", style = "text-align:center;width:40%;", @readonly = "true" } })
+        </div>
+
+
+        <div class="col-md-3">
+            @Html.Label("مقدار ارسال شده", htmlAttributes: new { @class = "control-label col-md-6", style = "text-align:center;;padding-top:5px" })
+            @Html.EditorFor(model => model.AmountSent, new { htmlAttributes = new { @class = "form-control", dir = "rtl", id = "amount_dispatched", style = "text-align:center;width:40%;", @readonly = "true" } })
+        </div>
+
+        <div class="col-md-3">
+            @Html.Label("مقدار ارسال نشده", htmlAttributes: new { @class = "control-label col-md-6", style = "text-align:center;;padding-top:5px" })
+            @Html.EditorFor(model => model.AmountNotSent, new { htmlAttributes = new { @class = "form-control", dir = "rtl", id = "amount_dispatched", style = "text-align:center;width:40%;", @readonly = "true" } })
+        </div>
+
+
+
+    </div>
+    <div class="col-md-12">
+        <div class="col-md-9" style="margin-bottom:30px;">
+            <div style="overflow-y:auto;" class="table-bordered">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center">
+                                تاریخ تولید
+                            </th>
+                            <th style="text-align:center">
+                                مقدار قابل ارسال
+                            </th>
+                            <th style="text-align:center">
+                                مقدار ارسالی
+                            </th>
+                      
+                        </tr>
+                    </thead>
+
+                    <tbody id="tbody_allocated">
+
+                        @{
+                            double sum = 0;
+                            var sendingAllocateds = ViewBag.SendingAllocateds as List<SendingAllocateDTO>;
+                        }
+                        @if (sendingAllocateds != null && sendingAllocateds.Count > 0)
+                        {
+                            for (int i = 0; i < (sendingAllocateds).Count; i++)
+                            {
+                                @Html.Hidden("sendings[" + i + "].AllocatedProductId", sendingAllocateds[i].AllocatedProductId, new { id = "sendingAllocateds[" + i + "].AllocatedProductId" })
+                                @Html.Hidden("sendings[" + i + "].Date", sendingAllocateds[i].DateProducted, new { id = "sendingAllocateds[" + i + "].Date" })
+                                sum += sendingAllocateds[i].AvailableAmountToSend;
+                                <tr>
+                                    <td style="text-align:center">@sendingAllocateds[i].DateProducted</td>
+                                    <td style="text-align:center" id="td_availToSend_@i">@sendingAllocateds[i].AvailableAmountToSend</td>
+                                    <td style="text-align:center;"> @Html.TextBox("sendings[" + i + "].SendingAmount", "0", new { @class = "form-control", style = "text-align:center;margin-right:35%", id = "td_amountToSend_" + @i })</td>
+                                </tr>
+
+                            }
+                            <tr>
+                                <th></th>
+                                <th style="text-align:center;">مجموع قابل ارسال</th>
+                                <th style="text-align:center;">مجموع ارسالی</th>
+
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <td style="text-align:center;" id="sendingAmountAvailable"> @sum</td>
+                                <td> @Html.TextBox("SumOfSending", "", new { @class = "form-control", style = "text-align:center;margin-right:27%;width:40%", id = "SumOfSending", @readonly = "true" })</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+            @if (Model.AmountAllocated > 0 && Model.AmountAllocated > Model.AmountSent && (double)ViewBag.AvailableAmountToSend > 0)
+            {
+                <div class="form-group">
+                    <input class ="btn btn-primary btn-block" type="submit" value="ارسال بار" id="sendBtn" />
+                    @*@Html.ActionLink("ارسال بار", "Create", new { orderItemId = Model.OrderItemId, area = "Storage", controller = "sendings" }, new { @class = "btn btn-primary btn-block" , id="sendBtn"})*@
+
+                    @*<input id="btnSubmit" type="button" value="ارسال بار" class="btn btn-primary btn-block" />*@
+                </div>
+            }
+            else
+            {
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary btn-block" id="btn_error">ارسال</button>
+                    @*@Html.ActionLink("ارسال بار", "Create", new { orderItemId = Model.OrderItemId, area = "Storage", controller = "sendings" }, new { @class = "btn btn-primary btn-block", disabled="true" })*@
+
+                    @*<input id="btnSubmit" type="button" value="ارسال بار" class="btn btn-primary btn-block" />*@
+                </div>
+            }
+
+        </div>
+        <div class="col-md-3 well">
+            @Html.Label("مقدار فعلی آماده ارسال", htmlAttributes: new { @class = "control-label col-md-6", style = "text-align:center;;padding-top:5px;font-size:12px;" })
+            @Html.TextBox("AvailableAmountToSend", ((double)ViewBag.AvailableAmountToSend).ToString() , new { @class = "form-control", dir = "rtl", id = "amount_dispatched", style = "text-align:center;width:40%;", @readonly = "true" } )
+        </div>
+
+        <div class="form-group">
+            <div>
+                <input id="btnSubmit" type="button" value="" class="btn btn-primary btn-block" style="background-color:white" />
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-12">
+        <div class="col-md-12" style="margin-bottom:30px;">
+            <div style="overflow-y:auto;" class="table-bordered">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center" onkeyup="">
+                                تاریخ ارسال
+                            </th>
+                            <th style="text-align:center">
+                                مقدار ارسال
+                            </th>
+                            <th style="text-align:center">
+                                مقصد ارسال
+                            </th>
+                            <th style="text-align:center">
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var sendingDetail in Model.OrderItemSendingDetails)
+                        {
+
+                            <tr>
+                                <td style="text-align:center">@sendingDetail.DateSent</td>
+                                <td style="text-align:center">@sendingDetail.SendingAmount</td>
+                                <td style="text-align:center"> @sendingDetail.Destination</td>
+                                <td style="text-align:center"> @Html.ActionLink("ویرایش", "Edit", new { id = sendingDetail.Id, area = "storage", controller = "Sendings" })</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+     
+
+        </div>
+    </div>
+
+    @*@Html.ActionLink("ارسال بار", "Create", new { orderItemId = Model.OrderItemId, area = "Storage", controller = "sendings" }, new { @class = "btn btn-primary btn-large" })*@
+
+
+
+
+}
+
+<div style="padding-right:20px;padding-top:30px;">
+    @Html.ActionLink("بازگشت به لیست ابلاغ", "Index", new { area = "Storage", controller = "Orders"}, new { style = "font-size:18px;" })
+</div>
+
+<script>
+    $("#btn_error").click(function () {
+        alert("کالای تولیدی برای ارسال تخصیص داده نشده است");
+    });
+    var rowCount = $('#tbody_allocated tr').length - 2;
+    var sendingAmountAvailable;
+    $("tr input[type='text']").keyup(function (obj) {
+ 
+        var a = $(this).val();
+        if (a == "") {
+            $(this).val("0");
+        }
+
+        var sum = 0;
+        for (var i = 0; i < rowCount; i++) {
+            var currentValue = parseFloat($("#td_amountToSend_" + i).val());
+            sum += currentValue;
+            sendingAmountAvailable = parseFloat($("#td_availToSend_" + i).html());
+            if (currentValue > sendingAmountAvailable) {
+                alert("موجودی کافی نیست ");
+                $("#sendBtn").attr("style", "display:none");
+                return;
+             
+            }
+        }
+        var availToSend = parseFloat($("#sendingAmountAvailable").html());
+        if (availToSend >= sum) {
+            $("#SumOfSending").val(sum);
+            $("#sendBtn").attr("style", "display:block");
+        } else {
+            alert("موجودی کافی نیست ");
+            $("#sendBtn").attr("style", "display:none");
+            return;
+     
+        }
+      
+    });
+
+    //$("#sendBtn").click(function () {
+    //    $.ajax(
+    //        {
+    //            url: "/Storage/Sendings/Create/",
+    //            async: false,
+    //            data: { sendings: getInputValues(), orderItemId = $("#orderItemId").val() },
+    //            dataType: "json",
+    //            method:"POST",
+    //            content: "application/json; charset=utf-8",
+    //            success: function (data) {
+
+    //            }
+    //        });
+    //});
+
+
+    function getRowValue(i) {        
+            var currentValue = parseFloat($("#td_amountToSend_" + i).val());
+            var currentId = $("#sendingAllocateds[" + i + "].AllocatedProductId").val();
+        return new { SendingValue: currentValue, ProductAllocatedId:currentId };
+    }
+
+    function getInputValues() {
+        var inputValues = [];
+        var rowCount = $('#tbody_allocated tr').length - 2;
+        for (var i = 0; i < rowCount; i++) {
+            inputValues.push(getRowValue(i));
+        }
+        return inputValues;
+    }
+
+</script>

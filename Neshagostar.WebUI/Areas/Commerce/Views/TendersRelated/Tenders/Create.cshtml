@@ -1,0 +1,261 @@
+﻿@model Neshagostar.WebUI.Areas.Commerce.Models.TendersRelated.TenderViewModel
+
+@{
+    ViewBag.Title = "Create";
+}
+
+
+
+<link href="~/Content/jquery-ui.css" rel="stylesheet">
+<script src="~/Scripts/jquery-ui.js"></script>
+
+<script src="~/Scripts/NeshagostarScripts/Commerce/Tenders/CreateTender.js" type="text/javascript"></script>
+
+<h2 style="padding-right:0px;margin-bottom:2%">ثبت مناقصه  </h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+<div>
+    @Html.Hidden("customerIdHidden", null, new { id = "customerIdHidden" })
+    <div class="col-md-12 well">
+        <div class="form-group">
+            @{ 
+                var date = PersianDateTime.Now.ToString().Substring(0, 10);
+            }
+            <div class="col-md-7" >
+                @Html.Label("عنوان مناقصه", htmlAttributes: new { @class = "control-label col-md-2", style = "padding-top:5px" })
+                @Html.EditorFor(model => model.TenderTitle, new { htmlAttributes = new { @class = "form-control col-md-6", dir = "rtl", id = "tenderTitle", style = "width:70%;" } })
+            </div>
+            <div class="col-md-3">
+                @Html.Label("تاریخ", htmlAttributes: new { @class = "control-label col-md-3", style = "padding-top:5px" })
+                @Html.EditorFor(model => model.DateTime, new { htmlAttributes = new { @class = "form-control col-md-5", dir = "rtl", id = "datetime", style = "width:50%;text-align:center", placeholder = date } })
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-12 well" style="padding-left:30px;">
+        <div class="form-group">
+            <div class="col-md-4">
+                @Html.Label("نام مناقصه گذار", htmlAttributes: new { @class = "control-label col-md-4", style = "text-align:center;padding-top:5px" })
+                <div>
+                    @Html.EditorFor(model => model.CustomerName, new { htmlAttributes = new { @class = "form-control", dir = "rtl", id = "customer_name", style = "width:50%;" } })
+                </div>
+
+            </div>
+            <div class="col-md-4">
+                @Html.Label("شماره تماس", htmlAttributes: new { @class = "control-label col-md-4", style = "text-align:center;;padding-top:5px" })
+                @Html.EditorFor(model => model.ContactNumber, new { htmlAttributes = new { @class = "form-control", dir = "rtl", id = "customer_tel", style = "width:50%;" } })
+            </div>
+            <div class="col-md-4">
+                @Html.Label("محل ", htmlAttributes: new { @class = "control-label col-md-4", style = "text-align:center;;padding-top:5px" })
+                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control", dir = "rtl", id = "customer_address", style = "width:50%;" } })
+            </div>
+
+        </div>
+    </div>
+</div>
+
+    <div>
+
+        <div class="col-md-12 well">
+            <div class="form-group">
+                <div class="col-md-5">
+                    @Html.Hidden("productInputHidden", null, new { id = "productInputHidden" })
+
+                    @Html.Label("نوع محصول", htmlAttributes: new { @class = "control-label col-md-3", style = "text-align:center;margin-top:5px;" })
+                    @Html.TextBox("ProductInput", null, htmlAttributes: new { @class = "form-control col-md-7", onclick = "popUpProducts()", id = "productInput", placeholder = "نوع محصول", style = "width:70%;text-align:center;margin:0%;" })
+
+                </div>
+
+                <div class="col-md-3" style="padding:0%;margin:0px;">
+                    @Html.Label("مقدار", htmlAttributes: new { @class = "control-label col-md-2", style = "margin-top:5px;" })
+                    @Html.TextBox("amountInMeteres", null, htmlAttributes: new { @class = "form-control col-md-9", placeholder = "مقدار", style = "text-align:center;width:65%;", id = "amountInMeters", onkeyup = "calculateTotalWeight()" })
+                </div>
+                <div class="col-md-3" style="padding:0%;margin:0px;">
+                    @Html.Label("قیمت به ازای واحد", htmlAttributes: new { @class = "control-label col-md-5", style = "margin-top:5px;" })
+                    @Html.TextBox("pricePerMeter", null, new { @class = "form-control col-md-7", dir = "rtl", id = "pricePerMeter", placeholder = "قیمت به ازای واحد", style = "text-align:center;width:50%;" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="col-md-12 well">
+            <div class="form-group">
+                <div class="col-md-3">
+                    @Html.Label("وزن در واحد ", htmlAttributes: new { @class = "control-label col-md-4", style = "margin-top:5px;" })
+                    @Html.TextBox("nominalWeightPerMeter", null, htmlAttributes: new { @class = "form-control col-md-5", id = "nominalWeightPerMeter", placeholder = "وزن به ازای هر واحد", style = "width:50%;text-align:center;", onkeyup = "calculateTotalWeight()" })
+                </div>
+                <div class="col-md-3">
+                    @Html.Label("مجموع وزن :", htmlAttributes: new { @class = "control-label col-md-4", style = "margin-top:5px;" })
+                    @Html.TextBox("totalWeight", null, new { @class = "form-control col-md-5", dir = "rtl", id = "totalWeight", placeholder = "مجموع وزن", style = "text-align:center;width:40%;" })
+                </div>
+                <div class="col-md-3">
+                    @Html.Label("قیمت مواد :", htmlAttributes: new { @class = "control-label col-md-4", style = "margin-top:5px;" })
+                    @Html.TextBox("hDPEPrice", null, htmlAttributes: new { @class = "form-control col-md-5", placeholder = "قیمت مواد اولیه", style = "text-align:center;width:50%;", id = "hDPEPrice" })
+                </div>
+                <div class="col-md-3">
+                    @Html.Label("قیمت واشر ", htmlAttributes: new { @class = "control-label col-md-4", style = "margin-top:5px;" })
+                    @Html.TextBox("WasherPrice", null, htmlAttributes: new { @class = "form-control col-md-5", placeholder = "قیمت واشر", style = "text-align:center;width:50%; ", id = "washerPrice" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="col-md-9 well">
+
+            <div class="col-md-12">
+                <div class="col-md-4">
+                    @Html.Label("هزینه حمل کل موضوع مناقصه", htmlAttributes: new { @class = "control-label col-md-6", style = "margin-top:1%" })
+
+                    @Html.TextBox("CarriageCost", null, htmlAttributes: new { @class = "form-control col-md-6", placeholder = "هزینه حمل ", style = "text-align:center;width:50%; ", id = "carriageCost" })
+                </div>
+                <div class="col-md-4">
+                    @Html.Label("هزینه ضمانت نامه", htmlAttributes: new { @class = "control-label col-md-6", style = "margin-top:2%" })
+
+                    @Html.TextBox("CarriageCost", null, htmlAttributes: new { @class = "form-control col-md-6", placeholder = "هزینه ضمانت نامه ", style = "text-align:center;width:45%; ", id = "guarantyCost" })
+                </div>
+                <div class="col-md-4">
+                    @Html.Label("هزینه بازرسی : ", htmlAttributes: new { @class = "control-label col-md-6", style = "margin-top:2%" })
+
+                    @Html.TextBox("CarriageCost", null, htmlAttributes: new { @class = "form-control col-md-6", placeholder = "هزینه بازرسی ", style = "text-align:center;width:40%; ", id = "inspectioncost" })
+                </div>
+            </div>
+            <div class="col-md-12" style="margin-top:3%">
+                <div class="col-md-6">
+                    @Html.Label("مبلغ ضمانت نامه شرکت در مناقصه : ", htmlAttributes: new { @class = "control-label col-md-6", style = "margin-top:2%" })
+
+                    @Html.TextBox("ParticipatingGuarantyPrice", null, htmlAttributes: new { @class = "form-control col-md-6", placeholder = "شرکت در مناقصه ", style = "text-align:center;width:40%; ", id = "participatingGuarantyPrice" })
+                </div>
+                <div class="col-md-6">
+                    @Html.Label("مبلغ برآورد : ", htmlAttributes: new { @class = "control-label col-md-3", style = "margin-top:2%" })
+
+                    @Html.TextBox("PredictionPrice", null, htmlAttributes: new { @class = "form-control col-md-6", placeholder = "مبلغ برآورد ", style = "text-align:center;width:40%; ", id = "predictionPrice" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9 well">
+            <div class="col-md-12">
+
+                @Html.Label("توضیحات", htmlAttributes: new { @class = "col-md-2" })
+
+                @Html.TextArea("Comments", null, new { @class = "form-control col-md-5", id = "comments", style = "width:100%;" })
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+
+    <div class="col-md-12">
+        <button type="button" class="btn btn-block btn-success btn-lg" onclick="validateForm();">افزودن به لیست</button>
+    </div>
+
+    <div class="col-md-12" style="margin-top:2%">
+        <div class="table table-hover">
+            <table style="text-align:center;table-layout:auto;width:100%">
+                <thead>
+                    <tr>
+                        <th style="text-align:center;">نوع محصول</th>
+                        <th style="text-align:center;">مقدار</th>
+                        <th style="text-align:center;">قیمت به ازای هر واحد</th>
+                        <th style="text-align:center;">وزن به ازای هر واحد</th>
+                        <th style="text-align:center;">قیمت به ازای هر کیلو</th>
+                        <th style="text-align:center;">قیمت مواد اولیه روز</th>
+                        <th style="text-align:center;">قیمت واشر</th>
+                        <th style="text-align:center;">مجموع قیمت</th>
+                        <th style="text-align:center;">قیمت نهایی</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="orderItemsClmns"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="table table-bordered">
+            <table style="text-align:center;table-layout:fixed;width:100%">
+                <thead style="text-align:center;">
+                    <tr style="text-align:center;">
+                        <th style="text-align:center;">
+                            قیمت کل بدون ارزش افزوده
+                        </th>
+                        <th style="text-align:center;">
+                            مقدار ارزش افزوده
+                        </th>
+                        <th style="text-align:center;">
+                            قیمت نهایی
+                        </th>
+                        <th style="text-align:center;">
+                            آیا ارزش افزوده دارد ؟
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="priceWithoutAddedCost"></td>
+                        <td id="addedCost"></td>
+                        <td id="finalPrice"></td>
+                        <td id="isUsedFromInventory">
+                            @Html.CheckBox("hasAddedCost", true, new { id = "hasAddedCost", onChange = "addedCostToggle(this)", @disabled = "true" })
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div>
+            <button id="btnSubmit" type="button" value="Create" class="btn btn-primary btn-block" onclick="sendOrderItemsJson()">ایجاد سفارش</button>
+        </div>
+    </div>
+
+    }
+
+
+    <div style="padding-right:20px;padding-top:30px;">
+        @Html.ActionLink("بازگشت به لیست تماس‌ها", "Index", null, new { style = "font-size:18px;" })
+    </div>
+
+
+
+    <script type="text/javascript">
+    $(function () {
+        $("#customer_name").autocomplete({
+            source: '@Url.Action("Search", new { area="Commerce", controller="Customers" })',
+            minLength: 2,
+            select: function (event, ui) {
+                showTel_CallerAddress(ui.item.value);
+            }
+
+        });
+    });
+
+
+    function showTel_CallerAddress(name) {
+
+        $.ajax({
+            type: "GET",
+            url: "/Commerce/Customers/GetTelAndAddressForInquiry/?name=" + name,
+            async: false,
+            dataType: "json",
+            content: "application/json; charset=utf-8",
+            success: function (data) {
+
+                $("#customer_tel").val(data.tel);
+                $("#customer_address").val(data.address);
+                $("#customerIdHidden").val(data.id);
+            }
+        })
+    }
+
+    </script>

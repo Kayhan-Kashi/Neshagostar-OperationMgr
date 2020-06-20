@@ -1,0 +1,98 @@
+﻿@model Neshagostar.DAL.DataModel.StorageRelated.MaterialRelated.MaterialPurchased
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>MaterialPurchased</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.MaterialSeller.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MaterialSeller.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MaterialSpecification.Specification)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MaterialSpecification.Specification)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Code)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateOfPurchase)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateOfPurchase)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AddedCostPrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AddedCostPrice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PurchaseMethod)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PurchaseMethod)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Escont)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Escont)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OtherCosts)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OtherCosts)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AmountPurchased)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AmountPurchased)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,210 @@
+﻿@model List<Neshagostar.WebUI.Areas.Commerce.Models.TendersRelated.TenderViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<link href="~/Content/jquery-ui.css" rel="stylesheet">
+<script src="~/Scripts/jquery-ui.js"></script>
+
+
+<style type="text/css">
+    th, td {
+        text-align: center;
+        font-size: 13px;
+    }
+</style>
+
+<script src="~/Scripts/NeshagostarScripts/Commerce/IndexInquiry.js">
+
+</script>
+
+<h1>لیست مناقصات</h1>
+<p style="font-size:20px;padding-top:10px;">
+    @Html.ActionLink("ثبت مناقصه", "Create", new { area = "Commerce", controller = "Tenders" })
+</p>
+
+<div style="overflow-y:auto;" class="table-bordered">
+    <table class="table">
+        @if (Model != null)
+        {
+            foreach (var tender in Model)
+            {
+                <tr>
+                    <th style="background-color:azure">
+                        تاریخ مناقصه
+                    </th>
+                    <th style="background-color:azure">
+                        برگزارکننده
+                    </th>
+                    <th style="background-color:azure">
+                        عنوان مناقصه
+                    </th>
+                    <th style="background-color:azure">
+                        مبلغ برآورد
+                    </th>
+                    <th style="background-color:azure">
+                        مجموع وزن
+                    </th>
+                    <th style="background-color:azure">
+                        برنده شدیم ؟
+                    </th>
+                    <th style="background-color:azure">
+
+                    </th>
+                    <th style="background-color:azure">
+
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        @tender.DateTime
+                    </td>
+                    <td>
+                        @tender.CustomerName
+                    </td>
+                    <td>
+                        @tender.TenderTitle
+                    </td>
+                    <td>
+                        @Html.DisplayFor(t => tender.PredictionPrice)
+
+                    </td>
+                    <td>
+                        @Html.DisplayFor(t => tender.TotalWeight)
+                    </td>
+                    @{
+                        if (tender.IsSuccessful)
+                        {
+                            <td style="color:green">
+                                بله
+                            </td>
+                        }
+                        else
+                        {
+                            <td style="color:red">
+                                خیر
+                            </td>
+                        }
+                    }
+                    <td>
+                        @Html.ActionLink("ویرایش", "Edit", new { area = "commerce", controller = "Tenders", id = tender.TenderId })
+                    </td>
+                    <td>
+                        @Html.ActionLink("اضافه کردن قیمت رقیب", "AddTenderPrice", new { area = "Commerce", controller = "Tenders", tenderId = tender.TenderId })
+                    </td>
+                </tr>
+                if (tender.TenderPrices != null)
+                {
+                    <tr>
+                        <th style="background-color:azure">
+                            رتبه قیمت
+                        </th>
+                        <th style="background-color:azure">
+                            نام شرکت کننده
+                        </th>
+                        <th style="background-color:azure">
+                            قیمت پیشنهادی
+                        </th>
+                        <th style="background-color:azure">
+                            قیمت به ازای هر کیلو
+                        </th>
+                        <th style="background-color:azure">
+                            تفاوت با قیمت شرکت در کیلو
+                        </th>
+                        <th style="background-color:azure">
+
+                        </th>
+                        <th style="background-color:azure">
+
+                        </th>
+                        <th style="background-color:azure">
+
+                        </th>
+                    </tr>
+                    for (int i = 0; i < tender.TenderPrices.Count; i++)
+                    {
+                    <tr>
+                        <td>
+                            @(i + 1)
+                        </td>
+                        <td>
+
+                            @tender.TenderPrices[i].ParticipantName
+                        </td>
+                        <td>
+                            @Html.DisplayFor(t => tender.TenderPrices[i].TotalPrice)
+
+                        </td>
+                        <td>
+                            @Html.DisplayFor(t => tender.TenderPrices[i].PricePerKilo)
+
+                        </td>
+
+                        @if (!(tender.TenderPrices[i].IsOurCompany))
+                        {
+
+                            var difference = Math.Ceiling((tender.FinalPrice / tender.TotalWeight) - tender.TenderPrices[i].PricePerKilo);
+
+                            if (difference > 0)
+                            {
+                        <td style="color:red">
+
+                            @{
+                                var diffToShow = Math.Abs(difference);
+                            }
+                            @Html.DisplayFor(t => diffToShow)
+                            <span>
+                                -
+                            </span>
+
+                        </td>
+                            }
+                            else
+                            {
+                                
+                                    var diffToShow = Math.Abs(difference);
+                                
+                        <td style="color:green">
+
+                            @Html.DisplayFor(t => diffToShow)
+                            <span>
+                                +
+                            </span>
+
+                        </td>
+                            }
+                            <td>
+                                @Html.ActionLink("ویرایش", "EditTenderPrice", new { area = "commerce", controller = "Tenders", id = tender.TenderPrices[i].Id })
+                                |
+                                @Html.ActionLink("حذف", "DeleteTenderPrice", new { area = "commerce", controller = "Tenders", id = tender.TenderPrices[i].Id })
+                            </td>
+                                }
+                                else
+                                {
+                                    <td> </td>
+                                    <td> </td>
+                                }
+                    </tr>
+                    }
+                    <tr>
+                        <td style="background-color:brown"></td>
+                        <td style="background-color:brown"></td>
+                        <td style="background-color:brown"></td>
+                        <td style="background-color:brown"></td>
+                        <td style="background-color:brown"></td>
+                        <td style="background-color:brown"></td>
+                        <td style="background-color:brown"></td>
+                        <td style="background-color:brown"></td>
+                    </tr>
+
+                }
+
+
+            }
+    
+        }
+
+    </table>
+</div>

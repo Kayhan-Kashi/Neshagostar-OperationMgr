@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.421
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neshagostar.WebUI", "Neshagostar.WebUI\Neshagostar.WebUI.csproj", "{8573D563-D294-4424-B920-FA32C195DDFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neshagostar.DAL", "Neshagostar.DAL\Neshagostar.DAL.csproj", "{893BE17F-48E4-422C-8CCA-DD8597AF8203}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8573D563-D294-4424-B920-FA32C195DDFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8573D563-D294-4424-B920-FA32C195DDFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8573D563-D294-4424-B920-FA32C195DDFE}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{8573D563-D294-4424-B920-FA32C195DDFE}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{893BE17F-48E4-422C-8CCA-DD8597AF8203}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{893BE17F-48E4-422C-8CCA-DD8597AF8203}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{893BE17F-48E4-422C-8CCA-DD8597AF8203}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{893BE17F-48E4-422C-8CCA-DD8597AF8203}.Release|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7CAF9FED-88E2-4DDF-B13C-C5FAF880C4DB}
+	EndGlobalSection
+EndGlobal

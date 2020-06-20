@@ -1,0 +1,120 @@
+﻿@model Neshagostar.DAL.DataModel.CommerceRelated.TenderRelated.TenderItem
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>ویرایش</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.TenderId)
+
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Tender.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Tender.Title, new { htmlAttributes = new { @class = "form-control", @readonly = "true" } })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Product.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Product.Title, new { htmlAttributes = new { @class = "form-control", @readonly = "true" } })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control", id = "amount", onkeyUp = "calculateTotalPrice();calculateTotalWeight();" } })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.HDPEPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.HDPEPrice, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.WasherPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.WasherPrice, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.NominalWeightPerMeter, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.NominalWeightPerMeter, new { htmlAttributes = new { @class = "form-control", id = "weightPerUnit", onkeyUp = "calculateTotalWeight()" } })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.PricePerUnit, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.PricePerUnit, new { htmlAttributes = new { @class = "form-control", id = "pricePerUnit", onkeyUp = "calculateTotalPrice()" } })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.TotalWeight, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.TotalWeight, new { htmlAttributes = new { @class = "form-control", id = "totalWeight" } })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.TotalPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.TotalPrice, new { htmlAttributes = new { @class = "form-control", id = "totalPrice" } })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Comments, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(model => model.Comments, new { @class = "form-control" })
+        </div>
+    </div>
+</div>
+
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="ویرایش" class="btn btn-default" />
+        </div>
+    </div>
+
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+<script>
+    function calculateTotalWeight() {
+        var weightPerUnit = $("#weightPerUnit").val();
+        var amount = $("#amount").val();
+        var result = weightPerUnit * amount;
+        $("#totalWeight").val(result);
+    }
+
+    function calculateTotalPrice() {
+        var amount = $("#amount").val();
+        var pricePerUnit = $("#pricePerUnit").val();
+        var result = amount * pricePerUnit;
+        $("#totalPrice").val(result);
+    }
+</script>

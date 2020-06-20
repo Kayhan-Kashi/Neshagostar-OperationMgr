@@ -1,0 +1,33 @@
+﻿@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity.Owin
+@using Neshagostar.WebUI.App_Start
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+
+
+        if (HttpContext.Current.GetOwinContext().Authentication.User.Identity.Name != null)
+        {
+            var username = HttpContext.Current.GetOwinContext().Authentication.User.Identity.Name;
+            var name = HttpContext.Current.GetOwinContext().GetUserManager<PersonnelManager>().FindByName(username).Name;
+
+            @Html.AntiForgeryToken()
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    @Html.ActionLink(name, "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", style = "color:greenyellow" })
+                </li>
+                <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+            </ul>
+        }
+
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: new { area = "PersonnelManagement" }, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: new { area = "PersonnelManagement" }, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}

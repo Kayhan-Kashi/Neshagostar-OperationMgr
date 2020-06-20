@@ -1,0 +1,124 @@
+﻿@model Neshagostar.DAL.DataModel.StorageRelated.ProductsRelated.ImportedProduct
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>ImportedProduct</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Product.Code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Product.Code)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AmountImported)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AmountImported)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Comments)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Comments)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <button id="btn_submit" type="button" value="Delete" class="btn btn-default">حذف</button> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>
+
+<script>
+    $("#btn_submit").click(popUpJustify);
+
+
+    function popUpJustify() {
+        var parentDiv = $('<div id="divPopupProducts" style="display:none;margin-top:5%;background:white;"></div>');
+
+        var formGroupReason = $('<div class="col-sm-12 form-group"></div>');
+        var labelReason = $('<label class="control-label col-md-3" for="Reason">دلیل عملیات</label>');
+        formGroupReason.append(labelReason);
+
+        var divReason = $('<div class="col-md-12"></div>');
+        var inputReason = $('<textarea  style="width:80%"  class="form-control" data-val="true" data-val-required="لطفا دلیل را وارد فرمائید" id="reason" name="Reason" type="text" value=""></textarea>');
+        var validationReason = $('<span class="field-validation-valid text-danger" data-valmsg-for="Reason" data-valmsg-replace="true"></span>');
+        divReason.append(inputReason);
+        divReason.append(validationReason);
+        formGroupReason.append(divReason);
+
+        var formGroupComments = $('<div class="col-sm-12 form-group"></div>');
+        var labelComments = $('<label class="control-label col-md-3" for="Comments">توضیحات</label>');
+        formGroupComments.append(labelComments);
+
+        var divComments = $('<div class="col-md-12"></div>');
+        var inputComments = $('<textarea style="width:80%" class="form-control" cols="30"  rows="2  data-val="true" data-val-required="لطفا دلیل را وارد فرمائید" id="comments" name="Comments" type="text" value=""></textarea>');
+        var validationComments = $('<span class="field-validation-valid text-danger" data-valmsg-for="Comments" data-valmsg-replace="true"></span>');
+        divComments.append(inputComments);
+        divComments.append(validationComments);
+        formGroupComments.append(divComments);
+
+
+
+        parentDiv.append(formGroupReason);
+        parentDiv.append(formGroupComments);
+
+        parentDiv.dialog({
+            height: 430,
+            width: 800,
+            modal: true,
+            buttons: {
+                "OK": function () {
+                    $.ajax({
+                        url: "/personnelmanagement/justifies/create",
+                        data: { reason: $("#reason").val(), comments : $("#comments").val(), action:"Delete", Entity:"ImportedProduct" },
+                        type: "POST",
+                        async: false,
+                        dataType: "json",
+                        content: "application/json; charset=utf-8",
+                        success: function (data) {
+                            if (data.value == "true") {                      
+                                $("form").submit();
+                            }
+                   
+                        }
+
+                    })
+                    $(this).dialog("close");
+                    //alert("You selected OK!!")
+                },
+                "Cancel": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+
+    }
+</script>

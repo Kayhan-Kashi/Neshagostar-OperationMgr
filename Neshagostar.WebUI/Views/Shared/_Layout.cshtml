@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="~/Content/MarketShop/image/favicon.png" rel="icon" />
+    <title>شرکت نشاگستر پردیس</title>
+    <script src="~/Content/MarketShop/js/jquery-2.1.1.min.js" crossorigin="anonymous"></script>
+    @*<script src="~/Scripts/jquery-3.0.0.js"></script>
+        <script src="~/Scripts/jquery-3.0.0.min.js"></script>*@
+    <link href="~/Content/jquery-ui.css" rel="stylesheet">
+    <script src="~/Scripts/jquery-ui.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <meta name="description" content="Responsive and clean html template design for any kind of ecommerce webshop">
+    @Styles.Render("~/Content/css")
+
+    @Styles.Render("~/Content/css2")
+    @Scripts.Render("~/bundles/scripts")
+
+
+</head>
+
+<body>
+    <div>
+        <div class="wrapper-wide">
+            @Html.Partial("~/Views/Shared/HeaderPartial.cshtml")
+            @RenderSection("menu_Items", false)
+            <div style="padding-right:20px;padding-top:15px;padding-bottom:30px;padding-left:20px;">
+                @RenderBody()
+            </div>
+            @*@Html.Partial("~/Views/Shared/FooterPartial.cshtml")*@
+
+
+
+
+
+        </div>
+    </div>
+
+
+
+
+    <div class="custom-footer">
+        <p style="padding-left:20px;padding-top:20px;text-align:left;font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;color:white">&copy; @DateTime.Now.Year -  Neshagostar Pardis</p>
+    </div>
+
+    @*<div class="custom-footer">
+
+            <h1>This section is footer</h1>
+            <h1>This section is footer</h1>
+
+
+        </div>*@
+
+
+
+
+
+
+
+
+
+
+    <!-- JS Part Start-->
+    @*<script type="text/javascript" src="~/Content/MarketShop/js/bootstrap/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="~/Content/MarketShop/js/jquery.easing-1.3.min.js"></script>
+        <script type="text/javascript" src="~/Content/MarketShop/js/jquery.dcjqaccordion.min.js"></script>
+        <script type="text/javascript" src="~/Content/MarketShop/js/owl.carousel.min.js"></script>*@
+   
+    <script type="text/javascript" src="~/Content/MarketShop/js/custom.js"></script>
+    
+    @*@RenderSection("Scripts", false)*@
+    <!-- JS Part End-->
+
+
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>

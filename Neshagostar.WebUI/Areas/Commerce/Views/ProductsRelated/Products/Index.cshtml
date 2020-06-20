@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Neshagostar.DAL.DataModel.CommerceRelated.ProductsRelated.Product>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h1>لیست محصولات</h1>
+
+<p style="font-size:20px;padding-top:10px;">
+    @Html.ActionLink("ثبت", "Create", new { controller = "Products", area = "commerce" })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Code)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Code)
+        </td>
+        <td>
+            @Html.ActionLink("ویرایش", "Edit", new { id = item.Id }) |
+            @Html.ActionLink("جزئیات", "Details", new { id = item.Id }) |
+            @Html.ActionLink("حذف", "Delete", new { id = item.Id })
+        </td>
+    </tr>
+}
+
+</table>

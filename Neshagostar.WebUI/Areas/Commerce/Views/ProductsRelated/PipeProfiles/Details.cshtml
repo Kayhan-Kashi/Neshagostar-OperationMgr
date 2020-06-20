@@ -1,0 +1,26 @@
+﻿@model Neshagostar.DAL.DataModel.CommerceRelated.ProductsRelated.PipeProfile
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>جزئیات</h2>
+
+<div>
+    <h4>نوع پروفیل</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("ویرایش", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("بازگشت به لیست", "Index")
+</p>

@@ -1,0 +1,97 @@
+﻿
+@{
+    ViewBag.Title = "Wastage";
+}
+
+<title>Result Visualization</title>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json",
+            url: '@Url.Action("Wastage", new { controller="charts", area= "production" })',
+            success: function (result) {
+                google.charts.load('current', {
+                    'packages': ['corechart']
+                });
+                google.charts.setOnLoadCallback(function () {
+                    drawChart(result);
+                });
+            }
+
+
+        });
+        function drawChart(result) {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Date');
+            data.addColumn('number', 'میزان ضایعات');
+            var dataArray = [];
+            $.each(result, function (i, obj) {
+                dataArray.push([obj.Date, obj.Amount]);
+            });
+
+            data.addRows(dataArray);
+            var columnChartsOptions = {
+                title: "جدول ضایعات",
+                width: 1000,
+                height: 400,
+                bar: { groupWidth: "20%" }
+            }
+
+
+            var columnChart = new google.visualization.ColumnChart(document.getElementById('columnchart_div'));
+            //alert();
+
+            columnChart.draw(data, columnChartsOptions);
+
+        }
+    })
+</script>
+
+<h2>ضایعات</h2>
+
+@*<div class="col-md-12 well" style="padding-left:0px;margin-left:0px;text-align:center;">
+    <div class="col-md-4">
+        <div class="form-group">
+            @Html.Label("میان کل ضایعات در بازه", htmlAttributes: new { @class = "control-label col-md-5" })
+            <div class="col-md-7">
+                @Html.Editor("", "", new { htmlAttributes = new { @class = "form-control", style = "width:60%;text-align:center" } })
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            @Html.Label("میان کل ضایعات در بازه", htmlAttributes: new { @class = "control-label col-md-5" })
+            <div class="col-md-7">
+                @Html.Editor("", "", new { htmlAttributes = new { @class = "form-control", style = "width:60%;text-align:center" } })
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            @Html.Label("میان کل ضایعات در بازه", htmlAttributes: new { @class = "control-label col-md-5" })
+            <div class="col-md-7">
+                @Html.Editor("", "", new { htmlAttributes = new { @class = "form-control", style = "width:60%;text-align:center" } })
+
+            </div>
+        </div>
+    </div>
+</div>*@
+
+<div class="col-md-12" id="columnchart_div" style="margin-right:10%;">
+
+</div>
+
+
+
+
+
+
+
+

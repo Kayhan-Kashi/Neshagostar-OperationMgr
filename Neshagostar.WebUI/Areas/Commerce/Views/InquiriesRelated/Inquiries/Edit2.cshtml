@@ -1,0 +1,152 @@
+﻿@model Neshagostar.WebUI.Areas.Commerce.Models.InquiriesRelated.InquiryBag
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>ویرایش</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>استعلام</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.InquiryId)
+
+    <div class="form-group">
+        @Html.Label("نوع کالا", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.Hidden("ProductId", null, new { id = "productInputHidden" })
+            @*@Html.Label("ProductInput", "نوع محصول", new { @for = "ProductInput" })*@
+            @Html.TextBox("ProductName", null, htmlAttributes: new { @class = "form-control", onclick = "popUpProducts()", id = "productInput", placeholder = "نوع محصول", style = "text-align:center;width:40%" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("متراژ", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-5">
+            @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control", onkeydown = "calculatePrice()", id = "amountInMeters" } })
+            @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("قیمت در هر متر", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-5">
+            @Html.EditorFor(model => model.PricePerUnit, new { htmlAttributes = new { @class = "form-control", onkeydown = "calculatePrice()", id = "pricePerMeter" } })
+            @Html.ValidationMessageFor(model => model.PricePerUnit, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("وزن در واحد", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-5">
+            @Html.EditorFor(model => model.NominalWeightPerMeter, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.NominalWeightPerMeter, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("کل وزن", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-5">
+            @Html.EditorFor(model => model.TotalWeight, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.TotalWeight, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("قیمت مواد اولیه", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-5">
+            @Html.EditorFor(model => model.HDPEPrice, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.HDPEPrice, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        @Html.Label("قیمت واشر", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-5">
+            @Html.EditorFor(model => model.WasherPrice, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.WasherPrice, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.HiddenFor(model => model.TotalPrice, new { id = "totalPrice" })
+        @Html.Label("قیمت کل آیتم", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-6">
+            @Html.EditorFor(model => model.TotalPrice, new { htmlAttributes = new { @class = "form-control", @readonly = "true", id = "totalPriceToShow" } })
+            @Html.ValidationMessageFor(model => model.TotalPrice, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("توضیحات", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(model => model.Comments, new { @class = "form-control", row = "15", dir = "rtl", id = "callercomments" })
+            @Html.ValidationMessageFor(model => model.Comments, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("آیا منجر به خرید شده ؟", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @if (Model.IsSuccessful)
+            {
+                <span>بله</span>
+                @Html.RadioButtonFor(model => model.IsSuccessful, true, new { @checked = true })
+                <span>خیر</span>
+                @Html.RadioButtonFor(model => model.IsSuccessful, false)
+            }
+            else
+            {
+                <span>بله</span>
+                @Html.RadioButtonFor(model => model.IsSuccessful, true)
+                <span>خیر</span>
+                @Html.RadioButtonFor(model => model.IsSuccessful, false, new {  @checked = true })
+
+            }
+
+
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("دلایل عدم خرید", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(model => model.ReasonForFailure, new { @class = "form-control", row = "15", dir = "rtl", id = "callercomments" })
+            @Html.ValidationMessageFor(model => model.ReasonForFailure, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="ویرایش" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+
+    <script>
+        var totalPrice;
+        function calculatePrice() {
+            //alert();
+            var amountInMeters = $("#amountInMeters").val();
+            var pricePerMeter = $("#pricePerMeter").val();
+            totalPrice = amountInMeters * pricePerMeter;
+            $("#totalPriceToShow").val(totalPrice.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
+            $("#totalPrice").val(totalPrice);
+        }
+    </script>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+<script src="~/Scripts/Javascripts/Commerce/EditOrderItem.js"></script>
+

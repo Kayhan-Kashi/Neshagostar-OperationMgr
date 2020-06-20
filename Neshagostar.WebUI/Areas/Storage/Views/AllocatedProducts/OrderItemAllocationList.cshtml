@@ -1,0 +1,193 @@
+﻿@using Neshagostar.WebUI.Areas.Storage.Models
+@model List<AllocationDTO>
+
+@{
+    ViewBag.Title = "OrderItemAllocationList";
+}
+
+<h2 style="margin-bottom:2%;">لیست تولیدات تخصیص داده شده</h2>
+@Html.Hidden("orderItemId", ViewBag.OrderItemId as string, new { id = "orderItemId" })
+
+<div class="col-md-12 well" style="padding-left:30px;">
+    <div class="form-group">
+        <div class="col-md-4" style="padding:0px;margin:0px;">
+            @Html.Label("نام خریدار", htmlAttributes: new { @class = "control-label col-md-3", style = "text-align:center;padding-top:5px;margin-left:0px;margin-right:0px;" })
+            <div>
+                @Html.Editor("CustomerName", ViewBag.CustomerName as string, new { htmlAttributes = new { @class = "form-control col-md-3", dir = "rtl", id = "customer_name", style = "text-align:center;width:60%;margin-left:0px;margin-right:0px;", @readonly = "true" } })
+            </div>
+
+        </div>
+        <div class="col-md-5">
+            @Html.Label("نوع محصول", htmlAttributes: new { @class = "control-label col-md-3", style = "text-align:center;;padding-top:5px" })
+            @Html.Editor("ProductName",ViewBag.ProductName as string, new { htmlAttributes = new { @class = "form-control", dir = "rtl", id = "product_name", style = "text-align:center;width:70%;", @readonly = "true" } })
+        </div>
+
+
+
+    </div>
+</div>
+<hr />
+
+<div class="col-md-12 well ">
+    <div class="col-md-8 ">
+        <div class="form-group col-md-6">
+            @Html.Label("مقدار تولید شده", null, new { @class = "control-label col-md-4", style = "margin-top:1%;margin-left:0px;" })
+            <div class="col-md-8">
+                @Html.TextBox("AllocatedAmount", ((double)ViewBag.AllocatedAmount).ToString(), new { @class = "form-control", style = "width:50%;text-align:center", @readonly = "true" })
+            </div>
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.Label("مقدار تولید نشده", null, new { @class = "control-label col-md-4", style = "margin-top:1%;margin-left:0px;" })
+            <div class="col-md-8">
+                @Html.TextBox("UnAmountAllocated", ((double)ViewBag.UnAllocatedAmount).ToString(), new { @class = "form-control", style = "width:50%;text-align:center", @readonly = "true", id = "unAmountAllocated" })
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+<div class="col-md-12 well ">
+    <div class="col-md-12 ">
+
+        <div class="form-group col-md-3">
+            @Html.Label("موجودی قابل تخصیص", null, new { @class = "control-label col-md-6", style = "margin-top:1%;margin-left:0px;" })
+            <div class="col-md-6">
+                @Html.TextBox("AvailableAmountToAllocate", ((double)ViewBag.AvailableAmountToAllocate).ToString(), new { @class = "form-control", style = "width:80%;text-align:center", @readonly = "true", id = "available_amount" })
+            </div>
+        </div>
+
+        <div class="form-group col-md-4">
+            @Html.Label("مقدار تخصیص شونده", null, new { @class = "control-label col-md-5", style = "margin-top:1%;margin-left:0px;" })
+            <div class="col-md-7">
+                @Html.TextBox("AmountWishToAllocate", null, new { @class = "form-control", style = "width:50%;text-align:center", id = "amountWishToAllocate" })
+            </div>
+        </div>
+        <div class="form-group col-md-5">
+            @Html.Label("روش تخصیص", null, new { @class = "control-label col-md-3", style = "margin-top:1%;margin-left:0px;" })
+            <div class="col-md-8">
+                @Html.DropDownList("AllocationMethods", ViewBag.AllocationMethods as IEnumerable<SelectListItem>, "روش تخصیص را انتخاب کنید", new { @class = "form-control", style = "width:120%", id = "select_allocationMethods" })
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+
+
+<div class="form-group">
+
+    <button type="submit" value="تخصیص" id="btn_allocate" class="btn btn-primary btn-block" style="margin-top:1px;border-radius:5px;margin-right:24%;width:50%">تخصیص</button>
+
+</div>
+
+<hr />
+
+<div>
+    <div style="overflow-y:auto;" class="table-bordered">
+        <table class="table">
+            <tr>
+                <th style="text-align:center;font-size:15px;">
+                    تاریخ تولید
+                </th>
+                <th style="text-align:center;font-size:15px;">
+                    سفارش
+                </th>
+                <th style="text-align:center;font-size:15px;">
+                    مقدار
+                </th>
+                <th style="text-align:center;font-size:15px;">
+                    تاریخ تخصیص
+                </th>
+                <th>عملیات</th>
+                <th></th>
+            </tr>
+            @{
+                Random random = new Random();
+                int x = random.Next(0, 255);
+                int y = random.Next(0, 255);
+                int z = random.Next(0, 255);
+            }
+            @if (Model != null && Model.Count > 0)
+            {
+                <tbody id="allocations_tbody">
+                    @foreach (Neshagostar.WebUI.Areas.Storage.Models.AllocationDTO item in Model)
+                    {
+
+
+                        <tr>
+                            <td style="text-align:center;width:180px;font-size:11px;">
+                                @Html.DisplayFor(modelItem => item.ProductionDate, new { id = "order_date" })
+                            </td>
+                            <td style="text-align:center;width:290px;font-size:11px;">
+                                @Html.DisplayFor(modelItem => item.CustomerName, new { style = "text-align:right;font-size:19px;" })
+                            </td>
+                            <td style='text-align:center;width:240px;font-size:11px;'>
+                                @Html.DisplayFor(modelItem => item.Amount, new { id = "date" })
+                            </td>
+                            <td style="text-align:center;width:180px;font-size:11px;">
+                                @Html.DisplayFor(modelItem => item.AllocatingDate, new { id = "order_date" })
+                            </td>
+
+                            <td>
+                                @Html.ActionLink("ویرایش", "Edit", new { area = "Storage", controller = "AllocatedProducts", id = item.Id }, new { style = "font-size:11px;" })
+
+                            </td>
+                            <td>
+                                @Html.ActionLink("حذف", "Delete", new { area = "Storage", controller = "AllocatedProducts", id = item.Id }, new { style = "font-size:11px;" })
+
+                            </td>
+                        </tr>
+
+                    }
+                </tbody>
+            }
+        </table>
+    </div>
+</div>
+
+<hr />
+
+<div>
+    @Html.ActionLink("بازگشت به لیست", "Index", new { area = "Storage", controller = "Orders" })
+</div>
+
+<script>
+
+
+    $("#btn_allocate").click(function () {
+        var available_amount = parseFloat($("#available_amount").val());
+        var orderItemId = $("#orderItemId").val();
+        var allocMethod = $("#select_allocationMethods").find("option:selected").val();
+        var amountWishToAlloc = parseFloat($("#amountWishToAllocate").val());
+        var neededAmountOfOrderItem = parseFloat($("#unAmountAllocated").val());
+        if (available_amount < amountWishToAlloc) {
+            alert("مقدار قابل تخصیص کافی در انبار موجود نیست");
+            return;
+        }
+        if (amountWishToAlloc > neededAmountOfOrderItem) {
+            alert("مقدار ورودی از مانده سفارش بیشتر است");
+            return;
+        }
+        if ($("#amountWishToAllocate").val() != "0" && $("#amountWishToAllocate").val() != "") {
+            $.ajax({
+                url: "/Storage/AllocatedProducts/AllocateProductionToOrderItemDirectly",
+                async: false,
+                dataType: "json",
+                content: "application/json; charset=utf-8",
+                data: { orderItemId: orderItemId, allocationMethod: allocMethod, amountWishToAlloc: amountWishToAlloc },
+                success: function (data) {
+                    window.location.href = data;
+                }
+            });
+        } else {
+            alert("مقدار تخصیص را وارد فرمائید");
+        }
+    });
+</script>
+

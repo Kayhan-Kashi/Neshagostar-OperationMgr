@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{893BE17F-48E4-422C-8CCA-DD8597AF8203}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Neshagostar.DAL</RootNamespace>
+    <AssemblyName>Neshagostar.DAL</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.2\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.2\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.2\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="PersianDateTime, Version=1.1.5082.36395, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\PersianDateTime.1.1.5082.36395\lib\net40\PersianDateTime.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataModel\ActivityLogging\PersonnelActivity\ActivityLog.cs" />
+    <Compile Include="DataModel\ActivityLogging\PersonnelActivity\Justify.cs" />
+    <Compile Include="DataModel\CallManagement\Caller.cs" />
+    <Compile Include="DataModel\CallManagement\RecievedCall.cs" />
+    <Compile Include="DataModel\CommerceRelated\CustomersRelated\Customer.cs" />
+    <Compile Include="DataModel\CommerceRelated\InquiriesRelated\Inquiry.cs" />
+    <Compile Include="DataModel\CommerceRelated\InquiriesRelated\InquiryItem.cs" />
+    <Compile Include="DataModel\CommerceRelated\MaterialRelated\MaterialSeller.cs" />
+    <Compile Include="DataModel\CommerceRelated\MaterialRelated\MaterialSpecification.cs" />
+    <Compile Include="DataModel\CommerceRelated\OrdersRelated\Order.cs" />
+    <Compile Include="DataModel\CommerceRelated\OrdersRelated\OrderItem.cs" />
+    <Compile Include="DataModel\CommerceRelated\ProductsRelated\Coupling.cs" />
+    <Compile Include="DataModel\CommerceRelated\ProductsRelated\PipeDiameter.cs" />
+    <Compile Include="DataModel\CommerceRelated\ProductsRelated\PipeProfile.cs" />
+    <Compile Include="DataModel\CommerceRelated\ProductsRelated\Product.cs" />
+    <Compile Include="DataModel\CommerceRelated\ProductsRelated\ProductCategory.cs" />
+    <Compile Include="DataModel\CommerceRelated\ProductsRelated\ProductGenre.cs" />
+    <Compile Include="DataModel\CommerceRelated\ProductsRelated\RingStiffness.cs" />
+    <Compile Include="DataModel\CommerceRelated\TenderRelated\Rival.cs" />
+    <Compile Include="DataModel\CommerceRelated\TenderRelated\RivalPrice.cs" />
+    <Compile Include="DataModel\CommerceRelated\TenderRelated\Tender.cs" />
+    <Compile Include="DataModel\CommerceRelated\TenderRelated\TenderItem.cs" />
+    <Compile Include="DataModel\FinanceRelated\OrdersRelated\Order.cs" />
+    <Compile Include="DataModel\FinanceRelated\Payment.cs" />
+    <Compile Include="DataModel\FinanceRelated\PaymentMethod.cs" />
+    <Compile Include="DataModel\NeshagostarContext.cs" />
+    <Compile Include="DataModel\PersonnelRelated\Department.cs" />
+    <Compile Include="DataModel\PersonnelRelated\Personnel.cs" />
+    <Compile Include="DataModel\PersonnelRelated\PersonnelRole.cs" />
+    <Compile Include="DataModel\ProductionRelated\DailyProductionReport.cs" />
+    <Compile Include="DataModel\ProductionRelated\Device.cs" />
+    <Compile Include="DataModel\ProductionRelated\ProductionLine.cs" />
+    <Compile Include="DataModel\ProductionRelated\Saloon.cs" />
+    <Compile Include="DataModel\StorageRelated\MaterialRelated\MaterialDedicated.cs" />
+    <Compile Include="DataModel\StorageRelated\MaterialRelated\MaterialImported.cs" />
+    <Compile Include="DataModel\CommerceRelated\MaterialRelated\MaterialPurchased.cs" />
+    <Compile Include="DataModel\StorageRelated\OrdersRelated\OrderItem.cs" />
+    <Compile Include="DataModel\StorageRelated\OrdersRelated\OrderItemSendingDetail.cs" />
+    <Compile Include="DataModel\StorageRelated\OrdersRelated\AllocatedProduct.cs" />
+    <Compile Include="DataModel\StorageRelated\OrdersRelated\Sending.cs" />
+    <Compile Include="DataModel\StorageRelated\OrdersRelated\SendingAllocated.cs" />
+    <Compile Include="DataModel\StorageRelated\OrdersRelated\SendingInfo.cs" />
+    <Compile Include="DataModel\StorageRelated\ProductsRelated\ImportedProduct.cs" />
+    <Compile Include="DataModel\StorageRelated\WastageRelated\DispatchedToBeGrindedProduct.cs" />
+    <Compile Include="DataModel\StorageRelated\WastageRelated\ImportedUnStandardProduct.cs" />
+    <Compile Include="DataModel\StorageRelated\WastageRelated\ProductIssue.cs" />
+    <Compile Include="FluentAPI\EntityTypeConfigs.cs" />
+    <Compile Include="Migrations\202002281301330_mi1.cs" />
+    <Compile Include="Migrations\202002281301330_mi1.Designer.cs">
+      <DependentUpon>202002281301330_mi1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002281324375_mig2.cs" />
+    <Compile Include="Migrations\202002281324375_mig2.Designer.cs">
+      <DependentUpon>202002281324375_mig2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002281332230_mig43.cs" />
+    <Compile Include="Migrations\202002281332230_mig43.Designer.cs">
+      <DependentUpon>202002281332230_mig43.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202002281301330_mi1.resx">
+      <DependentUpon>202002281301330_mi1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002281324375_mig2.resx">
+      <DependentUpon>202002281324375_mig2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002281332230_mig43.resx">
+      <DependentUpon>202002281332230_mig43.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -1,0 +1,261 @@
+﻿@model IEnumerable<Neshagostar.DAL.DataModel.CommerceRelated.CustomersRelated.Customer>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h1>لیست استعلام گران</h1>
+<p style="font-size:20px;padding-top:10px;">
+    @Html.ActionLink("ثبت استعلام گر", "CreateInquirier", new { area = "Commerce" })
+</p>
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>
+                @Html.TextBox("a", null, new { @class = "form-control", style = "width:70%", placeholder = "جستجوی نام", id = "filter_name", onchange = "getTableValues();", onkeyup = "getTableValues();" })
+            </th>
+            <th>
+                @Html.TextBox("a", null, new { @class = "form-control", style = "width:50%", placeholder = "جستجوی تلفن", id = "filter_tel", onchange = "getTableValues();", onkeyup = "getTableValues();" })
+            </th>
+            <th>
+                @Html.TextBox("a", null, new { @class = "form-control", style = "width:50%", placeholder = "جستجوی آدرس", id = "filter_address", onchange = "getTableValues();", onkeyup = "getTableValues();" })
+            </th>
+            <th></th>
+        </tr>
+
+    </thead>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.InquiryTel)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.InquiryAddress)
+        </th>
+        <th></th>
+    </tr>
+    <tbody id="customers_tbody">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InquiryTel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InquiryAddress)
+                </td>
+                <td>
+                    @Html.ActionLink("ویرایش", "EditInquirier", new { controller="Customers", id = item.Id, area = "Commerce" })
+                </td>
+            </tr>
+        }
+    </tbody>
+
+
+</table>
+<div class="row">
+    <div id="div_pagination" class="col-sm-11 text-center" style="margin-left:120px;">
+        <ul class="pagination" id="pagination_page">
+            <li id="previous_page">
+                <a role="button" onclick="getTableValues(1)"><<</a>
+                @*@Html.ActionLink(i.ToString(), "FilterRecievedCalls", new { controller = "RecievedCalls", area = "CallManagement", page = i, CategoryName = (string)ViewBag.Term, pageSize = (int)ViewBag.PageSize, role="button" })*@
+            </li>
+            <li id="first_page">
+                <a role="button" onclick="getTableValues(1)"><</a>
+                @*@Html.ActionLink(i.ToString(), "FilterRecievedCalls", new { controller = "RecievedCalls", area = "CallManagement", page = i, CategoryName = (string)ViewBag.Term, pageSize = (int)ViewBag.PageSize, role="button" })*@
+            </li>
+            @if (ViewBag.PageNumber > 1)
+            {
+                <li>
+                    <a role="button" onclick="getTableValues(@ViewBag.Page + 1)">></a>
+                    @*@Html.ActionLink(i.ToString(), "FilterRecievedCalls", new { controller = "RecievedCalls", area = "CallManagement", page = i, CategoryName = (string)ViewBag.Term, pageSize = (int)ViewBag.PageSize, role="button" })*@
+                </li>
+                <li>
+                    <a role="button" onclick="getTableValues(@ViewBag.PageNumber)">>></a>
+                    @*@Html.ActionLink(i.ToString(), "FilterRecievedCalls", new { controller = "RecievedCalls", area = "CallManagement", page = i, CategoryName = (string)ViewBag.Term, pageSize = (int)ViewBag.PageSize, role="button" })*@
+                </li>
+            }
+            else
+            {
+                <li>
+                    <a role="button" onclick="getTableValues(1)">></a>
+                    @*@Html.ActionLink(i.ToString(), "FilterRecievedCalls", new { controller = "RecievedCalls", area = "CallManagement", page = i, CategoryName = (string)ViewBag.Term, pageSize = (int)ViewBag.PageSize, role="button" })*@
+                </li>
+                <li>
+                    <a role="button" onclick="getTableValues(1)">>></a>
+                    @*@Html.ActionLink(i.ToString(), "FilterRecievedCalls", new { controller = "RecievedCalls", area = "CallManagement", page = i, CategoryName = (string)ViewBag.Term, pageSize = (int)ViewBag.PageSize, role="button" })*@
+                </li>
+            }
+
+        </ul>
+    </div>
+
+</div>
+
+<script>
+    function removeTableContent() {
+
+        $("#customers_tbody").empty();
+        //alert("table rows removed");
+    }
+
+    function getTableValues(page = 1) {
+        var searchTerm_name = $("#filter_name").val();
+        var searchTerm_tel = $("#filter_tel").val();
+        var searchTerm_address = $("#filter_address").val();
+
+        $.ajax({
+            type: "GET",
+            url: "/Commerce/Customers/FilterInquirier",
+            async: false,
+            dataType: "json",
+            content: "application/json; charset=utf-8",
+            data: { name: searchTerm_name, address: searchTerm_address, tel: searchTerm_tel, page: page },
+            success: function (data) {
+                removeTableContent();
+                //alert("recieved");
+                if (data.length > 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        //alert(data[i].customerName);
+                        var customer_name = $("<td>" + data[i].customerName + "</td>");
+                        var tel = $("<td>" + data[i].inquirierTel + "</td>");
+                        var address = $("<td>" + data[i].inquirierAddress + "</td>");
+                        var edit = $('<a href="' + '/commerce/customers/EditInquirier/' + data[i].id + '">ویرایش</a>');
+                        var operationtd = $("<td></td>").append(edit).append("|");
+
+                        var row = $("<tr></tr>").append(customer_name).append(tel).append(address).append(operationtd);
+                        //$("#recievedcalls_tbody").append(row);
+                        $("#customers_tbody").append(row);
+                    }
+                }
+                else {
+                    var customer_name = $("<td></td>");
+                    var mobile = $("<td>رکوردی یافت نشد</td>");
+                    var tel = $("<td></td>");
+                    var city = $("<td> </td>");
+                    var operationtd = $("<td> </td>");
+                    var row = $("<tr></tr>").append(customer_name).append(mobile).append(tel).append(operationtd);
+                    $("#customers_tbody").append(row);
+                }
+
+                insertPagination(data[0].pageNumbers, data[0].page);
+            }
+        });
+    }
+
+    function insertPagination(numberOfPages, currentPageNumber) {
+
+        var div_pagination = $("#div_pagination");
+        $("#pagination_page").remove();
+        var ul_pagination = $('<ul class="pagination" id="pagination_page"></ul>');
+
+        if (currentPageNumber > 1 && currentPageNumber < numberOfPages) {
+            //alert(numberOfPages + " ," + currentPageNumber + "if1");
+            var li1 = $("<li  id='previous_page'></li>");
+            var a1 = $('<a role="button" onclick="getTableValues(' + (currentPageNumber - 1) + ')">' + "<" + '</a>');
+            li1.append(a1);
+            //ul.append(li1);
+
+
+            var li2 = $("<li id='first_page'></li>");
+            var a2 = $('<a role="button" onclick="getTableValues(' + 1 + ')">' + "<<" + '</a>');
+            li2.append(a2);
+            //ul.append(li2);
+            //ul.append(li2);
+
+            var li3 = $("<li id='next_page'></li>");
+            var a3 = $('<a role="button" onclick="getTableValues(' + (currentPageNumber + 1) + ')">' + ">" + '</a>');
+            li3.append(a3);
+            //ul.append(li3);
+
+
+            var li4 = $("<li id='last_page'></li>");
+            var a4 = $('<a role="button" onclick="getTableValues(' + numberOfPages + ')">' + ">>" + '</a>');
+            li4.append(a4);
+            //ul.append(li4);
+            //ul.prepend(li4);
+            //alert("pagination is being inserted");
+            ul_pagination.append(li2);
+            ul_pagination.append(li1);
+            ul_pagination.append(li3);
+            ul_pagination.append(li4);
+            //alert("pagination is inserted");
+        }
+        else if (currentPageNumber == 1 && currentPageNumber < numberOfPages) {
+            //alert(numberOfPages + " ," + currentPageNumber + "if1");
+            var li1 = $("<li id='previous_page' ></li>");
+            var a1 = $('<a role="button" onclick="getTableValues(' + (currentPageNumber - 1) + ')">' + "<" + '</a>');
+            li1.append(a1);
+            //ul.append(li1);
+
+
+            var li2 = $("<li disabled='true'  id='first_page' ></li>");
+            var a2 = $('<a disabled="true" role="button" onclick="getTableValues(' + 1 + ')">' + "<<" + '</a>');
+            li2.append(a2);
+            //ul.append(li2);
+            //ul.append(li2);
+
+            var li3 = $("<li id='next_page'></li>");
+            var a3 = $('<a role="button" onclick="getTableValues(' + (currentPageNumber + 1) + ')">' + ">" + '</a>');
+            li3.append(a3);
+            //ul.append(li3);
+
+
+            var li4 = $("<li id='last_page'></li>");
+            var a4 = $('<a role="button" onclick="getTableValues(' + numberOfPages + ')">' + ">>" + '</a>');
+            li4.append(a4);
+            //ul.append(li4);
+            //ul.prepend(li4);
+            //alert("pagination is being inserted");
+            ul_pagination.append(li2);
+            ul_pagination.append(li1);
+            ul_pagination.append(li3);
+            ul_pagination.append(li4);
+        }
+        else {
+            //alert(numberOfPages + " ," + currentPageNumber + "if1");
+            var li1 = $("<li  id='previous_page'></li>");
+            var a1 = $('<a role="button" onclick="getTableValues(' + (currentPageNumber - 1) + ')">' + "<" + '</a>');
+            li1.append(a1);
+            //ul.append(li1);
+
+
+            var li2 = $("<li id='first_page'></li>");
+            var a2 = $('<a role="button" onclick="getTableValues(' + 1 + ')">' + "<<" + '</a>');
+            li2.append(a2);
+            //ul.append(li2);
+            //ul.append(li2);
+
+            var li3 = $("<li id='next_page'></li>");
+            var a3 = $('<a role="button" onclick="getTableValues(' + (numberOfPages) + ')">' + ">" + '</a>');
+            li3.append(a3);
+            //ul.append(li3);
+
+
+            var li4 = $("<li id='last_page'></li>");
+            var a4 = $('<a role="button" onclick="getTableValues(' + numberOfPages + ')">' + ">>" + '</a>');
+            li4.append(a4);
+            //ul.append(li4);
+            //ul.prepend(li4);
+            //alert("pagination is being inserted");
+            ul_pagination.append(li2);
+            ul_pagination.append(li1);
+            ul_pagination.append(li3);
+            ul_pagination.append(li4);
+            //ul.append(li2);
+            //ul.append(li2);
+            //ul.prepend(li2);
+
+            //div_pagination.append(pagination_ul);
+        }
+        //alert("appended");
+        div_pagination.append(ul_pagination);
+    }
+
+</script>
